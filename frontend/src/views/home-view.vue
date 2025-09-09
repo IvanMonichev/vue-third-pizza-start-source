@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import dough from '@/mocks/dough.json'
+import ingredients from '@/mocks/ingredients.json'
+import sauces from '@/mocks/sauces.json'
+import sizes from '@/mocks/sizes.json'
+
+const doughTypes = dough
+const pizzaIngredients = ingredients
+const pizzaSauces = sauces
+const pizzaSizes = sizes
+</script>
+
 <template>
   <main class="content">
     <form action="#" method="post">
@@ -490,9 +502,9 @@
           <div class="content__constructor">
             <div class="pizza pizza--foundation--big-tomato">
               <div class="pizza__wrapper">
-                <div class="pizza__filling pizza__filling--ananas"></div>
-                <div class="pizza__filling pizza__filling--bacon"></div>
-                <div class="pizza__filling pizza__filling--cheddar"></div>
+                <div class="pizza__filling pizza__filling--ananas" />
+                <div class="pizza__filling pizza__filling--bacon" />
+                <div class="pizza__filling pizza__filling--cheddar" />
               </div>
             </div>
           </div>
