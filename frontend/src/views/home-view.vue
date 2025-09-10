@@ -157,3 +157,398 @@ const pizzaSizes = sizes
     </form>
   </main>
 </template>
+<style lang="scss" scoped>
+@use '@/assets/sass/ds-system/ds-colors';
+@use '@/assets/sass/ds-system/ds-typography';
+@use '@/assets/sass/ds-system/ds-shadows';
+@use '@/assets/sass/mixins/m_center';
+@use '@/assets/sass/mixins/m_clear-list';
+.content {
+  padding-top: 20px;
+}
+
+.content__wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  width: 920px;
+  margin: 0 auto;
+  padding-right: 2.12%;
+  padding-bottom: 30px;
+  padding-left: 2.12%;
+}
+
+.title {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+
+  color: ds-colors.$black;
+
+  &--big {
+    @include ds-typography.b-s36-h42;
+  }
+
+  &--small {
+    @include ds-typography.b-s18-h21;
+  }
+}
+
+.content__dough {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.content__diameter {
+  width: 373px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.content__ingredients {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.content__pizza {
+  width: 373px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.content__constructor {
+  width: 315px;
+  margin-top: 25px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.content__result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 25px;
+
+  p {
+    @include ds-typography.b-s24-h28;
+
+    margin: 0;
+  }
+
+  button {
+    margin-left: 12px;
+    padding: 16px 45px;
+  }
+}
+
+.sheet {
+  padding-top: 15px;
+
+  border-radius: 8px;
+  background-color: ds-colors.$white;
+  box-shadow: ds-shadows.$shadow-light;
+}
+
+.sheet__title {
+  padding-right: 18px;
+  padding-left: 18px;
+}
+
+.sheet__content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin-top: 8px;
+  padding-top: 18px;
+  padding-right: 18px;
+  padding-left: 18px;
+
+  border-top: 1px solid rgba(ds-colors.$green-500, 0.1);
+}
+
+.dough__input {
+  position: relative;
+
+  margin-right: 8%;
+  margin-bottom: 20px;
+  padding-left: 50px;
+
+  cursor: pointer;
+
+  b {
+    @include ds-typography.r-s16-h19;
+
+    &::before {
+      @include m_center.p_center-v;
+
+      width: 36px;
+      height: 36px;
+
+      content: '';
+      transition: 0.3s;
+
+      border-radius: 50%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+  }
+
+  span {
+    @include ds-typography.l-s11-h13;
+
+    display: block;
+  }
+
+  &--light {
+    b {
+      &::before {
+        background-image: url('@/assets/img/dough-light.svg');
+      }
+    }
+  }
+
+  &--large {
+    b {
+      &::before {
+        background-image: url('@/assets/img/dough-large.svg');
+      }
+    }
+  }
+
+  &:hover {
+    b::before {
+      box-shadow: ds-shadows.$shadow-regular;
+    }
+  }
+
+  input {
+    &:checked + b::before {
+      box-shadow: ds-shadows.$shadow-large;
+    }
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  white-space: nowrap;
+
+  border: 0;
+
+  clip-path: inset(100%);
+}
+
+.ingredients__sauce {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  width: 100%;
+  margin-bottom: 14px;
+
+  p {
+    @include ds-typography.r-s16-h19;
+
+    margin-top: 0;
+    margin-right: 16px;
+    margin-bottom: 10px;
+  }
+}
+
+.ingredients__input {
+  margin-right: 24px;
+  margin-bottom: 10px;
+}
+
+.ingredients__filling {
+  width: 100%;
+
+  p {
+    @include ds-typography.r-s16-h19;
+
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+}
+
+.ingredients__list {
+  @include m_clear-list.clear-list;
+
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.ingredients__item {
+  width: 100px;
+  min-height: 40px;
+  margin-right: 17px;
+  margin-bottom: 35px;
+}
+
+.ingredients__counter {
+  width: 54px;
+  margin-top: 10px;
+  margin-left: 36px;
+}
+
+.counter {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.counter__button {
+  $el: &;
+  $size_icon: 50%;
+
+  position: relative;
+
+  display: block;
+
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+
+  cursor: pointer;
+  transition: 0.3s;
+
+  border: none;
+  border-radius: 50%;
+  outline: none;
+
+  &--minus {
+    background-color: ds-colors.$purple-100;
+
+    &::before {
+      @include m_center.p_center-all;
+
+      width: $size_icon;
+      height: 2px;
+
+      content: '';
+
+      border-radius: 2px;
+      background-color: ds-colors.$black;
+    }
+
+    &:hover:not(:active):not(:disabled) {
+      background-color: ds-colors.$purple-200;
+    }
+
+    &:active:not(:disabled) {
+      background-color: ds-colors.$purple-300;
+    }
+
+    &:focus:not(:disabled) {
+      box-shadow: ds-shadows.$shadow-regular;
+    }
+
+    &:disabled {
+      cursor: default;
+
+      &::before {
+        opacity: 0.1;
+      }
+    }
+  }
+
+  &--plus {
+    background-color: ds-colors.$green-500;
+
+    &::before {
+      @include m_center.p_center-all;
+
+      width: $size_icon;
+      height: 2px;
+
+      content: '';
+
+      border-radius: 2px;
+      background-color: ds-colors.$white;
+    }
+
+    &::after {
+      @include m_center.p_center-all;
+
+      width: $size_icon;
+      height: 2px;
+
+      content: '';
+      transform: translate(-50%, -50%) rotate(90deg);
+
+      border-radius: 2px;
+      background-color: ds-colors.$white;
+    }
+
+    &:hover:not(:active):not(:disabled) {
+      background-color: ds-colors.$green-400;
+    }
+
+    &:active:not(:disabled) {
+      background-color: ds-colors.$green-600;
+    }
+
+    &:focus:not(:disabled) {
+      box-shadow: ds-shadows.$shadow-regular;
+    }
+
+    &:disabled {
+      cursor: default;
+
+      opacity: 0.3;
+    }
+  }
+
+  &--orange {
+    background-color: ds-colors.$orange-200;
+
+    &:hover:not(:active):not(:disabled) {
+      background-color: ds-colors.$orange-100;
+    }
+
+    &:active:not(:disabled) {
+      background-color: ds-colors.$orange-300;
+    }
+  }
+}
+
+.counter__input {
+  @include ds-typography.r-s14-h16;
+
+  box-sizing: border-box;
+  width: 22px;
+  margin: 0;
+  padding: 0 3px;
+
+  text-align: center;
+
+  color: ds-colors.$black;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  background-color: transparent;
+
+  &:focus {
+    box-shadow: inset ds-shadows.$shadow-regular;
+  }
+}
+</style>
