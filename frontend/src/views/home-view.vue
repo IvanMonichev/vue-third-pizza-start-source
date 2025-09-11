@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import AppInput from '@/common/components/app-input.vue'
+import RadioDough from '@/common/components/radio-dough.vue'
+import { DoughSize } from '@/common/enums/dough-size.enum'
+import { Dough } from '@/common/types/dough.types'
 import dough from '@/mocks/dough.json'
 import ingredients from '@/mocks/ingredients.json'
 import sauces from '@/mocks/sauces.json'
@@ -7,12 +10,13 @@ import sizes from '@/mocks/sizes.json'
 import { mapIngredient } from '@/views/home-view.service'
 import { ref } from 'vue'
 
-const doughTypes = dough
+const doughTypes: Dough[] = dough
 const viewIngredients = ingredients.map(mapIngredient)
 const pizzaSauces = sauces
 const pizzaSizes = sizes
 
 const pizzaName = ref('')
+const doughValue = ref<DoughSize>(DoughSize.LIGHT)
 </script>
 
 <template>
@@ -26,25 +30,15 @@ const pizzaName = ref('')
             <h2 class="title title--small sheet__title">Выберите тесто</h2>
 
             <div class="sheet__content dough">
-              <label
-                v-for="type in doughTypes"
-                :key="type.id"
-                :class="{
-                  dough__input: true,
-                  'dough__input--light': type.size === 'light',
-                  'dough__input--large': type.size === 'large'
-                }"
-              >
-                <input
-                  type="radio"
-                  name="dought"
-                  value="light"
-                  class="visually-hidden"
-                  checked
-                />
-                <b>{{ type.name }}</b>
-                <span>{{ type.description }}</span>
-              </label>
+              <RadioDough
+                v-for="d in doughTypes"
+                :key="d.id"
+                v-model="doughValue"
+                :name="'dought'"
+                :description="d.description"
+                :label="d.name"
+                :value="d.size"
+              />
             </div>
           </div>
         </div>
@@ -133,14 +127,6 @@ const pizzaName = ref('')
         </div>
 
         <div class="content__pizza">
-          <!--          <label class="input">
-            <span class="visually-hidden">Название пиццы</span>
-            <input
-              type="text"
-              name="pizza_name"
-              placeholder="Введите название пиццы"
-            />
-          </label>-->
           <AppInput
             v-model="pizzaName"
             placeholder="Введите название пиццы"
@@ -281,69 +267,6 @@ const pizzaName = ref('')
   padding-left: 18px;
 
   border-top: 1px solid rgba(ds-colors.$green-500, 0.1);
-}
-
-.dough__input {
-  position: relative;
-
-  margin-right: 8%;
-  margin-bottom: 20px;
-  padding-left: 50px;
-
-  cursor: pointer;
-
-  b {
-    @include ds-typography.r-s16-h19;
-
-    &::before {
-      @include m_center.p_center-v;
-
-      width: 36px;
-      height: 36px;
-
-      content: '';
-      transition: 0.3s;
-
-      border-radius: 50%;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-    }
-  }
-
-  span {
-    @include ds-typography.l-s11-h13;
-
-    display: block;
-  }
-
-  &--light {
-    b {
-      &::before {
-        background-image: url('@/assets/img/dough-light.svg');
-      }
-    }
-  }
-
-  &--large {
-    b {
-      &::before {
-        background-image: url('@/assets/img/dough-large.svg');
-      }
-    }
-  }
-
-  &:hover {
-    b::before {
-      box-shadow: ds-shadows.$shadow-regular;
-    }
-  }
-
-  input {
-    &:checked + b::before {
-      box-shadow: ds-shadows.$shadow-large;
-    }
-  }
 }
 
 .visually-hidden {
