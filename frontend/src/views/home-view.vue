@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import AppInput from '@/common/components/app-input.vue'
+import RadioDiameter from '@/common/components/radio-diameter.vue'
 import RadioDough from '@/common/components/radio-dough.vue'
 import { DoughSize } from '@/common/enums/dough-size.enum'
+import { PizzaSize } from '@/common/enums/pizza-size.enum'
 import { Dough } from '@/common/types/dough.types'
 import dough from '@/mocks/dough.json'
 import ingredients from '@/mocks/ingredients.json'
@@ -17,6 +19,7 @@ const pizzaSizes = sizes
 
 const pizzaName = ref('')
 const doughValue = ref<DoughSize>(DoughSize.LIGHT)
+const pizzaSize = ref<PizzaSize>(PizzaSize.SMALL)
 </script>
 
 <template>
@@ -48,19 +51,27 @@ const doughValue = ref<DoughSize>(DoughSize.LIGHT)
             <h2 class="title title--small sheet__title">Выберите размер</h2>
 
             <div class="sheet__content diameter">
-              <label
+              <!--              <label-->
+              <!--                v-for="s in pizzaSizes"-->
+              <!--                :key="s.id"-->
+              <!--                :class="`diameter__input diameter__input&#45;&#45;${s.value}`"-->
+              <!--              >-->
+              <!--                <input-->
+              <!--                  type="radio"-->
+              <!--                  name="diameter"-->
+              <!--                  :value="s.value"-->
+              <!--                  class="visually-hidden"-->
+              <!--                />-->
+              <!--                <span>{{ s.name }}</span>-->
+              <!--              </label>-->
+              <RadioDiameter
                 v-for="s in pizzaSizes"
                 :key="s.id"
-                :class="`diameter__input diameter__input--${s.value}`"
-              >
-                <input
-                  type="radio"
-                  name="diameter"
-                  :value="s.value"
-                  class="visually-hidden"
-                />
-                <span>{{ s.name }}</span>
-              </label>
+                v-model="pizzaSize"
+                :name="'diameter'"
+                :label="s.name"
+                :value="s.multiplier"
+              />
             </div>
           </div>
         </div>
