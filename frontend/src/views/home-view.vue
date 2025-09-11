@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import AppInput from '@/common/components/app-input.vue'
 import dough from '@/mocks/dough.json'
 import ingredients from '@/mocks/ingredients.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
 import { mapIngredient } from '@/views/home-view.service'
+import { ref } from 'vue'
 
 const doughTypes = dough
 const viewIngredients = ingredients.map(mapIngredient)
 const pizzaSauces = sauces
 const pizzaSizes = sizes
+
+const pizzaName = ref('')
 </script>
 
 <template>
@@ -129,14 +133,20 @@ const pizzaSizes = sizes
         </div>
 
         <div class="content__pizza">
-          <label class="input">
+          <!--          <label class="input">
             <span class="visually-hidden">Название пиццы</span>
             <input
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
             />
-          </label>
+          </label>-->
+          <AppInput
+            v-model="pizzaName"
+            placeholder="Введите название пиццы"
+            name="pizza_name"
+            label="Название пиццы"
+          />
 
           <div class="content__constructor">
             <div class="pizza pizza--foundation--big-tomato">
