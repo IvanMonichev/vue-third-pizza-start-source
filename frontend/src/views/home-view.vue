@@ -1,25 +1,27 @@
 <script setup lang="ts">
 import AppInput from '@/common/components/app-input.vue'
-import RadioDiameter from '@/common/components/radio-diameter.vue'
-import RadioDough from '@/common/components/radio-dough.vue'
-import { DoughSize } from '@/common/enums/dough-size.enum'
-import { PizzaSize } from '@/common/enums/pizza-size.enum'
-import { Dough } from '@/common/types/dough.types'
+import {
+  Dough,
+  Ingredient,
+  PizzaSauces,
+  PizzaSizeInterface
+} from '@/common/types/constructor.types'
 import dough from '@/mocks/dough.json'
-import ingredients from '@/mocks/ingredients.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
-import { mapIngredient } from '@/views/home-view.service'
+import ingredients from '@/mocks/ingredients.json'
+import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
+import SelectorDough from '@/modules/constructor/selector-dough.vue'
+import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
 import { ref } from 'vue'
 
 const doughTypes: Dough[] = dough
-const viewIngredients = ingredients.map(mapIngredient)
-const pizzaSauces = sauces
-const pizzaSizes = sizes
+
+const pizzaSauces: PizzaSauces[] = sauces
+const pizzaSizes: PizzaSizeInterface[] = sizes
+const ingredientsValues: Ingredient[] = ingredients
 
 const pizzaName = ref('')
-const doughValue = ref<DoughSize>(DoughSize.LIGHT)
-const pizzaSize = ref<PizzaSize>(PizzaSize.SMALL)
 </script>
 
 <template>
@@ -28,102 +30,12 @@ const pizzaSize = ref<PizzaSize>(PizzaSize.SMALL)
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <div class="content__dough">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите тесто</h2>
-
-            <div class="sheet__content dough">
-              <RadioDough
-                v-for="d in doughTypes"
-                :key="d.id"
-                v-model="doughValue"
-                :name="'dought'"
-                :description="d.description"
-                :label="d.name"
-                :value="d.size"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="content__diameter">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите размер</h2>
-
-            <div class="sheet__content diameter">
-              <RadioDiameter
-                v-for="s in pizzaSizes"
-                :key="s.id"
-                v-model="pizzaSize"
-                :name="'diameter'"
-                :label="s.name"
-                :value="s.multiplier"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="content__ingredients">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">
-              Выберите ингредиенты
-            </h2>
-
-            <div class="sheet__content ingredients">
-              <div class="ingredients__sauce">
-                <p>Основной соус:</p>
-
-                <label
-                  v-for="s in pizzaSauces"
-                  :key="s.id"
-                  class="radio ingredients__input"
-                >
-                  <input type="radio" name="sauce" :value="s.value" />
-                  <span>{{ s.name }}</span>
-                </label>
-              </div>
-
-              <div class="ingredients__filling">
-                <p>Начинка:</p>
-
-                <ul class="ingredients__list">
-                  <li
-                    v-for="ingredient in viewIngredients"
-                    :key="ingredient.id"
-                    class="ingredients__item"
-                  >
-                    <span :class="`filling ${ingredient.class}`">{{
-                      ingredient.name
-                    }}</span>
-
-                    <div class="counter counter--orange ingredients__counter">
-                      <button
-                        type="button"
-                        class="counter__button counter__button--minus"
-                        disabled
-                      >
-                        <span class="visually-hidden">Меньше</span>
-                      </button>
-                      <input
-                        type="text"
-                        name="counter"
-                        class="counter__input"
-                        value="0"
-                      />
-                      <button
-                        type="button"
-                        class="counter__button counter__button--plus"
-                      >
-                        <span class="visually-hidden">Больше</span>
-                      </button>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <SelectorDough :dough-types="doughTypes" />
+        <SelectorDiameter :pizza-sizes="pizzaSizes" />
+        <SelectorIngredients
+          :pizza-sauces="pizzaSauces"
+          :ingredients="ingredientsValues"
+        />
         <div class="content__pizza">
           <AppInput
             v-model="pizzaName"
@@ -184,9 +96,7 @@ const pizzaSize = ref<PizzaSize>(PizzaSize.SMALL)
     @include ds-typography.b-s36-h42;
   }
 
-  &--small {
-    @include ds-typography.b-s18-h21;
-  }
+
 }
 
 .content__dough {

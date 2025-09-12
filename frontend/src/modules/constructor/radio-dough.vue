@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { doughSizeMap } from '@/common/constants/mappers.constant'
+import { doughSizeMap } from '@/common/constants/mappers.constants'
 import { DoughSize } from '@/common/enums/dough-size.enum'
 
 const { value } = defineProps<{
@@ -31,8 +31,8 @@ const size = doughSizeMap[value]
 
 <style scoped lang="scss">
 @use '@/assets/sass/ds-system/ds-typography';
-@use '@/assets/sass/mixins/m_center';
 @use '@/assets/sass/ds-system/ds-shadows';
+@use '@/assets/sass/mixins/m_center';
 
 .dough__input {
   position: relative;

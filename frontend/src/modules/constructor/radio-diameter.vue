@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { pizzaSizeMap } from '@/common/constants/mappers.constant'
+import { pizzaSizeMap } from '@/common/constants/mappers.constants'
 import { PizzaSize } from '@/common/enums/pizza-size.enum'
 
 const props = defineProps<{

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DATA_TRANSFER_PAYLOAD, MOVE } from '@/common/constants/core.constant'
+import { DATA_TRANSFER_PAYLOAD, MOVE } from '@/common/constants/core.constants'
 
 const props = defineProps({
   transferData: {
