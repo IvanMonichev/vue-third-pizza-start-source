@@ -1,0 +1,21 @@
+<script setup lang="ts">
+import { DATA_TRANSFER_PAYLOAD } from '@/common/constants/core.constant'
+
+const emit = defineEmits(['drop'])
+
+const onDrop = (e: DragEvent) => {
+  const { dataTransfer } = e
+  if (!dataTransfer) return
+
+  const payload = dataTransfer.getData(DATA_TRANSFER_PAYLOAD)
+  if (!payload) return
+  const transferData = JSON.parse(payload)
+  emit('drop', transferData)
+}
+</script>
+
+<template>
+  <div @drop.stop="onDrop" @dragover.prevent @dragenter.prevent><slot /></div>
+</template>
+
+<style scoped lang="scss"></style>

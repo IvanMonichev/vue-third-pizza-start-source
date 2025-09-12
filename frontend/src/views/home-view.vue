@@ -51,19 +51,6 @@ const pizzaSize = ref<PizzaSize>(PizzaSize.SMALL)
             <h2 class="title title--small sheet__title">Выберите размер</h2>
 
             <div class="sheet__content diameter">
-              <!--              <label-->
-              <!--                v-for="s in pizzaSizes"-->
-              <!--                :key="s.id"-->
-              <!--                :class="`diameter__input diameter__input&#45;&#45;${s.value}`"-->
-              <!--              >-->
-              <!--                <input-->
-              <!--                  type="radio"-->
-              <!--                  name="diameter"-->
-              <!--                  :value="s.value"-->
-              <!--                  class="visually-hidden"-->
-              <!--                />-->
-              <!--                <span>{{ s.name }}</span>-->
-              <!--              </label>-->
               <RadioDiameter
                 v-for="s in pizzaSizes"
                 :key="s.id"
