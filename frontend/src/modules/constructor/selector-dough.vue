@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { Dough } from '@/common/types/constructor.types'
 import RadioDough from '@/modules/constructor/radio-dough.vue'
 import { DoughSize } from '@/common/enums/dough-size.enum'
-import { Dough } from '@/common/types/dough.types'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { ref } from 'vue'
 
