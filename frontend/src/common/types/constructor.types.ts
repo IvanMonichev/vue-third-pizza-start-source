@@ -22,7 +22,7 @@ export interface PizzaSauces {
   id: number
   name: string
   price: number
-  value: SaucesValue
+  value: string
 }
 
 export interface Ingredient {
