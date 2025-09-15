@@ -6,6 +6,17 @@ const routes: RouteRecordRaw[] = [
     name: 'home-view',
     component: () => import('@/views/home-view.vue'),
     meta: { layout: 'app-layout-main' }
+  },
+  {
+    path: '/sign-in',
+    name: 'login-view',
+    component: () => import('@/views/login-view.vue')
+  },
+  {
+    path: '/cart',
+    name: 'cart-view',
+    component: () => import('@/views/cart-view.vue'),
+    meta: { layout: 'app-layout-main' }
   }
 ]
 

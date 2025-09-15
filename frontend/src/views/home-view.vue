@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppTitle from '@/common/components/app-title.vue'
 import {
   Dough,
   Ingredient,
@@ -24,7 +25,7 @@ const ingredientsValues: Ingredient[] = ingredients
   <main class="content">
     <form action="#" method="post">
       <div class="content__wrapper">
-        <h1 class="title title--big">Конструктор пиццы</h1>
+        <AppTitle>Конструктор пиццы</AppTitle>
         <SelectorDough :dough-types="doughTypes" />
         <SelectorDiameter :pizza-sizes="pizzaSizes" />
         <SelectorIngredients
@@ -37,9 +38,6 @@ const ingredientsValues: Ingredient[] = ingredients
   </main>
 </template>
 <style lang="scss" scoped>
-@use '@/assets/sass/ds-system/ds-colors';
-@use '@/assets/sass/ds-system/ds-typography';
-
 .content {
   padding-top: 20px;
 }
@@ -54,17 +52,5 @@ const ingredientsValues: Ingredient[] = ingredients
   padding-right: 2.12%;
   padding-bottom: 30px;
   padding-left: 2.12%;
-}
-
-.title {
-  box-sizing: border-box;
-  width: 100%;
-  margin: 0;
-
-  color: ds-colors.$black;
-
-  &--big {
-    @include ds-typography.b-s36-h42;
-  }
 }
 </style>
