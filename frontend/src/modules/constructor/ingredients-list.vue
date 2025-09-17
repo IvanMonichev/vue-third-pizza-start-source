@@ -16,7 +16,7 @@ const viewIngredients = props.ingredients.map(mapIngredient)
       class="ingredients__item"
     >
       <span :class="`filling ${ingredient.class}`">{{ ingredient.name }}</span>
-      <AppCounter />
+      <AppCounter extra-class="ingredients__counter" />
     </li>
   </ul>
 </template>

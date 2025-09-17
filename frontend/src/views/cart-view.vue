@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppCounter from '@/common/components/app-counter.vue'
 import AppTitle from '@/common/components/app-title.vue'
 </script>
 
@@ -34,26 +35,7 @@ import AppTitle from '@/common/components/app-title.vue'
               </div>
             </div>
 
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="1"
-              />
-              <button
-                type="button"
-                class="counter__button counter__button--plus counter__button--orange"
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
+            <AppCounter color="orange" extra-class="cart-list__counter" />
 
             <div class="cart-list__price">
               <b>782 ₽</b>
@@ -85,26 +67,7 @@ import AppTitle from '@/common/components/app-title.vue'
               </div>
             </div>
 
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="2"
-              />
-              <button
-                type="button"
-                class="counter__button counter__button--plus counter__button--orange"
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
+            <AppCounter color="orange" extra-class="cart-list__counter" />
 
             <div class="cart-list__price">
               <b>782 ₽</b>
@@ -130,27 +93,10 @@ import AppTitle from '@/common/components/app-title.vue'
               </p>
 
               <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
-
+                <AppCounter
+                  color="orange"
+                  extra-class="additional-list__counter"
+                />
                 <div class="additional-list__price">
                   <b>× 56 ₽</b>
                 </div>
@@ -168,26 +114,10 @@ import AppTitle from '@/common/components/app-title.vue'
               </p>
 
               <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
+                <AppCounter
+                  color="orange"
+                  extra-class="additional-list__counter"
+                />
 
                 <div class="additional-list__price">
                   <b>× 30 ₽</b>
@@ -206,26 +136,10 @@ import AppTitle from '@/common/components/app-title.vue'
               </p>
 
               <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
+                <AppCounter
+                  color="orange"
+                  extra-class="additional-list__counter"
+                />
 
                 <div class="additional-list__price">
                   <b>× 56 ₽</b>
@@ -305,6 +219,10 @@ import AppTitle from '@/common/components/app-title.vue'
 @use '@/assets/sass/ds-system/ds-typography';
 @use '@/assets/sass/mixins/m_clear-list';
 @use '@/assets/sass/ds-system/ds-shadows';
+
+.content {
+  padding-top: 20px;
+}
 
 .layout-form {
   display: -webkit-box;
