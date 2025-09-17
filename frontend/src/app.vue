@@ -1,8 +1,8 @@
 <template>
-  <app-header></app-header>
-  <home-view></home-view>
+  <AppLayout>
+    <router-view></router-view>
+  </AppLayout>
 </template>
 <script setup lang="ts">
-import AppHeader from '@/layouts/app-header.vue'
-import HomeView from '@/views/home-view.vue'
+import AppLayout from '@/layouts/app-layout.vue'
 </script>

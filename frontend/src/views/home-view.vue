@@ -15,7 +15,6 @@ import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
 
 const doughTypes: Dough[] = dough
-
 const pizzaSauces: PizzaSauces[] = sauces
 const pizzaSizes: PizzaSizeInterface[] = sizes
 const ingredientsValues: Ingredient[] = ingredients
@@ -26,7 +25,6 @@ const ingredientsValues: Ingredient[] = ingredients
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-
         <SelectorDough :dough-types="doughTypes" />
         <SelectorDiameter :pizza-sizes="pizzaSizes" />
         <SelectorIngredients

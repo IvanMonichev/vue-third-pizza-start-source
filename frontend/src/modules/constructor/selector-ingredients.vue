@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import RadioGroup from '@/common/components/radio-group.vue'
-import { Ingredient, PizzaSauces } from '@/common/types/constructor.types'
+import {
+  Ingredient,
+  PizzaSauces,
+  SaucesValue
+} from '@/common/types/constructor.types'
 import { Option } from '@/common/types/core.types'
-import Ingredients from '@/modules/constructor/ingredients.vue'
+import Ingredients from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
   pizzaSauces: PizzaSauces[]
@@ -18,6 +22,8 @@ const saucesOptions = computed<Option[]>(() =>
     value: s.value
   }))
 )
+
+const sauceValue = ref<SaucesValue>('tomato')
 </script>
 
 <template>
@@ -26,6 +32,7 @@ const saucesOptions = computed<Option[]>(() =>
       <div class="ingredients__sauce">
         <p>Основной соус:</p>
         <RadioGroup
+          v-model="sauceValue"
           :options="saucesOptions"
           name="sauce"
           label-class="ingredients__input"

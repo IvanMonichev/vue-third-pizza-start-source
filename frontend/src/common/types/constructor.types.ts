@@ -16,6 +16,8 @@ export interface Dough {
   size: DoughSize
 }
 
+export type SaucesValue = 'tomato' | 'creamy'
+
 export interface PizzaSauces {
   id: number
   name: string
