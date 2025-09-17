@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import AppTitle from '@/common/components/app-title.vue'
-import CartFooter from '@/modules/cart/cart-footer.vue'
+import TheCartFooter from '@/modules/cart/the-cart-footer.vue'
 </script>
 
 <template>
@@ -195,7 +195,7 @@ import CartFooter from '@/modules/cart/cart-footer.vue'
         </div>
       </div>
     </main>
-    <CartFooter />
+    <TheCartFooter />
   </form>
 </template>
 
