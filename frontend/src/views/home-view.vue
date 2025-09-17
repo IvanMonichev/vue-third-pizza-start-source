@@ -1,14 +1,23 @@
 <script setup lang="ts">
+import {
+  Dough,
+  Ingredient,
+  PizzaSauces,
+  PizzaSizeInterface
+} from '@/common/types/constructor.types'
 import dough from '@/mocks/dough.json'
-import ingredients from '@/mocks/ingredients.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
-import { mapIngredient } from '@/views/home-view.service'
+import ingredients from '@/mocks/ingredients.json'
+import ContentPizza from '@/modules/constructor/pizza.vue'
+import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
+import SelectorDough from '@/modules/constructor/selector-dough.vue'
+import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
 
-const doughTypes = dough
-const viewIngredients = ingredients.map(mapIngredient)
-const pizzaSauces = sauces
-const pizzaSizes = sizes
+const doughTypes: Dough[] = dough
+const pizzaSauces: PizzaSauces[] = sauces
+const pizzaSizes: PizzaSizeInterface[] = sizes
+const ingredientsValues: Ingredient[] = ingredients
 </script>
 
 <template>
@@ -16,144 +25,46 @@ const pizzaSizes = sizes
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-
-        <div class="content__dough">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите тесто</h2>
-
-            <div class="sheet__content dough">
-              <label
-                v-for="type in doughTypes"
-                :key="type.id"
-                :class="{
-                  dough__input: true,
-                  'dough__input--light': type.size === 'light',
-                  'dough__input--large': type.size === 'large'
-                }"
-              >
-                <input
-                  type="radio"
-                  name="dought"
-                  value="light"
-                  class="visually-hidden"
-                  checked
-                />
-                <b>{{ type.name }}</b>
-                <span>{{ type.description }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="content__diameter">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите размер</h2>
-
-            <div class="sheet__content diameter">
-              <label
-                v-for="s in pizzaSizes"
-                :key="s.id"
-                :class="`diameter__input diameter__input--${s.value}`"
-              >
-                <input
-                  type="radio"
-                  name="diameter"
-                  :value="s.value"
-                  class="visually-hidden"
-                />
-                <span>{{ s.name }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="content__ingredients">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">
-              Выберите ингредиенты
-            </h2>
-
-            <div class="sheet__content ingredients">
-              <div class="ingredients__sauce">
-                <p>Основной соус:</p>
-
-                <label
-                  v-for="s in pizzaSauces"
-                  :key="s.id"
-                  class="radio ingredients__input"
-                >
-                  <input type="radio" name="sauce" :value="s.value" />
-                  <span>{{ s.name }}</span>
-                </label>
-              </div>
-
-              <div class="ingredients__filling">
-                <p>Начинка:</p>
-
-                <ul class="ingredients__list">
-                  <li
-                    v-for="ingredient in viewIngredients"
-                    :key="ingredient.id"
-                    class="ingredients__item"
-                  >
-                    <span :class="`filling ${ingredient.class}`">{{
-                      ingredient.name
-                    }}</span>
-
-                    <div class="counter counter--orange ingredients__counter">
-                      <button
-                        type="button"
-                        class="counter__button counter__button--minus"
-                        disabled
-                      >
-                        <span class="visually-hidden">Меньше</span>
-                      </button>
-                      <input
-                        type="text"
-                        name="counter"
-                        class="counter__input"
-                        value="0"
-                      />
-                      <button
-                        type="button"
-                        class="counter__button counter__button--plus"
-                      >
-                        <span class="visually-hidden">Больше</span>
-                      </button>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="content__pizza">
-          <label class="input">
-            <span class="visually-hidden">Название пиццы</span>
-            <input
-              type="text"
-              name="pizza_name"
-              placeholder="Введите название пиццы"
-            />
-          </label>
-
-          <div class="content__constructor">
-            <div class="pizza pizza--foundation--big-tomato">
-              <div class="pizza__wrapper">
-                <div class="pizza__filling pizza__filling--ananas" />
-                <div class="pizza__filling pizza__filling--bacon" />
-                <div class="pizza__filling pizza__filling--cheddar" />
-              </div>
-            </div>
-          </div>
-
-          <div class="content__result">
-            <p>Итого: 0 ₽</p>
-            <button type="button" class="button" disabled>Готовьте!</button>
-          </div>
-        </div>
+        <SelectorDough :dough-types="doughTypes" />
+        <SelectorDiameter :pizza-sizes="pizzaSizes" />
+        <SelectorIngredients
+          :pizza-sauces="pizzaSauces"
+          :ingredients="ingredientsValues"
+        />
+        <ContentPizza />
       </div>
     </form>
   </main>
 </template>
+<style lang="scss" scoped>
+@use '@/assets/sass/ds-system/ds-colors';
+@use '@/assets/sass/ds-system/ds-typography';
+
+.content {
+  padding-top: 20px;
+}
+
+.content__wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  width: 920px;
+  margin: 0 auto;
+  padding-right: 2.12%;
+  padding-bottom: 30px;
+  padding-left: 2.12%;
+}
+
+.title {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+
+  color: ds-colors.$black;
+
+  &--big {
+    @include ds-typography.b-s36-h42;
+  }
+}
+</style>
