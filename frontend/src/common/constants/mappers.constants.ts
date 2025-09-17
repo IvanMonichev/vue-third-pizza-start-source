@@ -10,4 +10,4 @@ export const pizzaSizeMap: Record<PizzaSize, string> = {
   [PizzaSize.SMALL]: 'small',
   [PizzaSize.NORMAL]: 'normal',
   [PizzaSize.BIG]: 'big'
-}
+} as const
