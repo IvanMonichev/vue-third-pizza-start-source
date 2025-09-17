@@ -1,6 +1,6 @@
-@use "ds-system/ds-colors";
+@use 'ds-system/ds-colors';
 
-body {
+body #app {
   display: flex;
   flex-direction: column;
 
@@ -10,7 +10,7 @@ body {
   color: ds-colors.$black;
   background-color: ds-colors.$white;
 
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   font-size: 14px;
   line-height: 16px;
 
