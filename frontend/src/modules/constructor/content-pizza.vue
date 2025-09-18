@@ -16,6 +16,7 @@ const handleDropIngredient = (payload: object) => {
       placeholder="Введите название пиццы"
       name="pizza_name"
       label="Название пиццы"
+      :label-hidden="true"
     />
 
     <AppDrop @drop="handleDropIngredient">
