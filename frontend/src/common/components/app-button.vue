@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  variant?: 'default' | 'transparent'
+  variant?: 'default' | 'transparent' | 'border'
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
 }
@@ -14,7 +14,11 @@ defineEmits<{
 <template>
   <button
     :type="props.type || 'button'"
-    :class="{ button: true, 'button--transparent': variant === 'transparent' }"
+    :class="{
+      button: true,
+      'button--transparent': variant === 'transparent',
+      'button--border': variant === 'border'
+    }"
     :disabled="props.disabled"
     @click="$emit('click', $event)"
   >
