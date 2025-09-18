@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
 import { ref } from 'vue'
 
 const pizzaName = ref('')
+const handleDropIngredient = (payload: object) => {
+  console.log(payload)
+}
 </script>
 
 <template>
@@ -13,15 +17,18 @@ const pizzaName = ref('')
       name="pizza_name"
       label="Название пиццы"
     />
-    <div class="content__constructor">
-      <div class="pizza pizza--foundation--big-tomato">
-        <div class="pizza__wrapper">
-          <div class="pizza__filling pizza__filling--ananas" />
-          <div class="pizza__filling pizza__filling--bacon" />
-          <div class="pizza__filling pizza__filling--cheddar" />
+
+    <AppDrop @drop="handleDropIngredient">
+      <div class="content__constructor">
+        <div class="pizza pizza--foundation--big-tomato">
+          <div class="pizza__wrapper">
+            <div class="pizza__filling pizza__filling--ananas" />
+            <div class="pizza__filling pizza__filling--bacon" />
+            <div class="pizza__filling pizza__filling--cheddar" />
+          </div>
         </div>
       </div>
-    </div>
+    </AppDrop>
 
     <div class="content__result">
       <p>Итого: 0 ₽</p>
