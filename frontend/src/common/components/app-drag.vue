@@ -1,15 +1,13 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { DATA_TRANSFER_PAYLOAD, MOVE } from '@/common/constants/core.constants'
 
-const props = defineProps({
-  transferData: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  transferData: T
+}>()
 
 const onDrag = (e: DragEvent) => {
   const { dataTransfer } = e
+  console.log('dataTransfer', dataTransfer)
   if (!dataTransfer) return
   dataTransfer.effectAllowed = MOVE
   dataTransfer.dropEffect = MOVE
