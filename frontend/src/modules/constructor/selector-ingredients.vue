@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RadioGroup from '@/common/components/radio-group.vue'
+import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import {
   Ingredient,
   PizzaSauces,
@@ -31,7 +31,7 @@ const sauceValue = ref<SaucesValue>('tomato')
     <SheetLayout title="Выберите ингредиенты" content-class="ingredients">
       <div class="ingredients__sauce">
         <p>Основной соус:</p>
-        <RadioGroup
+        <AppRadioGroup
           v-model="sauceValue"
           :options="saucesOptions"
           name="sauce"

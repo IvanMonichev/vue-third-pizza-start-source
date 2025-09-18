@@ -13,7 +13,7 @@ const modelValue = defineModel<string | number>()
 <template>
   <label
     v-for="option in options"
-    :key="option.id"
+    :key="option.value"
     :class="['radio', labelClass]"
   >
     <input

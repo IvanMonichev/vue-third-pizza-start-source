@@ -1,15 +1,27 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AppSelect from '@/common/components/app-select.vue'
+import { ref } from 'vue'
+
+const options = [
+  { value: '1', label: 'Заберу сам' },
+  { value: '2', label: 'Новый адрес' },
+  { value: '3', label: 'Дом' }
+]
+
+const value = ref<string>('1')
+</script>
 
 <template>
   <div class="cart-form">
     <label class="cart-form__select">
       <span class="cart-form__label">Получение заказа:</span>
 
-      <select name="test" class="select">
-        <option value="1">Заберу сам</option>
-        <option value="2">Новый адрес</option>
-        <option value="3">Дом</option>
-      </select>
+      <AppSelect
+        v-model="value"
+        name="test"
+        :options="options"
+        label="Получение заказа:"
+      />
     </label>
 
     <label class="input input--big-label">
