@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
+import AppDrag from '@/common/components/app-drag.vue'
 import { Ingredient } from '@/common/types/constructor.types'
 import { mapIngredient } from '@/common/utils/ingredients.utils'
 
@@ -15,7 +16,11 @@ const viewIngredients = props.ingredients.map(mapIngredient)
       :key="ingredient.id"
       class="ingredients__item"
     >
-      <span :class="`filling ${ingredient.class}`">{{ ingredient.name }}</span>
+      <AppDrag :transfer-data="ingredient">
+        <span :class="`filling ${ingredient.class}`">{{
+          ingredient.name
+        }}</span>
+      </AppDrag>
       <AppCounter extra-class="ingredients__counter" />
     </li>
   </ul>
