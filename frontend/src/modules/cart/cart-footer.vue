@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AppButton from '@/common/components/app-button.vue'
+</script>
 
 <template>
   <section class="footer">
@@ -13,7 +15,7 @@
     </div>
 
     <div class="footer__submit">
-      <button type="submit" class="button">Оформить заказ</button>
+      <AppButton>Оформить заказ</AppButton>
     </div>
   </section>
 </template>

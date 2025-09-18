@@ -5,7 +5,7 @@ import CartAdditionalList from '@/modules/cart/cart-additional-list.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
 import CartItem from '@/modules/cart/cart-list-item.vue'
 import CartList from '@/modules/cart/cart-list.vue'
-import TheCartFooter from '@/modules/cart/the-cart-footer.vue'
+import CartFooter from '@/modules/cart/cart-footer.vue'
 import colaImg from '@/assets/img/cola.svg'
 import sauceImg from '@/assets/img/sauce.svg'
 import potatoImg from '@/assets/img/potato.svg'
@@ -56,7 +56,7 @@ import potatoImg from '@/assets/img/potato.svg'
         </div>
       </div>
     </main>
-    <TheCartFooter />
+    <CartFooter />
   </form>
 </template>
 
