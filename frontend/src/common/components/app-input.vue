@@ -5,6 +5,7 @@ interface Props {
   labelHidden?: boolean
   name?: string
   required?: boolean
+  size?: 'big'
 }
 
 const props = defineProps<Props>()
@@ -13,7 +14,7 @@ const modelValue = defineModel<string>()
 </script>
 
 <template>
-  <label class="input">
+  <label :class="['input', { 'input--big-label': props.size === 'big' }]">
     <span v-if="label" :class="{ 'visually-hidden': props.labelHidden }">{{
       label
     }}</span>

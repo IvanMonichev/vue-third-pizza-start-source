@@ -5,6 +5,7 @@ interface Props {
   label: string
   name: string
   options: Option[]
+  extraClass?: string
 }
 
 defineProps<Props>()
@@ -12,7 +13,7 @@ const modelValue = defineModel<string | number>()
 </script>
 
 <template>
-  <label class="app-select">
+  <label :class="['app-select', extraClass]">
     <span class="app-select__label">Получение заказа:</span>
 
     <select v-model="modelValue" name="test" class="app-select__field">
