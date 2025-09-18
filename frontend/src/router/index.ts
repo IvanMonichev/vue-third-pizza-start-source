@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     name: 'cart-view',
     component: () => import('@/views/cart-view.vue'),
     meta: { layout: 'app-layout-main' }
+  },
+  {
+    path: '/profile',
+    name: 'profile-view',
+    component: () => import('@/views/profile-view.vue')
   }
 ]
 
