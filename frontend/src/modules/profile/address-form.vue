@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppButtonIcon from '@/common/components/app-button-icon.vue'
 import AppButton from '@/common/components/app-button.vue'
 import AppInput from '@/common/components/app-input.vue'
 import { ref } from 'vue'
@@ -19,9 +20,9 @@ const isEditing = ref(props.mode === 'edit')
       <div class="address-form__header">
         <b>Адрес №1. Тест</b>
         <div class="address-form__edit">
-          <button type="button" class="icon" @click="isEditing = true">
-            <span class="visually-hidden">Изменить адрес</span>
-          </button>
+          <AppButtonIcon @click="isEditing = true"
+            >Изменить адрес</AppButtonIcon
+          >
         </div>
       </div>
       <p>Невский пр., д. 22, кв. 46</p>
