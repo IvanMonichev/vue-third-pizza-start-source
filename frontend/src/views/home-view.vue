@@ -10,7 +10,7 @@ import dough from '@/mocks/dough.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
 import ingredients from '@/mocks/ingredients.json'
-import ContentPizza from '@/modules/constructor/pizza.vue'
+import Pizza from '@/modules/constructor/pizza.vue'
 import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
@@ -32,7 +32,7 @@ const ingredientsValues: Ingredient[] = ingredients
           :pizza-sauces="pizzaSauces"
           :ingredients="ingredientsValues"
         />
-        <ContentPizza />
+        <Pizza />
       </div>
     </form>
   </main>
