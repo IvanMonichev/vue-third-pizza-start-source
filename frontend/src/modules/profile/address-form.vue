@@ -104,14 +104,6 @@ const isEditing = ref(props.mode === 'edit')
   margin-top: 16px;
 }
 
-.sheet {
-  padding-top: 15px;
-
-  border-radius: 8px;
-  background-color: ds-colors.$white;
-  box-shadow: ds-shadows.$shadow-light;
-}
-
 .address-form {
   $bl: &;
 
