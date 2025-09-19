@@ -1,30 +1,26 @@
 <script setup lang="ts">
+import AppButton from '@/common/components/app-button.vue'
+import AppInput from '@/common/components/app-input.vue'
 import AppTitle from '@/common/components/app-title.vue'
 </script>
 
 <template>
   <div class="sign-form">
-    <a href="#" class="close close--white">
+    <RouterLink to="/" class="close close--white">
       <span class="visually-hidden">Закрыть форму авторизации</span>
-    </a>
+    </RouterLink>
     <div class="sign-form__title">
       <AppTitle type="small">Авторизуйтесь на сайте</AppTitle>
     </div>
     <form action="#" method="post">
       <div class="sign-form__input">
-        <label class="input">
-          <span>E-mail</span>
-          <input type="email" name="email" placeholder="example@mail.ru" />
-        </label>
+        <AppInput type="email" name="email" placeholder="example@mail.ru" />
       </div>
 
       <div class="sign-form__input">
-        <label class="input">
-          <span>Пароль</span>
-          <input type="password" name="pass" placeholder="***********" />
-        </label>
+        <AppInput type="password" name="password" placeholder="*********" />
       </div>
-      <button type="submit" class="button">Авторизоваться</button>
+      <AppButton type="submit">Авторизоваться</AppButton>
     </form>
   </div>
 </template>
@@ -66,5 +62,67 @@ import AppTitle from '@/common/components/app-title.vue'
 
 .sign-form__input {
   margin-bottom: 16px;
+}
+
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  width: 25px;
+  height: 25px;
+
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+
+  color: ds-colors.$black;
+  border-radius: 50%;
+  outline: none;
+
+  &::before,
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 25px;
+    height: 2px;
+
+    content: '';
+
+    border-radius: 2px;
+    background-color: ds-colors.$black;
+  }
+
+  &::before {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  &::after {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
+
+  &:focus {
+    &::before,
+    &::after {
+      background-color: ds-colors.$orange-100;
+    }
+  }
+
+  &--white {
+    &::before,
+    &::after {
+      background-color: ds-colors.$white;
+    }
+  }
 }
 </style>
