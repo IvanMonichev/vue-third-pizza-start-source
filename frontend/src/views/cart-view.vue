@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
-import CartAdditionalItem from '@/modules/cart/cart-additional-item.vue'
+import CartAdditionalListItem from '@/modules/cart/cart-additional-list-item.vue'
 import CartAdditionalList from '@/modules/cart/cart-additional-list.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
 import CartItem from '@/modules/cart/cart-list-item.vue'
@@ -30,19 +30,19 @@ import potatoImg from '@/assets/img/potato.svg'
 
         <div class="cart__additional">
           <CartAdditionalList>
-            <CartAdditionalItem
+            <CartAdditionalListItem
               title="Coca-Cola 0,5 л"
               :price="56"
               :img-src="colaImg"
               img-alt="Coca-Cola 0,5 литра"
             />
-            <CartAdditionalItem
+            <CartAdditionalListItem
               title="Острый соус"
               :price="30"
               :img-src="sauceImg"
               img-alt="Острый соус"
             />
-            <CartAdditionalItem
+            <CartAdditionalListItem
               title="Картошка из печи"
               :price="56"
               :img-src="potatoImg"

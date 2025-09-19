@@ -2,17 +2,29 @@
 
 <template>
   <div class="layout__sidebar sidebar">
-    <a href="index.html" class="logo layout__logo">
+    <RouterLink to="/" class="logo layout__logo">
       <img
         src="@/assets/img/logo.svg"
         alt="V!U!E! Pizza logo"
         width="90"
         height="40"
       />
-    </a>
+    </RouterLink>
 
-    <a class="layout__link" href="#">История заказов</a>
-    <a class="layout__link layout__link--active" href="#">Мои данные</a>
+    <RouterLink
+      to="/profile/orders"
+      class="layout__link"
+      active-class="layout__link--active"
+    >
+      История заказов
+    </RouterLink>
+    <RouterLink
+      to="/profile/user-data"
+      class="layout__link"
+      active-class="layout__link--active"
+    >
+      Мои данные
+    </RouterLink>
   </div>
 </template>
 
