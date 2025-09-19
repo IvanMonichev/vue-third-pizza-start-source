@@ -55,6 +55,11 @@ const { title, image, price, options } = toRefs(props)
   white-space: nowrap;
 }
 
+.product {
+  display: flex;
+  align-items: center;
+}
+
 .product__text {
   margin-left: 15px;
 
