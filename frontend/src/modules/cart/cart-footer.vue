@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import AppButtonLink from '@/common/components/app-button-link.vue'
 import AppButton from '@/common/components/app-button.vue'
 </script>
 
 <template>
   <section class="footer">
     <div class="footer__more">
-      <a href="#" class="button button--border button--arrow">Хочу еще одну</a>
+      <!--      <a href="#" class="button button&#45;&#45;border button&#45;&#45;arrow">Хочу еще одну</a>-->
+      <AppButtonLink to="/" :variants="['border', 'arrow']"
+        >Хочу еще одну</AppButtonLink
+      >
     </div>
     <p class="footer__text">
       Перейти к конструктору<br />чтоб собрать ещё одну пиццу
