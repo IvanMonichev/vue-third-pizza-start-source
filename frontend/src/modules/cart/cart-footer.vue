@@ -6,7 +6,6 @@ import AppButton from '@/common/components/app-button.vue'
 <template>
   <section class="footer">
     <div class="footer__more">
-      <!--      <a href="#" class="button button&#45;&#45;border button&#45;&#45;arrow">Хочу еще одну</a>-->
       <AppButtonLink to="/" :variants="['border', 'arrow']"
         >Хочу еще одну</AppButtonLink
       >
