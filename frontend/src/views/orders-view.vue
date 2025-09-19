@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
-import OrderSheet from '@/modules/profile/order-sheet.vue'
+import OrderSheet from '@/modules/order/order-sheet.vue'
 </script>
 
 <template>

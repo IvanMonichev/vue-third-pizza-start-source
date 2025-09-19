@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AppButton from '@/common/components/app-button.vue'
 import AppTitle from '@/common/components/app-title.vue'
-import AddressForm from '@/modules/profile/address-form.vue'
-import UserData from '@/modules/profile/user-data.vue'
+import AddressForm from '@/modules/user-data/address-form.vue'
+import UserData from '@/modules/user-data/user-data.vue'
 </script>
 
 <template>
