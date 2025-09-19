@@ -21,7 +21,16 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/profile',
     name: 'profile-view',
-    component: () => import('@/views/profile-view.vue')
+    component: () => import('@/views/profile-view.vue'),
+    redirect: '/profile/user-data',
+    meta: { layout: 'app-layout-main' },
+    children: [
+      {
+        path: 'user-data',
+        name: 'user-view',
+        component: () => import('@/views/user-view.vue')
+      }
+    ]
   }
 ]
 
