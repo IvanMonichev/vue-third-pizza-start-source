@@ -1,21 +1,29 @@
 <script setup lang="ts">
-defineProps<{
+interface Props {
   placeholder?: string
   label?: string
+  labelHidden?: boolean
   name?: string
-}>()
+  required?: boolean
+  size?: 'big'
+}
+
+const props = defineProps<Props>()
 
 const modelValue = defineModel<string>()
 </script>
 
 <template>
-  <label class="input">
-    <span v-if="label" class="visually-hidden">{{ label }}</span>
+  <label :class="['input', { 'input--big-label': props.size === 'big' }]">
+    <span v-if="label" :class="{ 'visually-hidden': props.labelHidden }">{{
+      label
+    }}</span>
     <input
       v-model="modelValue"
       type="text"
       :name="name"
       :placeholder="placeholder"
+      :required="required"
     />
   </label>
 </template>
@@ -78,5 +86,23 @@ const modelValue = defineModel<string>()
       white-space: nowrap;
     }
   }
+}
+
+.visually-hidden {
+  position: absolute;
+
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  white-space: nowrap;
+
+  border: 0;
+
+  clip-path: inset(100%);
 }
 </style>

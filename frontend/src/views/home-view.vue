@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppTitle from '@/common/components/app-title.vue'
 import {
   Dough,
   Ingredient,
@@ -9,7 +10,7 @@ import dough from '@/mocks/dough.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
 import ingredients from '@/mocks/ingredients.json'
-import ContentPizza from '@/modules/constructor/pizza.vue'
+import ContentPizza from '@/modules/constructor/content-pizza.vue'
 import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
@@ -24,7 +25,7 @@ const ingredientsValues: Ingredient[] = ingredients
   <main class="content">
     <form action="#" method="post">
       <div class="content__wrapper">
-        <h1 class="title title--big">Конструктор пиццы</h1>
+        <AppTitle>Конструктор пиццы</AppTitle>
         <SelectorDough :dough-types="doughTypes" />
         <SelectorDiameter :pizza-sizes="pizzaSizes" />
         <SelectorIngredients
@@ -37,9 +38,6 @@ const ingredientsValues: Ingredient[] = ingredients
   </main>
 </template>
 <style lang="scss" scoped>
-@use '@/assets/sass/ds-system/ds-colors';
-@use '@/assets/sass/ds-system/ds-typography';
-
 .content {
   padding-top: 20px;
 }
@@ -54,17 +52,5 @@ const ingredientsValues: Ingredient[] = ingredients
   padding-right: 2.12%;
   padding-bottom: 30px;
   padding-left: 2.12%;
-}
-
-.title {
-  box-sizing: border-box;
-  width: 100%;
-  margin: 0;
-
-  color: ds-colors.$black;
-
-  &--big {
-    @include ds-typography.b-s36-h42;
-  }
 }
 </style>

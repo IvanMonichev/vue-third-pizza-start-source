@@ -1,7 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+interface Props {
+  color?: 'orange' | 'green'
+  extraClass?: string
+}
+
+defineProps<Props>()
+</script>
 
 <template>
-  <div class="counter counter--orange ingredients__counter">
+  <div :class="['counter', `counter--${color ?? 'green'}`, extraClass]">
     <button
       type="button"
       class="counter__button counter__button--minus"
@@ -10,7 +17,14 @@
       <span class="visually-hidden">Меньше</span>
     </button>
     <input type="text" name="counter" class="counter__input" value="0" />
-    <button type="button" class="counter__button counter__button--plus">
+    <button
+      type="button"
+      :class="[
+        'counter__button',
+        'counter__button--plus',
+        `counter__button--${color ?? 'green'}`
+      ]"
+    >
       <span class="visually-hidden">Больше</span>
     </button>
   </div>
@@ -86,8 +100,6 @@
   }
 
   &--plus {
-    background-color: ds-colors.$green-500;
-
     &::before {
       @include m_center.p_center-all;
 
@@ -113,14 +125,6 @@
       background-color: ds-colors.$white;
     }
 
-    &:hover:not(:active):not(:disabled) {
-      background-color: ds-colors.$green-400;
-    }
-
-    &:active:not(:disabled) {
-      background-color: ds-colors.$green-600;
-    }
-
     &:focus:not(:disabled) {
       box-shadow: ds-shadows.$shadow-regular;
     }
@@ -129,6 +133,18 @@
       cursor: default;
 
       opacity: 0.3;
+    }
+  }
+
+  &--green {
+    background-color: ds-colors.$green-500;
+
+    &:hover:not(:active):not(:disabled) {
+      background-color: ds-colors.$green-400;
+    }
+
+    &:active:not(:disabled) {
+      background-color: ds-colors.$green-600;
     }
   }
 

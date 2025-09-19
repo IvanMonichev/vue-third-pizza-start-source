@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { DATA_TRANSFER_PAYLOAD } from '@/common/constants/core.constants'
 
-const emit = defineEmits(['drop'])
+interface Props {
+  (e: 'drop', payload: object): void
+}
+
+const emit = defineEmits<Props>()
 
 const onDrop = (e: DragEvent) => {
   const { dataTransfer } = e

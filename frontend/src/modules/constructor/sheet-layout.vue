@@ -13,16 +13,7 @@ defineProps<{ title?: string; contentClass?: string }>()
 
 <style scoped lang="scss">
 @use '@/assets/sass/ds-system/ds-colors';
-@use '@/assets/sass/ds-system/ds-shadows';
 @use '@/assets/sass/ds-system/ds-typography';
-
-.sheet {
-  padding-top: 15px;
-
-  border-radius: 8px;
-  background-color: ds-colors.$white;
-  box-shadow: ds-shadows.$shadow-light;
-}
 
 .sheet__title {
   padding-right: 18px;
