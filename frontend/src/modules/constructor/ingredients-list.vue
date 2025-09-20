@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import AppDrag from '@/common/components/app-drag.vue'
-import { Ingredient } from '@/common/types/constructor.types'
+import { Ingredient } from '@/common/types/pizza.types'
 import { mapIngredient } from '@/common/utils/ingredients.utils'
 
 const props = defineProps<{ ingredients: Ingredient[] }>()

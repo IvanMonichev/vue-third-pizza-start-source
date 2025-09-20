@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppButton from '@/common/components/app-button.vue'
-import { AdditionalItem } from '@/common/types/order.types'
+import { MiscView } from '@/common/types/order.types'
 import OrderAdditional from '@/modules/order/order-additional.vue'
 import OrderListItem from '@/modules/order/order-list-item.vue'
 import OrderList from '@/modules/order/order-list.vue'
@@ -9,7 +9,7 @@ import colaImg from '@/assets/img/cola.svg'
 import sauceImg from '@/assets/img/sauce.svg'
 import potatoImg from '@/assets/img/potato.svg'
 
-const additionalItems: AdditionalItem[] = [
+const additionalItems: MiscView[] = [
   {
     name: 'Coca-Cola 0,5 литра',
     price: 56,

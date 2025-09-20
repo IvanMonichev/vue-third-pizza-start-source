@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
 import { PizzaSize } from '@/common/enums/pizza-size.enum'
-import { PizzaSizeInterface } from '@/common/types/constructor.types'
+import { PizzaSizeInterface } from '@/common/types/pizza.types'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { ref } from 'vue'
 

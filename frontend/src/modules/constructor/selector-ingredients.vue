@@ -4,7 +4,7 @@ import {
   Ingredient,
   PizzaSauces,
   SaucesValue
-} from '@/common/types/constructor.types'
+} from '@/common/types/pizza.types'
 import { Option } from '@/common/types/core.types'
 import Ingredients from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'

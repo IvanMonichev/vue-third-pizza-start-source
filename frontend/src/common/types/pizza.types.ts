@@ -35,3 +35,17 @@ export interface Ingredient {
 export type ViewIngredient = Ingredient & {
   class: string
 }
+
+type SelectedIngredient = {
+  ingredientId: number
+  quantity: number
+}
+
+export interface Pizza {
+  name: string
+  sauceId: string | null
+  doughId: string | null
+  sizeId: string | null
+  ingredients: SelectedIngredient[]
+  quantity: number
+}

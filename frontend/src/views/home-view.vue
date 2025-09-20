@@ -5,7 +5,7 @@ import {
   Ingredient,
   PizzaSauces,
   PizzaSizeInterface
-} from '@/common/types/constructor.types'
+} from '@/common/types/pizza.types'
 import dough from '@/mocks/dough.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
