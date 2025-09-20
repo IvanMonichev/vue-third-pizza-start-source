@@ -1,4 +1,4 @@
-import { Ingredient, ViewIngredient } from '@/common/types/constructor.types'
+import { Ingredient, ViewIngredient } from '@/common/types/pizza.types'
 
 const toClassName = (path: string) => {
   const name = path.split('/').pop()?.replace('.svg', '') || ''

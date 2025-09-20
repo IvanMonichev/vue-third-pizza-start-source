@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { AdditionalItem } from '@/common/types/order.types'
+import { MiscView } from '@/common/types/order.types'
 
 interface Props {
-  items: AdditionalItem[]
+  items: MiscView[]
 }
 
 const props = defineProps<Props>()
