@@ -21,8 +21,9 @@ export interface Address {
   comment: string
 }
 
-type OrderAddress = Omit<Address, 'id' | 'name'>
-interface OrderMisc {
+export type OrderAddress = Omit<Address, 'id' | 'name'>
+
+export interface OrderMisc {
   miscId: number
   quantity: number
 }

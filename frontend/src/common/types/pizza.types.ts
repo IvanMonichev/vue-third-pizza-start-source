@@ -1,6 +1,6 @@
 import { DoughSize } from '@/common/enums/dough-size.enum'
 
-export interface PizzaSizeInterface {
+export interface Size {
   id: number
   name: string
   image: string
@@ -18,7 +18,7 @@ export interface Dough {
 
 export type SaucesValue = 'tomato' | 'creamy'
 
-export interface PizzaSauces {
+export interface Sauces {
   id: number
   name: string
   price: number
