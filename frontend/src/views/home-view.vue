@@ -16,7 +16,7 @@ import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
 const pizzaDoughs: PizzaDough[] = dough
 const pizzaSauces: PizzaSauces[] = sauces
 const pizzaSizes: PizzaSize[] = sizes
-const ingredientsValues: PizzaIngredient[] = ingredients
+const pizzaIngredients: PizzaIngredient[] = ingredients
 </script>
 
 <template>
@@ -28,7 +28,7 @@ const ingredientsValues: PizzaIngredient[] = ingredients
         <SelectorDiameter :pizza-sizes="pizzaSizes" />
         <SelectorIngredients
           :pizza-sauces="pizzaSauces"
-          :ingredients="ingredientsValues"
+          :ingredients="pizzaIngredients"
         />
         <ContentPizza />
       </div>

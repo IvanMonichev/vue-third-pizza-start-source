@@ -9,3 +9,8 @@ export interface AddressDto {
 }
 
 export type OrderAddressDto = AddressDto
+
+export interface Address extends Pick<AddressDto, 'id'> {
+  label: string
+  fullAddress: string
+}

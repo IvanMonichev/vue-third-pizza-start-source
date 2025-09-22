@@ -11,3 +11,7 @@ export interface OrderMiscDto {
   miscId: number
   quantity: number
 }
+
+export interface CartMisc extends MiscDto {
+  quantity: number
+}

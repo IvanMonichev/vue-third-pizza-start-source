@@ -1,11 +1,12 @@
-import { Address, OrderDto } from '@/common/types/order.types'
-import { User } from '@/common/types/profile.types'
+import { Address } from '@/common/types/address.types'
+import { ProfileOrder } from '@/common/types/order.types'
+import { UserDto } from '@/common/types/profile.types'
 import { defineStore } from 'pinia'
 
 interface ProfileState {
-  user: User | null
+  user: UserDto | null
   addresses: Address[]
-  orders: OrderDto[]
+  orders: ProfileOrder[]
 }
 
 export const useProfileStore = defineStore('profile', {
@@ -14,6 +15,18 @@ export const useProfileStore = defineStore('profile', {
     addresses: [],
     orders: []
   }),
-  getters: {},
-  actions: {}
+  getters: {
+    hasAddresses: (state) => state.addresses.length > 0,
+    hasOrders: (state) => state.orders.length > 0,
+    lastOrder: (state) => state.orders.at(-1) ?? null,
+    totalSpent: (state) =>
+      state.orders.reduce((acc, order) => acc + order.total, 0)
+  },
+  actions: {
+    clearProfile() {
+      this.user = null
+      this.addresses = []
+      this.orders = []
+    }
+  }
 })
