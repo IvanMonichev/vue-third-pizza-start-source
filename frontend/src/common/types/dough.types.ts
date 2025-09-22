@@ -6,5 +6,8 @@ export interface DoughDto {
   image: string
   description: string
   price: number
-  size: DoughSize
+}
+
+export interface PizzaDough extends DoughDto {
+  value: DoughSize
 }

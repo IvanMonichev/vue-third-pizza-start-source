@@ -1,6 +1,10 @@
+import { PizzaSizeValue } from '@/common/enums/pizza-size-value.enum'
+
 export interface SizeDto {
   id: number
   name: string
   image: string
-  multiplier: number
+  multiplier: PizzaSizeValue
 }
+
+export type PizzaSize = SizeDto

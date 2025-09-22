@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { pizzaSizeMap } from '@/common/constants/mappers.constants'
-import { PizzaSize } from '@/common/enums/pizza-size.enum'
+import { PizzaSizeValue } from '@/common/enums/pizza-size-value.enum'
 
 const props = defineProps<{
   label: string
   name: string
-  value: PizzaSize
+  value: PizzaSizeValue
 }>()
 
 const size = pizzaSizeMap[props.value]
-const modelValue = defineModel<PizzaSize>()
+const modelValue = defineModel<PizzaSizeValue>()
 </script>
 
 <template>

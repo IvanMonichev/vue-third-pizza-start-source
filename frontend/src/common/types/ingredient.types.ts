@@ -10,3 +10,5 @@ export interface PizzaIngredientDto extends Pick<IngredientDto, 'id'> {
   ingredientId: number
   quantity: number
 }
+
+export type PizzaIngredient = IngredientDto

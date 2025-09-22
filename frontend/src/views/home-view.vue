@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
-import {
-  DoughDto,
-  Ingredient,
-  SaucesDto,
-  SizeDto
-} from '@/common/types/pizza.types'
+import { PizzaDough } from '@/common/types/dough.types'
+import { PizzaIngredient } from '@/common/types/ingredient.types'
+import { PizzaSauces } from '@/common/types/sauces.types'
+import { PizzaSize } from '@/common/types/size.types'
 import dough from '@/mocks/dough.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
@@ -15,10 +13,10 @@ import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
 
-const doughTypes: DoughDto[] = dough
-const pizzaSauces: SaucesDto[] = sauces
-const pizzaSizes: SizeDto[] = sizes
-const ingredientsValues: Ingredient[] = ingredients
+const pizzaDoughs: PizzaDough[] = dough
+const pizzaSauces: PizzaSauces[] = sauces
+const pizzaSizes: PizzaSize[] = sizes
+const ingredientsValues: PizzaIngredient[] = ingredients
 </script>
 
 <template>
@@ -26,7 +24,7 @@ const ingredientsValues: Ingredient[] = ingredients
     <form action="#" method="post">
       <div class="content__wrapper">
         <AppTitle>Конструктор пиццы</AppTitle>
-        <SelectorDough :dough-types="doughTypes" />
+        <SelectorDough :pizza-dough="pizzaDoughs" />
         <SelectorDiameter :pizza-sizes="pizzaSizes" />
         <SelectorIngredients
           :pizza-sauces="pizzaSauces"
