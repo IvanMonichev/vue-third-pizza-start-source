@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
-import { Dough, Ingredient, Sauces, Size } from '@/common/types/pizza.types'
+import {
+  DoughDto,
+  Ingredient,
+  SaucesDto,
+  SizeDto
+} from '@/common/types/pizza.types'
 import dough from '@/mocks/dough.json'
 import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
@@ -10,9 +15,9 @@ import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
 
-const doughTypes: Dough[] = dough
-const pizzaSauces: Sauces[] = sauces
-const pizzaSizes: Size[] = sizes
+const doughTypes: DoughDto[] = dough
+const pizzaSauces: SaucesDto[] = sauces
+const pizzaSizes: SizeDto[] = sizes
 const ingredientsValues: Ingredient[] = ingredients
 </script>
 

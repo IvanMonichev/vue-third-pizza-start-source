@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { Dough } from '@/common/types/pizza.types'
+import { DoughDto } from '@/common/types/pizza.types'
 import RadioDough from '@/modules/constructor/radio-dough.vue'
 import { DoughSize } from '@/common/enums/dough-size.enum'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { ref } from 'vue'
 
 defineProps<{
-  doughTypes: Dough[]
+  doughTypes: DoughDto[]
 }>()
 
 const doughValue = ref<DoughSize>(DoughSize.LIGHT)

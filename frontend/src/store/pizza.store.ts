@@ -1,8 +1,8 @@
-import { Pizza } from '@/common/types/pizza.types'
+import { PizzaDto } from '@/common/types/pizza.types'
 import { defineStore } from 'pinia'
 
 interface PizzaState {
-  currentPizza: Pizza
+  currentPizza: PizzaDto
 }
 
 export const usePizzaStore = defineStore('pizza', {

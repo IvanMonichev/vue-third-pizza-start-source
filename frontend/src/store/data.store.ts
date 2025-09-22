@@ -1,11 +1,16 @@
 import { Misc } from '@/common/types/order.types'
-import { Dough, Ingredient, Sauces, Size } from '@/common/types/pizza.types'
+import {
+  DoughDto,
+  Ingredient,
+  SaucesDto,
+  SizeDto
+} from '@/common/types/pizza.types'
 import { defineStore } from 'pinia'
 
 interface State {
-  dough: Dough[]
-  sauces: Sauces[]
-  sizes: Size[]
+  dough: DoughDto[]
+  sauces: SaucesDto[]
+  sizes: SizeDto[]
   ingredients: Ingredient[]
   misc: Misc[]
 }

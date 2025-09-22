@@ -1,14 +1,9 @@
-import {
-  Address,
-  Misc,
-  OrderAddress,
-  OrderMisc
-} from '@/common/types/order.types'
-import { Pizza } from '@/common/types/pizza.types'
+import { OrderAddress, OrderMisc } from '@/common/types/order.types'
+import { PizzaDto } from '@/common/types/pizza.types'
 import { defineStore } from 'pinia'
 
 interface CartState {
-  pizzas: Pizza[]
+  pizzas: PizzaDto[]
   misc: OrderMisc[]
   address: OrderAddress | null
 }
@@ -19,9 +14,11 @@ export const useCartStore = defineStore('cart', {
     misc: [],
     address: null
   }),
-  getters: {},
+  getters: {
+    pizzasPrice: (state) => state.pizzas.reduce((acc, pizza) => acc + pi)
+  },
   actions: {
-    addPizza(pizza: Pizza) {
+    addPizza(pizza: PizzaDto) {
       this.pizzas.push(pizza)
     },
     removePizza(index: number) {

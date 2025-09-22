@@ -1,37 +1,12 @@
-import { Pizza } from '@/common/types/pizza.types'
+import { OrderAddressDto } from '@/common/types/address.types'
+import { OrderMiscDto } from '@/common/types/misc.types'
+import { OrderPizzaDto } from '@/common/types/pizza.types'
 
-export interface Misc {
+export interface OrderDto {
   id: number
-  name: string
-  price: number
-  image: string
-}
-
-export interface MiscView extends Omit<Misc, 'id'> {
-  alt: string
-}
-
-export interface Address {
-  id: number
-  name: string
   userId: string
-  street: string
-  building: string
-  flat: string
-  comment: string
-}
-
-export type OrderAddress = Omit<Address, 'id' | 'name'>
-
-export interface OrderMisc {
-  miscId: number
-  quantity: number
-}
-
-export interface Order {
-  userId: string
-  phone: string
-  address: OrderAddress
-  pizzas: Pizza[]
-  misc: OrderMisc[]
+  addressId: number
+  orderPizzas: OrderPizzaDto[]
+  orderMisc: OrderMiscDto[]
+  orderAddress: OrderAddressDto
 }
