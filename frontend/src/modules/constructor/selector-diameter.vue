@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import { PizzaSize } from '@/common/types/size.types'
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
-import { PizzaSize } from '@/common/enums/pizza-size.enum'
-import { Size } from '@/common/types/pizza.types'
+import { PizzaSizeValue } from '@/common/enums/pizza-size-value.enum'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { ref } from 'vue'
 
-defineProps<{ pizzaSizes: Size[] }>()
-const pizzaSize = ref<PizzaSize>(PizzaSize.SMALL)
+defineProps<{ pizzaSizes: PizzaSize[] }>()
+const pizzaSize = ref<PizzaSizeValue>(PizzaSizeValue.SMALL)
 </script>
 
 <template>

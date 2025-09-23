@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
-import { Ingredient, Sauces, SaucesValue } from '@/common/types/pizza.types'
 import { Option } from '@/common/types/core.types'
+import { PizzaIngredient } from '@/common/types/ingredient.types'
+import { PizzaSauces, SaucesType } from '@/common/types/sauces.types'
 import Ingredients from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
-  pizzaSauces: Sauces[]
-  ingredients: Ingredient[]
+  pizzaSauces: PizzaSauces[]
+  ingredients: PizzaIngredient[]
 }>()
 
 const saucesOptions = computed<Option[]>(() =>
@@ -19,7 +20,7 @@ const saucesOptions = computed<Option[]>(() =>
   }))
 )
 
-const sauceValue = ref<SaucesValue>('tomato')
+const sauceValue = ref<SaucesType>('tomato')
 </script>
 
 <template>
