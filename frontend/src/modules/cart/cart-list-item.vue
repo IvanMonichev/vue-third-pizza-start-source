@@ -22,7 +22,7 @@ import AppCounter from '@/common/components/app-counter.vue'
       </div>
     </div>
 
-    <AppCounter color="orange" extra-class="cart-list__counter" />
+    <AppCounter :count="0" color="orange" extra-class="cart-list__counter" />
 
     <div class="cart-list__price">
       <b>782 ₽</b>

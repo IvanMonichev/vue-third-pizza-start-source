@@ -44,13 +44,14 @@ export const usePizzaStore = defineStore('pizza', {
   },
   actions: {
     setIngredient(id: number, value: number) {
-      const ingredient = this.ingredients.find((i) => i.id === id)
-
-      if (value <= 0) {
+      if (value < 1) {
         this.ingredients = this.ingredients.filter((i) => i.id !== id)
         return
       }
 
+      if (value > 3) return
+
+      const ingredient = this.ingredients.find((i) => i.id === id)
       if (ingredient) {
         ingredient.quantity = value
       } else {
@@ -60,22 +61,26 @@ export const usePizzaStore = defineStore('pizza', {
 
     incrementIngredient(id: number) {
       const ingredient = this.ingredients.find((i) => i.id === id)
-      if (ingredient) {
-        ingredient.quantity++
-      } else {
+      if (!ingredient) {
         this.ingredients.push({ id, quantity: 1 })
+        return
       }
+
+      if (ingredient.quantity >= 3) return
+      ingredient.quantity++
     },
 
     decrementIngredient(id: number) {
       const index = this.ingredients.findIndex((i) => i.id === id)
-      if (index !== -1) {
-        if (this.ingredients[index].quantity > 1) {
-          this.ingredients[index].quantity--
-        } else {
-          this.ingredients.splice(index, 1)
-        }
+      if (index === -1) return
+
+      const ingredient = this.ingredients[index]
+      if (ingredient.quantity <= 1) {
+        this.ingredients.splice(index, 1)
+        return
       }
+
+      ingredient.quantity--
     },
 
     removeIngredient(id: number) {

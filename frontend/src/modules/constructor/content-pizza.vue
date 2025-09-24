@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppButton from '@/common/components/app-button.vue'
 import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
 import { ref } from 'vue'
@@ -36,7 +37,7 @@ const pizzaStore = usePizzaStore()
 
     <div class="content__result">
       <p>Итого: {{ pizzaStore.pizzaPrice }} ₽</p>
-      <button type="button" class="button" disabled>Готовьте!</button>
+      <AppButton type="button" disabled>Готовьте!</AppButton>
     </div>
   </div>
 </template>

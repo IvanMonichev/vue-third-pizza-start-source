@@ -7,7 +7,7 @@ defineProps<{
   labelClass?: string
 }>()
 
-const modelValue = defineModel<string | number>()
+const modelValue = defineModel<string | number | null>()
 </script>
 
 <template>
