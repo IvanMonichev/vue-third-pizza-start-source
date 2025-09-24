@@ -7,4 +7,4 @@ export interface SizeDto {
   multiplier: PizzaSizeValue
 }
 
-export type PizzaSize = SizeDto
+export type PizzaSize = Pick<SizeDto, 'id'>
