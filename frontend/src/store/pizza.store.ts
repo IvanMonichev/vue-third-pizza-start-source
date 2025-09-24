@@ -59,6 +59,10 @@ export const usePizzaStore = defineStore('pizza', {
 
     setDoughId(id: number) {
       this.doughId = id
+    },
+
+    setSizeId(id: number) {
+      this.sizeId = id
     }
   }
 })
