@@ -1,15 +1,20 @@
-import { PizzaDough } from '@/common/types/dough.types'
-import { PizzaIngredient } from '@/common/types/ingredient.types'
+import { DoughDto } from '@/common/types/dough.types'
+import { IngredientDto } from '@/common/types/ingredient.types'
 import { MiscDto } from '@/common/types/misc.types'
-import { PizzaSauces } from '@/common/types/sauces.types'
-import { PizzaSize } from '@/common/types/size.types'
+import { SaucesDto } from '@/common/types/sauces.types'
+import { SizeDto } from '@/common/types/size.types'
 import { defineStore } from 'pinia'
+import dough from '@/mocks/dough.json'
+import sauces from '@/mocks/sauces.json'
+import sizes from '@/mocks/sizes.json'
+import ingredients from '@/mocks/ingredients.json'
+import misc from '@/mocks/misc.json'
 
 interface DataState {
-  dough: PizzaDough[]
-  sauces: PizzaSauces[]
-  sizes: PizzaSize[]
-  ingredients: PizzaIngredient[]
+  dough: DoughDto[]
+  sauces: SaucesDto[]
+  sizes: SizeDto[]
+  ingredients: IngredientDto[]
   misc: MiscDto[]
 }
 
@@ -22,15 +27,31 @@ export const useDataStore = defineStore('data', {
     misc: []
   }),
   getters: {
-    getDoughById: (state) => (id: number) =>
-      state.dough.find((d) => d.id === id),
-    getSauceById: (state) => (id: number) =>
-      state.sauces.find((s) => s.id === id),
-    getSizeById: (state) => (id: number) =>
-      state.sizes.find((sz) => sz.id === id),
-    getIngredientById: (state) => (id: number) =>
-      state.ingredients.find((i) => i.id === id),
-    getMiscById: (state) => (id: number) => state.misc.find((m) => m.id === id)
+    getById:
+      (state) =>
+      <T extends keyof DataState>(
+        type: T,
+        id: number | null
+      ): DataState[T][number] | null => {
+        if (id === null) return null
+        return state[type].find((item) => item.id === id) ?? null
+      }
   },
-  actions: {}
+  actions: {
+    loadDough() {
+      this.dough = dough
+    },
+    loadSauces() {
+      this.sauces = sauces
+    },
+    loadSizes() {
+      this.sizes = sizes
+    },
+    loadIngredients() {
+      this.ingredients = ingredients
+    },
+    loadMisc() {
+      this.misc = misc
+    }
+  }
 })
