@@ -32,13 +32,20 @@ export const usePizzaStore = defineStore('pizza', {
         return acc + (ingredient ? ingredient.price * ing.quantity : 0)
       }, 0)
       return basePrice + ingredientsPrice
-    }
+    },
+    getIngredientQuantity:
+      (state) =>
+      (id: number): number => {
+        return state.ingredients.find((i) => i.id === id)?.quantity || 0
+      }
   },
   actions: {
     incrementIngredient(id: number) {
       const ingredient = this.ingredients.find((i) => i.id === id)
       if (ingredient) {
         ingredient.quantity++
+      } else {
+        this.ingredients.push({ id, quantity: 1 })
       }
     },
 
@@ -63,6 +70,10 @@ export const usePizzaStore = defineStore('pizza', {
 
     setSizeId(id: number) {
       this.sizeId = id
+    },
+
+    setSauceId(id: number) {
+      this.sauceId = id
     }
   }
 })

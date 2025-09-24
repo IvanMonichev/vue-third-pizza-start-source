@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import AppDrag from '@/common/components/app-drag.vue'
-import { Ingredient } from '@/common/types/pizza.types'
 import { mapIngredient } from '@/common/utils/ingredients.utils'
+import { computed, onMounted } from 'vue'
+import { useDataStore, usePizzaStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
-const props = defineProps<{ ingredients: Ingredient[] }>()
+const dataStore = useDataStore()
+const pizzaStore = usePizzaStore()
+const { ingredients } = storeToRefs(dataStore)
 
-const viewIngredients = props.ingredients.map(mapIngredient)
+onMounted(async () => {
+  dataStore.loadIngredients()
+})
+
+const viewIngredients = computed(() => ingredients.value.map(mapIngredient))
 </script>
 
 <template>
@@ -21,7 +29,12 @@ const viewIngredients = props.ingredients.map(mapIngredient)
           ingredient.name
         }}</span>
       </AppDrag>
-      <AppCounter extra-class="ingredients__counter" />
+      <AppCounter
+        :count="pizzaStore.getIngredientQuantity(ingredient.id)"
+        extra-class="ingredients__counter"
+        @increment="pizzaStore.incrementIngredient(ingredient.id)"
+        @decrement="pizzaStore.decrementIngredient(ingredient.id)"
+      />
     </li>
   </ul>
 </template>

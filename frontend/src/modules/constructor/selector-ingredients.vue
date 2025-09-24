@@ -1,26 +1,29 @@
 <script setup lang="ts">
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
-import { PizzaIngredient } from '@/common/types/ingredient.types'
-import { PizzaSauces, SaucesType } from '@/common/types/sauces.types'
 import Ingredients from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { computed, ref } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useDataStore, usePizzaStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
-const props = defineProps<{
-  pizzaSauces: PizzaSauces[]
-  ingredients: PizzaIngredient[]
-}>()
+const dataStore = useDataStore()
+const pizzaStore = usePizzaStore()
+const { sauces } = storeToRefs(dataStore)
 
 const saucesOptions = computed<Option[]>(() =>
-  props.pizzaSauces.map((s) => ({
-    id: s.id,
+  sauces.value.map((s) => ({
     label: s.name,
-    value: s.value
+    value: s.id
   }))
 )
 
-const sauceValue = ref<SaucesType>('tomato')
+onMounted(async () => {
+  dataStore.loadSauces()
+  pizzaStore.setSauceId(dataStore.sauces[0].id)
+})
+
+const { sauceId } = storeToRefs(pizzaStore)
 </script>
 
 <template>
@@ -29,7 +32,7 @@ const sauceValue = ref<SaucesType>('tomato')
       <div class="ingredients__sauce">
         <p>Основной соус:</p>
         <AppRadioGroup
-          v-model="sauceValue"
+          v-model="sauceId"
           :options="saucesOptions"
           name="sauce"
           label-class="ingredients__input"
@@ -38,7 +41,7 @@ const sauceValue = ref<SaucesType>('tomato')
 
       <div class="ingredients__filling">
         <p>Начинка:</p>
-        <Ingredients :ingredients="ingredients" />
+        <Ingredients />
       </div>
     </SheetLayout>
   </div>
