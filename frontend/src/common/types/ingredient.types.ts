@@ -11,6 +11,6 @@ export interface PizzaIngredientDto extends Pick<IngredientDto, 'id'> {
   quantity: number
 }
 
-export interface PizzaIngredient extends IngredientDto {
+export interface PizzaIngredient extends Pick<IngredientDto, 'id'> {
   quantity: number
 }
