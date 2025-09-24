@@ -9,7 +9,19 @@ const { extraClass, color } = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'increment'): void
   (e: 'decrement'): void
+  (e: 'set-value', value: number): void
 }>()
+
+const onInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const value = Number(target.value)
+
+  if (Number.isNaN(value) || value < 0) {
+    emit('set-value', 0)
+  } else {
+    emit('set-value', value)
+  }
+}
 </script>
 
 <template>
@@ -27,7 +39,7 @@ const emit = defineEmits<{
       name="counter"
       class="counter__input"
       :value="count"
-      :readonly="true"
+      @input="onInput"
     />
     <button
       type="button"

@@ -21,17 +21,20 @@ export const usePizzaStore = defineStore('pizza', {
       const dataStore = useDataStore()
       const dough = dataStore.getById('dough', state.doughId)
       const sauce = dataStore.getById('sauces', state.sauceId)
+      const size = dataStore.getById('sizes', state.sizeId)
 
       if (!dough) return 0
       if (!sauce) return 0
       if (!state.ingredients) return 0
+      if (!size?.multiplier) return 0
 
       const basePrice = dough.price + sauce.price
       const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
         const ingredient = dataStore.getById('ingredients', ing.id)
         return acc + (ingredient ? ingredient.price * ing.quantity : 0)
       }, 0)
-      return basePrice + ingredientsPrice
+
+      return size.multiplier * (basePrice + ingredientsPrice)
     },
     getIngredientQuantity:
       (state) =>
@@ -40,6 +43,21 @@ export const usePizzaStore = defineStore('pizza', {
       }
   },
   actions: {
+    setIngredient(id: number, value: number) {
+      const ingredient = this.ingredients.find((i) => i.id === id)
+
+      if (value <= 0) {
+        this.ingredients = this.ingredients.filter((i) => i.id !== id)
+        return
+      }
+
+      if (ingredient) {
+        ingredient.quantity = value
+      } else {
+        this.ingredients.push({ id, quantity: value })
+      }
+    },
+
     incrementIngredient(id: number) {
       const ingredient = this.ingredients.find((i) => i.id === id)
       if (ingredient) {

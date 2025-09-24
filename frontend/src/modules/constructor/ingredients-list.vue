@@ -34,6 +34,7 @@ const viewIngredients = computed(() => ingredients.value.map(mapIngredient))
         extra-class="ingredients__counter"
         @increment="pizzaStore.incrementIngredient(ingredient.id)"
         @decrement="pizzaStore.decrementIngredient(ingredient.id)"
+        @set-value="pizzaStore.setIngredient(ingredient.id, $event)"
       />
     </li>
   </ul>
