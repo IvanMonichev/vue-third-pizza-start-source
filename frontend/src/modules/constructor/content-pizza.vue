@@ -7,11 +7,16 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 const pizzaName = ref('')
-const handleDropIngredient = (payload: object) => {
-  console.log(payload)
+const pizzaStore = usePizzaStore()
+const handleDropIngredient = (payload: unknown) => {
+  if (typeof payload !== 'object' || payload === null) return
+
+  if ('id' in payload && typeof payload.id === 'number') {
+    pizzaStore.incrementIngredient(payload.id)
+  }
 }
 
-const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(usePizzaStore())
+const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(pizzaStore)
 </script>
 
 <template>
