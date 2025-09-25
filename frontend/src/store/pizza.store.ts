@@ -5,6 +5,7 @@ import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
 
 interface PizzaState {
+  pizzaName: string
   doughId: number | null
   sizeId: number | null
   sauceId: number | null
@@ -13,6 +14,7 @@ interface PizzaState {
 
 export const usePizzaStore = defineStore('pizza', {
   state: (): PizzaState => ({
+    pizzaName: '',
     doughId: null,
     sizeId: null,
     sauceId: null,
@@ -127,6 +129,14 @@ export const usePizzaStore = defineStore('pizza', {
 
     setSauceId(id: number) {
       this.sauceId = id
+    },
+
+    setPizzaName(name: string) {
+      this.pizzaName = name
+    },
+
+    resetPizzaName() {
+      this.pizzaName = ''
     }
   }
 })

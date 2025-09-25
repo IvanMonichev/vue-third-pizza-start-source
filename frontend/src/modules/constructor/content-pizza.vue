@@ -4,9 +4,7 @@ import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
 import { usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
 
-const pizzaName = ref('')
 const pizzaStore = usePizzaStore()
 const handleDropIngredient = (payload: unknown) => {
   if (typeof payload !== 'object' || payload === null) return
@@ -22,7 +20,7 @@ const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(pizzaStore)
 <template>
   <div class="content__pizza">
     <AppInput
-      v-model="pizzaName"
+      v-model="pizzaStore.pizzaName"
       placeholder="Введите название пиццы"
       name="pizza_name"
       label="Название пиццы"
@@ -55,7 +53,9 @@ const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(pizzaStore)
 
     <div class="content__result">
       <p>Итого: {{ pizzaPrice }} ₽</p>
-      <AppButton type="button" disabled>Готовьте!</AppButton>
+      <AppButton type="button" :disabled="!pizzaStore.pizzaName"
+        >Готовьте!</AppButton
+      >
     </div>
   </div>
 </template>
