@@ -1,3 +1,5 @@
+import { IngredientType } from '@/common/enums/ingredient-type.enum'
+
 export interface IngredientDto {
   id: number
   name: string
@@ -5,12 +7,14 @@ export interface IngredientDto {
   price: number
 }
 
-export interface PizzaIngredientDto extends Pick<IngredientDto, 'id'> {
-  pizzaId: number
-  ingredientId: number
-  quantity: number
+export interface Ingredient extends IngredientDto {
+  type: IngredientType
 }
 
-export interface PizzaIngredient extends Pick<IngredientDto, 'id'> {
+export interface IngredientWithClass extends Ingredient {
+  class: string
+}
+
+export interface PizzaIngredient extends Pick<Ingredient, 'id'> {
   quantity: number
 }
