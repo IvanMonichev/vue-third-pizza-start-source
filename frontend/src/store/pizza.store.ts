@@ -1,16 +1,14 @@
-import {
-  IngredientWithClass,
-  PizzaIngredient
-} from '@/common/types/ingredient.types'
-import { defineStore } from 'pinia'
+import { Dough } from '@/common/types/dough.types'
+import { Ingredient, PizzaIngredient } from '@/common/types/ingredient.types'
+import { Sauce } from '@/common/types/sauce.types'
 import { useDataStore } from '@/store/data.store'
-import { ingredientClassMap } from '@/common/constants/mappers.constants'
+import { defineStore } from 'pinia'
 
 interface PizzaState {
   doughId: number | null
   sizeId: number | null
   sauceId: number | null
-  ingredients: PizzaIngredient[]
+  pizzaIngredients: PizzaIngredient[]
 }
 
 export const usePizzaStore = defineStore('pizza', {
@@ -18,7 +16,7 @@ export const usePizzaStore = defineStore('pizza', {
     doughId: null,
     sizeId: null,
     sauceId: null,
-    ingredients: []
+    pizzaIngredients: []
   }),
   getters: {
     pizzaPrice: (state) => {
@@ -29,11 +27,11 @@ export const usePizzaStore = defineStore('pizza', {
 
       if (!dough) return 0
       if (!sauce) return 0
-      if (!state.ingredients) return 0
+      if (!state.pizzaIngredients) return 0
       if (!size?.multiplier) return 0
 
       const basePrice = dough.price + sauce.price
-      const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
+      const ingredientsPrice = state.pizzaIngredients.reduce((acc, ing) => {
         const ingredient = dataStore.dataById('ingredients', ing.id)
         return acc + (ingredient ? ingredient.price * ing.quantity : 0)
       }, 0)
@@ -44,44 +42,57 @@ export const usePizzaStore = defineStore('pizza', {
     getIngredientQuantity:
       (state) =>
       (id: number): number => {
-        return state.ingredients.find((i) => i.id === id)?.quantity || 0
+        return state.pizzaIngredients.find((i) => i.id === id)?.quantity || 0
       },
 
-    ingredientsWithClass: (state): IngredientWithClass[] => {
+    ingredients: (state): Ingredient[] => {
       const dataStore = useDataStore()
-      return state.ingredients
-        .map((stateIngredient) => {
-          const ingredient = dataStore.ingredients.find(
-            (dataIngredient) => dataIngredient.id === stateIngredient.id
-          )
-          return ingredient
-            ? { ...ingredient, class: ingredientClassMap[ingredient.type] }
-            : null
-        })
-        .filter((i): i is IngredientWithClass => i !== null)
+      return state.pizzaIngredients.map((i) => {
+        const ingredient = dataStore.dataById('ingredients', i.id)
+
+        if (!ingredient) throw new Error(`Ingredient with id ${i.id} not found`)
+
+        return ingredient
+      })
+    },
+
+    dough: (state): Dough | null => {
+      const dataStore = useDataStore()
+
+      const dough = dataStore.dataById('dough', state.doughId)
+      if (!dough) return null
+      return dough
+    },
+
+    sauce: (state): Sauce | null => {
+      const dataStore = useDataStore()
+
+      const sauce = dataStore.dataById('sauces', state.sauceId)
+      if (!sauce) return null
+      return sauce
     }
   },
   actions: {
     setIngredient(id: number, value: number) {
       if (value < 1) {
-        this.ingredients = this.ingredients.filter((i) => i.id !== id)
+        this.pizzaIngredients = this.pizzaIngredients.filter((i) => i.id !== id)
         return
       }
 
       if (value > 3) return
 
-      const ingredient = this.ingredients.find((i) => i.id === id)
+      const ingredient = this.pizzaIngredients.find((i) => i.id === id)
       if (ingredient) {
         ingredient.quantity = value
       } else {
-        this.ingredients.push({ id, quantity: value })
+        this.pizzaIngredients.push({ id, quantity: value })
       }
     },
 
     incrementIngredient(id: number) {
-      const ingredient = this.ingredients.find((i) => i.id === id)
+      const ingredient = this.pizzaIngredients.find((i) => i.id === id)
       if (!ingredient) {
-        this.ingredients.push({ id, quantity: 1 })
+        this.pizzaIngredients.push({ id, quantity: 1 })
         return
       }
 
@@ -90,12 +101,12 @@ export const usePizzaStore = defineStore('pizza', {
     },
 
     decrementIngredient(id: number) {
-      const index = this.ingredients.findIndex((i) => i.id === id)
+      const index = this.pizzaIngredients.findIndex((i) => i.id === id)
       if (index === -1) return
 
-      const ingredient = this.ingredients[index]
+      const ingredient = this.pizzaIngredients[index]
       if (ingredient.quantity <= 1) {
-        this.ingredients.splice(index, 1)
+        this.pizzaIngredients.splice(index, 1)
         return
       }
 
@@ -103,7 +114,7 @@ export const usePizzaStore = defineStore('pizza', {
     },
 
     removeIngredient(id: number) {
-      this.ingredients = this.ingredients.filter((i) => i.id !== id)
+      this.pizzaIngredients = this.pizzaIngredients.filter((i) => i.id !== id)
     },
 
     setDoughId(id: number) {

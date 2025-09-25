@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import AppDrag from '@/common/components/app-drag.vue'
-import { mapIngredient } from '@/common/utils/ingredients.utils'
-import { computed, onMounted } from 'vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
@@ -13,19 +12,17 @@ const { ingredients } = storeToRefs(dataStore)
 onMounted(async () => {
   dataStore.loadIngredients()
 })
-
-const viewIngredients = computed(() => ingredients.value.map(mapIngredient))
 </script>
 
 <template>
   <ul class="ingredients__list">
     <li
-      v-for="ingredient in viewIngredients"
+      v-for="ingredient in ingredients"
       :key="ingredient.id"
       class="ingredients__item"
     >
       <AppDrag :transfer-data="ingredient">
-        <span :class="`filling ${ingredient.class}`">{{
+        <span :class="['filling', `filling--${ingredient.className}`]">{{
           ingredient.name
         }}</span>
       </AppDrag>

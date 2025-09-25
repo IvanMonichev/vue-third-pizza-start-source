@@ -2,16 +2,16 @@
 import AppButton from '@/common/components/app-button.vue'
 import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
-import { ref } from 'vue'
 import { usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 const pizzaName = ref('')
 const handleDropIngredient = (payload: object) => {
   console.log(payload)
 }
 
-const { ingredientsWithClass, pizzaPrice } = storeToRefs(usePizzaStore())
+const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(usePizzaStore())
 </script>
 
 <template>
@@ -26,12 +26,17 @@ const { ingredientsWithClass, pizzaPrice } = storeToRefs(usePizzaStore())
 
     <AppDrop @drop="handleDropIngredient">
       <div class="content__constructor">
-        <div class="pizza pizza--foundation--big-tomato">
+        <div
+          :class="[
+            `pizza`,
+            `pizza--foundation--${dough?.className}-${sauce?.className}`
+          ]"
+        >
           <div class="pizza__wrapper">
             <div
-              v-for="i in ingredientsWithClass"
+              v-for="i in ingredients"
               :key="i.id"
-              :class="[`pizza__filling`, `pizza__filling--${i.class}`]"
+              :class="[`pizza__filling`, `pizza__filling--${i.className}`]"
             />
           </div>
         </div>
@@ -72,19 +77,19 @@ const { ingredientsWithClass, pizzaPrice } = storeToRefs(usePizzaStore())
   background-position: center;
   background-size: 100%;
 
-  &--foundation--big-creamy {
+  &--foundation--large-creamy {
     background-image: url('@/assets/img/foundation/big-creamy.svg');
   }
 
-  &--foundation--big-tomato {
+  &--foundation--large-tomato {
     background-image: url('@/assets/img/foundation/big-tomato.svg');
   }
 
-  &--foundation--small-creamy {
+  &--foundation--light-creamy {
     background-image: url('@/assets/img/foundation/small-creamy.svg');
   }
 
-  &--foundation--small-tomato {
+  &--foundation--light-tomato {
     background-image: url('@/assets/img/foundation/small-tomato.svg');
   }
 }

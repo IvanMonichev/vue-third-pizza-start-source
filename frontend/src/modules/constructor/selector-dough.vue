@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import RadioDough from '@/modules/constructor/radio-dough.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { onMounted } from 'vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
@@ -19,15 +19,7 @@ const { doughId } = storeToRefs(pizzaStore)
 <template>
   <div class="content__dough">
     <SheetLayout title="Выберите тесто" content-class="dough">
-      <RadioDough
-        v-for="d in dough"
-        :key="d.id"
-        v-model="doughId"
-        name="dough"
-        :description="d.description"
-        :label="d.name"
-        :value="d.id"
-      />
+      <RadioDough v-for="d in dough" :key="d.id" v-model="doughId" :dough="d" />
     </SheetLayout>
   </div>
 </template>

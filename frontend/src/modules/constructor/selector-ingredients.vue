@@ -3,13 +3,14 @@ import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
 import Ingredients from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { computed, onMounted } from 'vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { computed, onMounted } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
 const { sauces } = storeToRefs(dataStore)
+const { sauceId } = storeToRefs(pizzaStore)
 
 const saucesOptions = computed<Option[]>(() =>
   sauces.value.map((s) => ({
@@ -22,8 +23,6 @@ onMounted(async () => {
   dataStore.loadSauces()
   pizzaStore.setSauceId(dataStore.sauces[0].id)
 })
-
-const { sauceId } = storeToRefs(pizzaStore)
 </script>
 
 <template>

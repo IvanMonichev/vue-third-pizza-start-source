@@ -1,30 +1,24 @@
 <script setup lang="ts">
-import { doughSizeMap } from '@/common/constants/mappers.constants'
-import { DoughSize } from '@/common/enums/dough-size.enum'
+import { Dough } from '@/common/types/dough.types'
 
-const { value } = defineProps<{
-  value: DoughSize
-  name: string
-  label: string
-  description: string
+const { dough } = defineProps<{
+  dough: Dough
 }>()
 
-defineEmits<{ (e: 'update:modelValue', value: DoughSize): void }>()
-const modelValue = defineModel<DoughSize>()
-
-const size = doughSizeMap[value]
+const { name, className, description, id } = dough
+const modelValue = defineModel<number | null>()
 </script>
 
 <template>
-  <label :class="['dough__input', `dough__input--${size}`]">
+  <label :class="['dough__input', `dough__input--${className}`]">
     <input
       v-model="modelValue"
       type="radio"
-      :name="name"
-      :value="value"
+      name="dough"
       class="visually-hidden"
+      :value="id"
     />
-    <b>{{ label }}</b>
+    <b>{{ name }}</b>
     <span>{{ description }}</span>
   </label>
 </template>
