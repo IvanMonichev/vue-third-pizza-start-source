@@ -1,6 +1,10 @@
-import { PizzaIngredient } from '@/common/types/ingredient.types'
+import {
+  IngredientWithClass,
+  PizzaIngredient
+} from '@/common/types/ingredient.types'
 import { defineStore } from 'pinia'
 import { useDataStore } from '@/store/data.store'
+import { ingredientClassMap } from '@/common/constants/mappers.constants'
 
 interface PizzaState {
   doughId: number | null
@@ -19,9 +23,9 @@ export const usePizzaStore = defineStore('pizza', {
   getters: {
     pizzaPrice: (state) => {
       const dataStore = useDataStore()
-      const dough = dataStore.getById('dough', state.doughId)
-      const sauce = dataStore.getById('sauces', state.sauceId)
-      const size = dataStore.getById('sizes', state.sizeId)
+      const dough = dataStore.dataById('dough', state.doughId)
+      const sauce = dataStore.dataById('sauces', state.sauceId)
+      const size = dataStore.dataById('sizes', state.sizeId)
 
       if (!dough) return 0
       if (!sauce) return 0
@@ -30,17 +34,32 @@ export const usePizzaStore = defineStore('pizza', {
 
       const basePrice = dough.price + sauce.price
       const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
-        const ingredient = dataStore.getById('ingredients', ing.id)
+        const ingredient = dataStore.dataById('ingredients', ing.id)
         return acc + (ingredient ? ingredient.price * ing.quantity : 0)
       }, 0)
 
       return size.multiplier * (basePrice + ingredientsPrice)
     },
+
     getIngredientQuantity:
       (state) =>
       (id: number): number => {
         return state.ingredients.find((i) => i.id === id)?.quantity || 0
-      }
+      },
+
+    ingredientsWithClass: (state): IngredientWithClass[] => {
+      const dataStore = useDataStore()
+      return state.ingredients
+        .map((stateIngredient) => {
+          const ingredient = dataStore.ingredients.find(
+            (dataIngredient) => dataIngredient.id === stateIngredient.id
+          )
+          return ingredient
+            ? { ...ingredient, class: ingredientClassMap[ingredient.type] }
+            : null
+        })
+        .filter((i): i is IngredientWithClass => i !== null)
+    }
   },
   actions: {
     setIngredient(id: number, value: number) {

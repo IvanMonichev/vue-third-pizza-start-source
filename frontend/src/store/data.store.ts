@@ -1,5 +1,5 @@
 import { DoughDto } from '@/common/types/dough.types'
-import { IngredientDto } from '@/common/types/ingredient.types'
+import { Ingredient } from '@/common/types/ingredient.types'
 import { MiscDto } from '@/common/types/misc.types'
 import { SaucesDto } from '@/common/types/sauces.types'
 import { SizeDto } from '@/common/types/size.types'
@@ -9,12 +9,13 @@ import sauces from '@/mocks/sauces.json'
 import sizes from '@/mocks/sizes.json'
 import ingredients from '@/mocks/ingredients.json'
 import misc from '@/mocks/misc.json'
+import { ingredientIdMap } from '@/common/constants/mappers.constants'
 
 interface DataState {
   dough: DoughDto[]
   sauces: SaucesDto[]
   sizes: SizeDto[]
-  ingredients: IngredientDto[]
+  ingredients: Ingredient[]
   misc: MiscDto[]
 }
 
@@ -27,7 +28,7 @@ export const useDataStore = defineStore('data', {
     misc: []
   }),
   getters: {
-    getById:
+    dataById:
       (state) =>
       <T extends keyof DataState>(
         type: T,
@@ -48,7 +49,10 @@ export const useDataStore = defineStore('data', {
       this.sizes = sizes
     },
     loadIngredients() {
-      this.ingredients = ingredients
+      this.ingredients = ingredients.map((i) => ({
+        ...i,
+        type: ingredientIdMap[i.id]
+      }))
     },
     loadMisc() {
       this.misc = misc

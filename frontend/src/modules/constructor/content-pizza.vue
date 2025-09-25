@@ -4,13 +4,14 @@ import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
 import { ref } from 'vue'
 import { usePizzaStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
 const pizzaName = ref('')
 const handleDropIngredient = (payload: object) => {
   console.log(payload)
 }
 
-const pizzaStore = usePizzaStore()
+const { ingredientsWithClass, pizzaPrice } = storeToRefs(usePizzaStore())
 </script>
 
 <template>
@@ -27,16 +28,18 @@ const pizzaStore = usePizzaStore()
       <div class="content__constructor">
         <div class="pizza pizza--foundation--big-tomato">
           <div class="pizza__wrapper">
-            <div class="pizza__filling pizza__filling--ananas" />
-            <div class="pizza__filling pizza__filling--bacon" />
-            <div class="pizza__filling pizza__filling--cheddar" />
+            <div
+              v-for="i in ingredientsWithClass"
+              :key="i.id"
+              :class="[`pizza__filling`, `pizza__filling--${i.class}`]"
+            />
           </div>
         </div>
       </div>
     </AppDrop>
 
     <div class="content__result">
-      <p>Итого: {{ pizzaStore.pizzaPrice }} ₽</p>
+      <p>Итого: {{ pizzaPrice }} ₽</p>
       <AppButton type="button" disabled>Готовьте!</AppButton>
     </div>
   </div>
