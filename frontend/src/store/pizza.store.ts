@@ -1,61 +1,102 @@
-import { PizzaDough } from '@/common/types/dough.types'
 import { PizzaIngredient } from '@/common/types/ingredient.types'
-import { PizzaSauces } from '@/common/types/sauces.types'
-import { PizzaSize } from '@/common/types/size.types'
 import { defineStore } from 'pinia'
+import { useDataStore } from '@/store/data.store'
 
 interface PizzaState {
-  dough: PizzaDough | null
-  size: PizzaSize | null
-  sauce: PizzaSauces | null
+  doughId: number | null
+  sizeId: number | null
+  sauceId: number | null
   ingredients: PizzaIngredient[]
 }
 
 export const usePizzaStore = defineStore('pizza', {
   state: (): PizzaState => ({
-    dough: null,
-    size: null,
-    sauce: null,
+    doughId: null,
+    sizeId: null,
+    sauceId: null,
     ingredients: []
   }),
   getters: {
     pizzaPrice: (state) => {
-      const { dough, sauce, ingredients } = state
+      const dataStore = useDataStore()
+      const dough = dataStore.getById('dough', state.doughId)
+      const sauce = dataStore.getById('sauces', state.sauceId)
+      const size = dataStore.getById('sizes', state.sizeId)
+
       if (!dough) return 0
       if (!sauce) return 0
-      if (!ingredients) return 0
+      if (!state.ingredients) return 0
+      if (!size?.multiplier) return 0
 
       const basePrice = dough.price + sauce.price
-      const ingredientsPrice = ingredients.reduce(
-        (acc, ing) => acc + ing.price * ing.quantity,
-        0
-      )
-      return basePrice + ingredientsPrice
-    }
+      const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
+        const ingredient = dataStore.getById('ingredients', ing.id)
+        return acc + (ingredient ? ingredient.price * ing.quantity : 0)
+      }, 0)
+
+      return size.multiplier * (basePrice + ingredientsPrice)
+    },
+    getIngredientQuantity:
+      (state) =>
+      (id: number): number => {
+        return state.ingredients.find((i) => i.id === id)?.quantity || 0
+      }
   },
   actions: {
-    setDough(dough: PizzaDough) {
-      this.dough = dough
-    },
-    setSize(size: PizzaSize) {
-      this.size = size
-    },
-    setSauce(sauce: PizzaSauces) {
-      this.sauce = sauce
-    },
-    toggleIngredient(ingredient: PizzaIngredient) {
-      const index = this.ingredients.findIndex((i) => i.id === ingredient.id)
-      if (index === -1) {
-        this.ingredients.push({ ...ingredient, quantity: 1 })
+    setIngredient(id: number, value: number) {
+      if (value < 1) {
+        this.ingredients = this.ingredients.filter((i) => i.id !== id)
+        return
+      }
+
+      if (value > 3) return
+
+      const ingredient = this.ingredients.find((i) => i.id === id)
+      if (ingredient) {
+        ingredient.quantity = value
       } else {
-        this.ingredients.splice(index, 1)
+        this.ingredients.push({ id, quantity: value })
       }
     },
-    clear() {
-      this.dough = null
-      this.size = null
-      this.sauce = null
-      this.ingredients = []
+
+    incrementIngredient(id: number) {
+      const ingredient = this.ingredients.find((i) => i.id === id)
+      if (!ingredient) {
+        this.ingredients.push({ id, quantity: 1 })
+        return
+      }
+
+      if (ingredient.quantity >= 3) return
+      ingredient.quantity++
+    },
+
+    decrementIngredient(id: number) {
+      const index = this.ingredients.findIndex((i) => i.id === id)
+      if (index === -1) return
+
+      const ingredient = this.ingredients[index]
+      if (ingredient.quantity <= 1) {
+        this.ingredients.splice(index, 1)
+        return
+      }
+
+      ingredient.quantity--
+    },
+
+    removeIngredient(id: number) {
+      this.ingredients = this.ingredients.filter((i) => i.id !== id)
+    },
+
+    setDoughId(id: number) {
+      this.doughId = id
+    },
+
+    setSizeId(id: number) {
+      this.sizeId = id
+    },
+
+    setSauceId(id: number) {
+      this.sauceId = id
     }
   }
 })

@@ -1,24 +1,31 @@
 <script setup lang="ts">
-import { PizzaSize } from '@/common/types/size.types'
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
-import { PizzaSizeValue } from '@/common/enums/pizza-size-value.enum'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { ref } from 'vue'
+import { onMounted } from 'vue'
+import { useDataStore, usePizzaStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
-defineProps<{ pizzaSizes: PizzaSize[] }>()
-const pizzaSize = ref<PizzaSizeValue>(PizzaSizeValue.SMALL)
+const dataStore = useDataStore()
+const pizzaStore = usePizzaStore()
+onMounted(async () => {
+  dataStore.loadSizes()
+  pizzaStore.setSizeId(dataStore.sizes[0].id)
+})
+
+const { sizes } = storeToRefs(dataStore)
+const { sizeId } = storeToRefs(pizzaStore)
 </script>
 
 <template>
   <div class="content__diameter">
     <SheetLayout title="Выберите размер" content-class="diameter">
       <RadioDiameter
-        v-for="s in pizzaSizes"
+        v-for="s in sizes"
         :key="s.id"
-        v-model="pizzaSize"
-        :name="'diameter'"
+        v-model="sizeId"
+        name="diameter"
         :label="s.name"
-        :value="s.multiplier"
+        :value="s.id"
       />
     </SheetLayout>
   </div>

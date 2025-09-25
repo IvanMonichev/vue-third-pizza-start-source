@@ -1,10 +1,27 @@
 <script setup lang="ts">
 interface Props {
+  count: number
   color?: 'orange' | 'green'
   extraClass?: string
 }
 
-defineProps<Props>()
+const { extraClass, color } = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'increment'): void
+  (e: 'decrement'): void
+  (e: 'set-value', value: number): void
+}>()
+
+const onInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const value = Number(target.value)
+
+  if (Number.isNaN(value) || value < 0) {
+    emit('set-value', 0)
+  } else {
+    emit('set-value', value)
+  }
+}
 </script>
 
 <template>
@@ -12,11 +29,18 @@ defineProps<Props>()
     <button
       type="button"
       class="counter__button counter__button--minus"
-      disabled
+      :disabled="count <= 0"
+      @click="emit('decrement')"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
-    <input type="text" name="counter" class="counter__input" value="0" />
+    <input
+      type="text"
+      name="counter"
+      class="counter__input"
+      :value="count"
+      @input="onInput"
+    />
     <button
       type="button"
       :class="[
@@ -24,6 +48,7 @@ defineProps<Props>()
         'counter__button--plus',
         `counter__button--${color ?? 'green'}`
       ]"
+      @click="emit('increment')"
     >
       <span class="visually-hidden">Больше</span>
     </button>

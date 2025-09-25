@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import AppButton from '@/common/components/app-button.vue'
 import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
 import { ref } from 'vue'
+import { usePizzaStore } from '@/store'
 
 const pizzaName = ref('')
 const handleDropIngredient = (payload: object) => {
   console.log(payload)
 }
+
+const pizzaStore = usePizzaStore()
 </script>
 
 <template>
@@ -32,8 +36,8 @@ const handleDropIngredient = (payload: object) => {
     </AppDrop>
 
     <div class="content__result">
-      <p>Итого: 0 ₽</p>
-      <button type="button" class="button" disabled>Готовьте!</button>
+      <p>Итого: {{ pizzaStore.pizzaPrice }} ₽</p>
+      <AppButton type="button" disabled>Готовьте!</AppButton>
     </div>
   </div>
 </template>
