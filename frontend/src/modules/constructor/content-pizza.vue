@@ -36,7 +36,12 @@ const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(usePizzaStore())
             <div
               v-for="i in ingredients"
               :key="i.id"
-              :class="[`pizza__filling`, `pizza__filling--${i.className}`]"
+              :class="[
+                'pizza__filling',
+                `pizza__filling--${i.className}`,
+                i.quantity === 2 ? 'pizza__filling--second' : '',
+                i.quantity === 3 ? 'pizza__filling--third' : ''
+              ]"
             />
           </div>
         </div>

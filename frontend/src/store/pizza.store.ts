@@ -1,5 +1,5 @@
 import { Dough } from '@/common/types/dough.types'
-import { Ingredient, PizzaIngredient } from '@/common/types/ingredient.types'
+import { PizzaIngredient } from '@/common/types/ingredient.types'
 import { Sauce } from '@/common/types/sauce.types'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
@@ -45,14 +45,14 @@ export const usePizzaStore = defineStore('pizza', {
         return state.pizzaIngredients.find((i) => i.id === id)?.quantity || 0
       },
 
-    ingredients: (state): Ingredient[] => {
+    ingredients: (state) => {
       const dataStore = useDataStore()
       return state.pizzaIngredients.map((i) => {
         const ingredient = dataStore.dataById('ingredients', i.id)
 
         if (!ingredient) throw new Error(`Ingredient with id ${i.id} not found`)
 
-        return ingredient
+        return { ...ingredient, quantity: i.quantity }
       })
     },
 
