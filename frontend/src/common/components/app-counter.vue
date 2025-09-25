@@ -17,7 +17,7 @@ const emit = defineEmits<{
 }>()
 
 const isDecrementDisabled = computed(
-  () => props.min !== undefined && props.value <= props.value
+  () => props.min !== undefined && props.value <= props.min
 )
 const isIncrementDisabled = computed(
   () => props.max !== undefined && props.value >= props.max
