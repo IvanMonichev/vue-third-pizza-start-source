@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import logo from '@/assets/img/logo.svg'
+</script>
+
 <template>
   <header class="header">
     <div class="header__logo">
@@ -15,9 +19,6 @@
     </div>
   </header>
 </template>
-<script setup lang="ts">
-import logo from '@/assets/img/logo.svg'
-</script>
 <style lang="scss" scoped>
 @use '@/assets/sass/ds-system/ds-colors';
 @use '@/assets/sass/ds-system/ds-shadows';

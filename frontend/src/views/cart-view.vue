@@ -1,14 +1,19 @@
 <script setup lang="ts">
+import colaImg from '@/assets/img/cola.svg'
+import potatoImg from '@/assets/img/potato.svg'
+import sauceImg from '@/assets/img/sauce.svg'
 import AppTitle from '@/common/components/app-title.vue'
 import CartAdditionalListItem from '@/modules/cart/cart-additional-list-item.vue'
 import CartAdditionalList from '@/modules/cart/cart-additional-list.vue'
+import CartFooter from '@/modules/cart/cart-footer.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
 import CartItem from '@/modules/cart/cart-list-item.vue'
 import CartList from '@/modules/cart/cart-list.vue'
-import CartFooter from '@/modules/cart/cart-footer.vue'
-import colaImg from '@/assets/img/cola.svg'
-import sauceImg from '@/assets/img/sauce.svg'
-import potatoImg from '@/assets/img/potato.svg'
+import { useCartStore } from '@/store'
+
+const cartStore = useCartStore()
+
+console.log('cartStore', cartStore.pizzas)
 </script>
 
 <template>

@@ -2,10 +2,11 @@
 import AppButton from '@/common/components/app-button.vue'
 import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
-import { usePizzaStore } from '@/store'
+import { useCartStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
 const pizzaStore = usePizzaStore()
+const cartStore = useCartStore()
 const handleDropIngredient = (payload: unknown) => {
   if (typeof payload !== 'object' || payload === null) return
 
@@ -14,13 +15,24 @@ const handleDropIngredient = (payload: unknown) => {
   }
 }
 
-const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(pizzaStore)
+const { ingredients, pizzaPrice, dough, sauce, pizzaName } =
+  storeToRefs(pizzaStore)
+
+const handleAddPizza = () => {
+  try {
+    const pizza = pizzaStore.toCartPizza()
+    cartStore.addPizza(pizza)
+    pizzaStore.resetPizza()
+  } catch (e) {
+    console.error(e)
+  }
+}
 </script>
 
 <template>
   <div class="content__pizza">
     <AppInput
-      v-model="pizzaStore.pizzaName"
+      v-model="pizzaName"
       placeholder="Введите название пиццы"
       name="pizza_name"
       label="Название пиццы"
@@ -53,7 +65,7 @@ const { ingredients, pizzaPrice, dough, sauce } = storeToRefs(pizzaStore)
 
     <div class="content__result">
       <p>Итого: {{ pizzaPrice }} ₽</p>
-      <AppButton type="button" :disabled="!pizzaStore.pizzaName"
+      <AppButton type="button" :disabled="!pizzaName" @click="handleAddPizza"
         >Готовьте!</AppButton
       >
     </div>

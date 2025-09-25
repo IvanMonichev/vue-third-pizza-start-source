@@ -1,5 +1,6 @@
 import { Dough } from '@/common/types/dough.types'
 import { PizzaIngredient } from '@/common/types/ingredient.types'
+import { CartPizza } from '@/common/types/pizza.types'
 import { Sauce } from '@/common/types/sauce.types'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
@@ -15,9 +16,9 @@ interface PizzaState {
 export const usePizzaStore = defineStore('pizza', {
   state: (): PizzaState => ({
     pizzaName: '',
-    doughId: null,
-    sizeId: null,
-    sauceId: null,
+    doughId: 1,
+    sizeId: 1,
+    sauceId: 1,
     pizzaIngredients: []
   }),
   getters: {
@@ -137,6 +138,36 @@ export const usePizzaStore = defineStore('pizza', {
 
     resetPizzaName() {
       this.pizzaName = ''
+    },
+
+    toCartPizza(): CartPizza {
+      const dataStore = useDataStore()
+      const dough = dataStore.dataById('dough', this.doughId)
+      const sauce = dataStore.dataById('sauces', this.sauceId)
+      const size = dataStore.dataById('sizes', this.sizeId)
+
+      if (!dough || !sauce || !size) {
+        throw new Error('Не выбраны все параметры пиццы')
+      }
+
+      return {
+        id: crypto.randomUUID(),
+        name: this.pizzaName,
+        doughId: this.doughId!,
+        sauceId: this.sauceId!,
+        sizeId: this.sizeId!,
+        quantity: 1,
+        ingredients: this.pizzaIngredients.map((i) => ({
+          id: i.id,
+          quantity: i.quantity
+        })),
+        price: this.pizzaPrice,
+        total: this.pizzaPrice
+      }
+    },
+
+    resetPizza() {
+      this.$reset()
     }
   }
 })

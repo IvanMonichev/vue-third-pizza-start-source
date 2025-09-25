@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { onMounted } from 'vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
 onMounted(async () => {
   dataStore.loadSizes()
-  pizzaStore.setSizeId(dataStore.sizes[0].id)
 })
 
 const { sizes } = storeToRefs(dataStore)

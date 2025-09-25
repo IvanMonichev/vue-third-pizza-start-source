@@ -9,7 +9,6 @@ const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
 onMounted(async () => {
   dataStore.loadDough()
-  pizzaStore.setDoughId(dataStore.dough[0].id)
 })
 
 const { dough } = storeToRefs(dataStore)

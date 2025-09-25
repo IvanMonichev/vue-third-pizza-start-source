@@ -21,7 +21,6 @@ const saucesOptions = computed<Option[]>(() =>
 
 onMounted(async () => {
   dataStore.loadSauces()
-  pizzaStore.setSauceId(dataStore.sauces[0].id)
 })
 </script>
 
