@@ -151,18 +151,14 @@ export const usePizzaStore = defineStore('pizza', {
       }
 
       return {
-        id: crypto.randomUUID(),
+        clientId: crypto.randomUUID(),
         name: this.pizzaName,
-        doughId: this.doughId!,
-        sauceId: this.sauceId!,
-        sizeId: this.sizeId!,
+        dough,
+        sauce,
+        size,
+        ingredients: this.ingredients,
         quantity: 1,
-        ingredients: this.pizzaIngredients.map((i) => ({
-          id: i.id,
-          quantity: i.quantity
-        })),
-        price: this.pizzaPrice,
-        total: this.pizzaPrice
+        price: this.pizzaPrice
       }
     },
 

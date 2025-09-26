@@ -10,10 +10,10 @@ import CartForm from '@/modules/cart/cart-form.vue'
 import CartItem from '@/modules/cart/cart-list-item.vue'
 import CartList from '@/modules/cart/cart-list.vue'
 import { useCartStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
 const cartStore = useCartStore()
-
-console.log('cartStore', cartStore.pizzas)
+const { isEmpty, pizzas, pizzasPrice, pizzaTotalPrice } = storeToRefs(cartStore)
 </script>
 
 <template>
@@ -24,13 +24,20 @@ console.log('cartStore', cartStore.pizzas)
           <AppTitle>Корзина</AppTitle>
         </div>
 
-        <!-- <div class="sheet cart__empty">
+        <div v-if="isEmpty" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
-        </div> -->
+        </div>
 
-        <CartList>
-          <CartItem />
-          <CartItem />
+        <CartList v-else>
+          <CartItem
+            v-for="pizza in pizzas"
+            :key="pizza.clientId"
+            :pizza="pizza"
+            :pizza-total-price="pizzaTotalPrice(pizza.clientId)"
+            @increment="cartStore.incrementCartPizza(pizza.clientId)"
+            @decrement="cartStore.decrementCartPizza(pizza.clientId)"
+            @set-value="cartStore.setCartPizzaQuantity(pizza.clientId, $event)"
+          />
         </CartList>
 
         <div class="cart__additional">
@@ -61,7 +68,7 @@ console.log('cartStore', cartStore.pizzas)
         </div>
       </div>
     </main>
-    <CartFooter />
+    <CartFooter :pizzas-price="pizzasPrice" :is-empty="isEmpty" />
   </form>
 </template>
 
@@ -113,5 +120,9 @@ console.log('cartStore', cartStore.pizzas)
   border: 0;
 
   clip-path: inset(100%);
+}
+
+.cart__empty {
+  padding: 20px 30px;
 }
 </style>

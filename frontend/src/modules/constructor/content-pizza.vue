@@ -2,6 +2,7 @@
 import AppButton from '@/common/components/app-button.vue'
 import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
+import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
@@ -64,7 +65,7 @@ const handleAddPizza = () => {
     </AppDrop>
 
     <div class="content__result">
-      <p>Итого: {{ pizzaPrice }} ₽</p>
+      <p>Итого: {{ pizzaPrice.toLocaleString(AppConfig.Locale) }} ₽</p>
       <AppButton type="button" :disabled="!pizzaName" @click="handleAddPizza"
         >Готовьте!</AppButton
       >

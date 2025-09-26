@@ -1,5 +1,24 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
+import { doughCartMap } from '@/common/constants/mappers.constants'
+import { CartPizza } from '@/common/types/pizza.types'
+import { AppConfig } from '@/modules/cart/config/app.config'
+
+interface Props {
+  pizza: CartPizza
+  pizzaTotalPrice: number
+}
+
+const props = defineProps<Props>()
+const ingredientsList = props.pizza.ingredients
+  .map((i) => i.name.toLowerCase())
+  .join(', ')
+
+const emit = defineEmits<{
+  (e: 'increment'): void
+  (e: 'decrement'): void
+  (e: 'set-value', value: number): void
+}>()
 </script>
 
 <template>
@@ -13,19 +32,27 @@ import AppCounter from '@/common/components/app-counter.vue'
         alt="Капричоза"
       />
       <div class="product__text">
-        <h2>Капричоза</h2>
+        <h2>{{ pizza.name }}</h2>
         <ul>
-          <li>30 см, на тонком тесте</li>
-          <li>Соус: томатный</li>
-          <li>Начинка: грибы, лук, ветчина, пармезан, ананас</li>
+          <li>{{ pizza.size.name }}, {{ doughCartMap[pizza.dough.id] }}</li>
+          <li>Соус: {{ pizza.sauce.name.toLowerCase() }}</li>
+          <li>Начинка: {{ ingredientsList }}</li>
         </ul>
       </div>
     </div>
 
-    <AppCounter :count="0" color="orange" extra-class="cart-list__counter" />
+    <AppCounter
+      :min="0"
+      color="orange"
+      extra-class="cart-list__counter"
+      :value="pizza.quantity"
+      @increment="emit('increment')"
+      @decrement="emit('decrement')"
+      @set-value="emit('set-value', $event)"
+    />
 
     <div class="cart-list__price">
-      <b>782 ₽</b>
+      <b>{{ pizzaTotalPrice.toLocaleString(AppConfig.Locale) }} ₽</b>
     </div>
 
     <div class="cart-list__button">

@@ -32,7 +32,7 @@ const onInput = (event: Event) => {
     return
   }
 
-  if (target.value === '-') {
+  if (target.value === '-' || target.value === '') {
     return
   }
 
