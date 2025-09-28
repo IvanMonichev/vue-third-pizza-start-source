@@ -1,11 +1,11 @@
 import { OrderAddressDto } from '@/common/types/address.types'
-import { CartMisc } from '@/common/types/misc.types'
+import { CartMisc, MiscDto } from '@/common/types/misc.types'
 import { CartPizza } from '@/common/types/pizza.types'
 import { defineStore } from 'pinia'
 
 interface CartState {
   pizzas: CartPizza[]
-  misc: CartMisc[]
+  miscList: CartMisc[]
   address: OrderAddressDto | null
 }
 
@@ -61,7 +61,7 @@ export const useCartStore = defineStore('cart', {
         price: 200 + 50 + (40 + 60 + 70) // = 420
       }
     ],
-    misc: [],
+    miscList: [],
     address: null
   }),
   getters: {
@@ -72,20 +72,52 @@ export const useCartStore = defineStore('cart', {
       ),
 
     miscPrice: (state): number =>
-      state.misc.reduce((acc, item) => acc + item.price * item.quantity, 0),
+      state.miscList.reduce((acc, item) => acc + item.price * item.quantity, 0),
 
     isEmpty: (state): boolean => state.pizzas.length === 0,
 
-    pizzaTotalPrice: (state) => {
+    pizzaFinalPrice: (state) => {
       return (pizzaId: string) => {
         const pizza = state.pizzas.find((p) => p.clientId === pizzaId)
         return pizza ? pizza.price * pizza.quantity : 0
       }
+    },
+
+    orderTotalPrice: (state): number => {
+      const pizzasTotal = state.pizzas.reduce(
+        (acc, pizza) => acc + pizza.price * pizza.quantity,
+        0
+      )
+      const miscTotal = state.miscList.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      )
+      return pizzasTotal + miscTotal
     }
   },
   actions: {
+    buildMiscListCart(miscDto: MiscDto[]) {
+      this.miscList = miscDto.map((m) => {
+        return {
+          ...m,
+          quantity: 0
+        }
+      })
+    },
+
     addPizza(pizza: CartPizza) {
       this.pizzas.push(pizza)
+    },
+
+    setMisc(misc: CartMisc) {
+      const index = this.miscList.findIndex((m) => m.id === misc.id)
+
+      if (index === -1) {
+        this.miscList.push(misc)
+        return
+      }
+
+      this.miscList[index] = misc
     },
 
     incrementCartPizza(pizzaId: string) {
@@ -115,34 +147,6 @@ export const useCartStore = defineStore('cart', {
           this.pizzas[index].quantity = quantity
         }
       }
-    },
-
-    removePizza(index: number) {
-      this.pizzas.splice(index, 1)
-    },
-    addMisc(item: CartMisc) {
-      const existing = this.misc.find((m) => m.id === item.id)
-      if (existing) {
-        existing.quantity += item.quantity
-      } else {
-        this.misc.push(item)
-      }
-    },
-    updatePizzaQuantity(index: number, quantity: number) {
-      if (this.pizzas[index]) {
-        this.pizzas[index].quantity = quantity
-      }
-    },
-    updateMiscQuantity(miscId: number, quantity: number) {
-      const existing = this.misc.find((m) => m.id === miscId)
-      if (existing) {
-        existing.quantity = quantity
-      }
-    },
-    clearCart() {
-      this.pizzas = []
-      this.misc = []
-      this.address = null
     }
   }
 })

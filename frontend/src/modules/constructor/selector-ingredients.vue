@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
-import Ingredients from '@/modules/constructor/ingredients-list.vue'
+import IngredientsList from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
@@ -39,7 +39,7 @@ onMounted(async () => {
 
       <div class="ingredients__filling">
         <p>Начинка:</p>
-        <Ingredients />
+        <IngredientsList />
       </div>
     </SheetLayout>
   </div>

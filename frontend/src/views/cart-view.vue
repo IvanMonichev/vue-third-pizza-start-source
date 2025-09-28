@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import colaImg from '@/assets/img/cola.svg'
-import potatoImg from '@/assets/img/potato.svg'
-import sauceImg from '@/assets/img/sauce.svg'
 import AppTitle from '@/common/components/app-title.vue'
-import CartAdditionalListItem from '@/modules/cart/cart-additional-list-item.vue'
 import CartAdditionalList from '@/modules/cart/cart-additional-list.vue'
 import CartFooter from '@/modules/cart/cart-footer.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
@@ -13,7 +9,8 @@ import { useCartStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
 const cartStore = useCartStore()
-const { isEmpty, pizzas, pizzasPrice, pizzaTotalPrice } = storeToRefs(cartStore)
+const { isEmpty, pizzas, pizzasPrice, pizzaFinalPrice, orderTotalPrice } =
+  storeToRefs(cartStore)
 </script>
 
 <template>
@@ -33,42 +30,21 @@ const { isEmpty, pizzas, pizzasPrice, pizzaTotalPrice } = storeToRefs(cartStore)
             v-for="pizza in pizzas"
             :key="pizza.clientId"
             :pizza="pizza"
-            :pizza-total-price="pizzaTotalPrice(pizza.clientId)"
+            :pizza-total-price="pizzaFinalPrice(pizza.clientId)"
             @increment="cartStore.incrementCartPizza(pizza.clientId)"
             @decrement="cartStore.decrementCartPizza(pizza.clientId)"
             @set-value="cartStore.setCartPizzaQuantity(pizza.clientId, $event)"
           />
         </CartList>
 
-        <div class="cart__additional">
-          <CartAdditionalList>
-            <CartAdditionalListItem
-              title="Coca-Cola 0,5 л"
-              :price="56"
-              :img-src="colaImg"
-              img-alt="Coca-Cola 0,5 литра"
-            />
-            <CartAdditionalListItem
-              title="Острый соус"
-              :price="30"
-              :img-src="sauceImg"
-              img-alt="Острый соус"
-            />
-            <CartAdditionalListItem
-              title="Картошка из печи"
-              :price="56"
-              :img-src="potatoImg"
-              img-alt="Картошка из печи"
-            />
-          </CartAdditionalList>
-        </div>
+        <CartAdditionalList />
 
         <div class="cart__form">
           <CartForm />
         </div>
       </div>
     </main>
-    <CartFooter :pizzas-price="pizzasPrice" :is-empty="isEmpty" />
+    <CartFooter :total-price="orderTotalPrice" :is-empty="isEmpty" />
   </form>
 </template>
 
@@ -80,11 +56,6 @@ const { isEmpty, pizzas, pizzasPrice, pizzaTotalPrice } = storeToRefs(cartStore)
 .container {
   width: 770px;
   margin: 0 auto;
-}
-
-.cart__additional {
-  margin-top: 15px;
-  margin-bottom: 25px;
 }
 
 .cart__title {

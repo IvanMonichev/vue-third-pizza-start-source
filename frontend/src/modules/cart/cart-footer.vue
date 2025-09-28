@@ -5,7 +5,7 @@ import { AppConfig } from '@/modules/cart/config/app.config'
 
 interface Props {
   isEmpty: boolean
-  pizzasPrice: number
+  totalPrice: number
 }
 
 defineProps<Props>()
@@ -22,7 +22,7 @@ defineProps<Props>()
       Перейти к конструктору<br />чтоб собрать ещё одну пиццу
     </p>
     <div class="footer__price">
-      <b>Итого: {{ pizzasPrice.toLocaleString(AppConfig.Locale) }} ₽</b>
+      <b>Итого: {{ totalPrice.toLocaleString(AppConfig.Locale) }} ₽</b>
     </div>
 
     <div class="footer__submit">

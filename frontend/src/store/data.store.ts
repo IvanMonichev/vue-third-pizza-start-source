@@ -20,7 +20,7 @@ interface DataState {
   sauces: Sauce[]
   sizes: SizeDto[]
   ingredients: Ingredient[]
-  misc: MiscDto[]
+  miscList: MiscDto[]
 }
 
 export const useDataStore = defineStore('data', {
@@ -29,7 +29,7 @@ export const useDataStore = defineStore('data', {
     sauces: [],
     sizes: [],
     ingredients: [],
-    misc: []
+    miscList: []
   }),
   getters: {
     dataById:
@@ -61,8 +61,8 @@ export const useDataStore = defineStore('data', {
         className: ingredientClassMap[i.id]
       }))
     },
-    loadMisc() {
-      this.misc = misc
+    loadMiscList() {
+      this.miscList = misc
     }
   }
 })

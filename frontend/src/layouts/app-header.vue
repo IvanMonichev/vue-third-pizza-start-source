@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import logo from '@/assets/img/logo.svg'
+import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore } from '@/store'
+
+const { pizzasPrice } = useCartStore()
 </script>
 
 <template>
@@ -10,7 +14,9 @@ import logo from '@/assets/img/logo.svg'
       </RouterLink>
     </div>
     <div class="header__cart">
-      <RouterLink to="/cart">0 ₽</RouterLink>
+      <RouterLink to="/cart"
+        >{{ pizzasPrice.toLocaleString(AppConfig.Locale) }} ₽</RouterLink
+      >
     </div>
     <div class="header__user">
       <RouterLink to="/sign-in" class="header__login"

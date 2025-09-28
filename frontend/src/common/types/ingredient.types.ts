@@ -7,8 +7,5 @@ export interface IngredientDto {
 
 export interface Ingredient extends IngredientDto {
   className: string
-}
-
-export interface PizzaIngredient extends Pick<Ingredient, 'id'> {
   quantity: number
 }

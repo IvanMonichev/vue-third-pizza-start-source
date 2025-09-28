@@ -65,35 +65,30 @@
     "id": 11,
     "name": "Томаты",
     "image": "filling/tomatoes.svg",
-    "price": 35,
-    "quantity": 1
+    "price": 35
   },
   {
     "id": 12,
     "name": "Лосось",
     "image": "filling/salmon.svg",
-    "price": 50,
-    "quantity": 1
+    "price": 50
   },
   {
     "id": 13,
     "name": "Моцарелла",
     "image": "filling/mozzarella.svg",
-    "price": 35,
-    "quantity": 1
+    "price": 35
   },
   {
     "id": 14,
     "name": "Пармезан",
     "image": "filling/parmesan.svg",
-    "price": 35,
-    "quantity": 1
+    "price": 35
   },
   {
     "id": 15,
     "name": "Блю чиз",
     "image": "filling/blue_cheese.svg",
-    "price": 50,
-    "quantity": 1
+    "price": 50
   }
 ]

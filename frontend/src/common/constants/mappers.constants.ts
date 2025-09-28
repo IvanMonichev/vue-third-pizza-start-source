@@ -1,3 +1,6 @@
+import colaImg from '@/assets/img/cola.svg'
+import potatoImg from '@/assets/img/potato.svg'
+import sauceImg from '@/assets/img/sauce.svg'
 import { PizzaSizeValue } from '@/common/enums/pizza-size-value.enum'
 
 export const pizzaSizeMap: Record<PizzaSizeValue, string> = {
@@ -38,3 +41,9 @@ export const saucesClassMap: Record<number, string> = {
   1: 'tomato',
   2: 'creamy'
 } as const
+
+export const miscImagesMap: Record<string, string> = {
+  cola: colaImg,
+  potato: potatoImg,
+  sauce: sauceImg
+}

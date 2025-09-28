@@ -1,27 +1,48 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
+import { miscImagesMap } from '@/common/constants/mappers.constants'
+import { CartMisc } from '@/common/types/misc.types'
+import { AppConfig } from '@/modules/cart/config/app.config'
+import { computed } from 'vue'
 
 interface Props {
-  imgSrc: string
-  imgAlt: string
-  title: string
-  price: number
+  misc: CartMisc
 }
 
-const props = defineProps<Props>()
+const { misc } = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'increment', misc: CartMisc): void
+  (e: 'decrement', misc: CartMisc): void
+  (e: 'set-value', payload: { misc: CartMisc; value: number }): void
+}>()
+
+const finalPrice = computed(() => misc.quantity * misc.price)
 </script>
 
 <template>
   <li class="additional-list__item sheet">
     <p class="additional-list__description">
-      <img :src="props.imgSrc" width="39" height="60" :alt="props.imgAlt" />
-      <span>{{ props.title }}</span>
+      <img
+        :src="miscImagesMap[misc.image]"
+        width="39"
+        height="60"
+        :alt="misc.name"
+      />
+      <span>{{ misc.name }}</span>
     </p>
 
     <div class="additional-list__wrapper">
-      <AppCounter color="orange" extra-class="additional-list__counter" />
+      <AppCounter
+        color="orange"
+        extra-class="additional-list__counter"
+        :value="misc.quantity"
+        :min="0"
+        @increment="emit('increment', misc)"
+        @decrement="emit('decrement', misc)"
+        @set-value="emit('set-value', { misc: misc, value: $event })"
+      />
       <div class="additional-list__price">
-        <b>× {{ props.price }} ₽</b>
+        <b>× {{ finalPrice.toLocaleString(AppConfig.Locale) }} ₽</b>
       </div>
     </div>
   </li>

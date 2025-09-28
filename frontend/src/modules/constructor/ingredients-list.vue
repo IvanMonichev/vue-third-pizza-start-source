@@ -27,7 +27,7 @@ onMounted(async () => {
         }}</span>
       </AppDrag>
       <AppCounter
-        :value="pizzaStore.getIngredientQuantity(ingredient.id)"
+        :value="pizzaStore.ingredientQuantity(ingredient.id)"
         extra-class="ingredients__counter"
         :min="0"
         :max="3"

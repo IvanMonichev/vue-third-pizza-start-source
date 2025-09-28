@@ -1,5 +1,5 @@
 import { Dough } from '@/common/types/dough.types'
-import { PizzaIngredient } from '@/common/types/ingredient.types'
+import { Ingredient } from '@/common/types/ingredient.types'
 import { CartPizza } from '@/common/types/pizza.types'
 import { Sauce } from '@/common/types/sauce.types'
 import { useDataStore } from '@/store/data.store'
@@ -10,7 +10,7 @@ interface PizzaState {
   doughId: number | null
   sizeId: number | null
   sauceId: number | null
-  pizzaIngredients: PizzaIngredient[]
+  ingredients: Ingredient[]
 }
 
 export const usePizzaStore = defineStore('pizza', {
@@ -19,7 +19,7 @@ export const usePizzaStore = defineStore('pizza', {
     doughId: 1,
     sizeId: 1,
     sauceId: 1,
-    pizzaIngredients: []
+    ingredients: []
   }),
   getters: {
     pizzaPrice: (state) => {
@@ -30,11 +30,11 @@ export const usePizzaStore = defineStore('pizza', {
 
       if (!dough) return 0
       if (!sauce) return 0
-      if (!state.pizzaIngredients) return 0
+      if (!state.ingredients) return 0
       if (!size?.multiplier) return 0
 
       const basePrice = dough.price + sauce.price
-      const ingredientsPrice = state.pizzaIngredients.reduce((acc, ing) => {
+      const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
         const ingredient = dataStore.dataById('ingredients', ing.id)
         return acc + (ingredient ? ingredient.price * ing.quantity : 0)
       }, 0)
@@ -42,15 +42,15 @@ export const usePizzaStore = defineStore('pizza', {
       return size.multiplier * (basePrice + ingredientsPrice)
     },
 
-    getIngredientQuantity:
+    ingredientQuantity:
       (state) =>
       (id: number): number => {
-        return state.pizzaIngredients.find((i) => i.id === id)?.quantity || 0
+        return state.ingredients.find((i) => i.id === id)?.quantity || 0
       },
 
     ingredients: (state) => {
       const dataStore = useDataStore()
-      return state.pizzaIngredients.map((i) => {
+      return state.ingredients.map((i) => {
         const ingredient = dataStore.dataById('ingredients', i.id)
 
         if (!ingredient) throw new Error(`Ingredient with id ${i.id} not found`)
@@ -78,24 +78,24 @@ export const usePizzaStore = defineStore('pizza', {
   actions: {
     setIngredient(id: number, value: number) {
       if (value < 1) {
-        this.pizzaIngredients = this.pizzaIngredients.filter((i) => i.id !== id)
+        this.ingredients = this.ingredients.filter((i) => i.id !== id)
         return
       }
 
       if (value > 3) return
 
-      const ingredient = this.pizzaIngredients.find((i) => i.id === id)
+      const ingredient = this.ingredients.find((i) => i.id === id)
       if (ingredient) {
         ingredient.quantity = value
       } else {
-        this.pizzaIngredients.push({ id, quantity: value })
+        this.ingredients.push({ id, quantity: value })
       }
     },
 
     incrementIngredient(id: number) {
-      const ingredient = this.pizzaIngredients.find((i) => i.id === id)
+      const ingredient = this.ingredients.find((i) => i.id === id)
       if (!ingredient) {
-        this.pizzaIngredients.push({ id, quantity: 1 })
+        this.ingredients.push({ id, quantity: 1 })
         return
       }
 
@@ -104,40 +104,16 @@ export const usePizzaStore = defineStore('pizza', {
     },
 
     decrementIngredient(id: number) {
-      const index = this.pizzaIngredients.findIndex((i) => i.id === id)
+      const index = this.ingredients.findIndex((i) => i.id === id)
       if (index === -1) return
 
-      const ingredient = this.pizzaIngredients[index]
+      const ingredient = this.ingredients[index]
       if (ingredient.quantity <= 1) {
-        this.pizzaIngredients.splice(index, 1)
+        this.ingredients.splice(index, 1)
         return
       }
 
       ingredient.quantity--
-    },
-
-    removeIngredient(id: number) {
-      this.pizzaIngredients = this.pizzaIngredients.filter((i) => i.id !== id)
-    },
-
-    setDoughId(id: number) {
-      this.doughId = id
-    },
-
-    setSizeId(id: number) {
-      this.sizeId = id
-    },
-
-    setSauceId(id: number) {
-      this.sauceId = id
-    },
-
-    setPizzaName(name: string) {
-      this.pizzaName = name
-    },
-
-    resetPizzaName() {
-      this.pizzaName = ''
     },
 
     toCartPizza(): CartPizza {
