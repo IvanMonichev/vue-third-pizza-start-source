@@ -1,7 +1,4 @@
-import { Dough } from '@/common/types/dough.types'
-import { Ingredient, IngredientDto } from '@/common/types/ingredient.types'
-import { Sauce } from '@/common/types/sauce.types'
-import { SizeDto } from '@/common/types/size.types'
+import { IngredientDto, IngredientPizza } from '@/common/types/ingredient.types'
 
 export interface OrderPizzaDto {
   id: number
@@ -16,9 +13,9 @@ export interface OrderPizzaDto {
 
 export interface CartPizza extends Pick<OrderPizzaDto, 'name' | 'quantity'> {
   clientId: string
-  sauce: Sauce
-  dough: Dough
-  size: SizeDto
+  sauceId: number
+  doughId: number
+  sizeId: number
   price: number
-  ingredients: Ingredient[]
+  ingredientsPizza: IngredientPizza[]
 }

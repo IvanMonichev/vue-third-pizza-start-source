@@ -122,23 +122,14 @@ export const usePizzaStore = defineStore('pizza', {
     },
 
     toCartPizza(): CartPizza {
-      const dataStore = useDataStore()
-      const dough = dataStore.dataById('dough', this.doughId)
-      const sauce = dataStore.dataById('sauces', this.sauceId)
-      const size = dataStore.dataById('sizes', this.sizeId)
-
-      if (!dough || !sauce || !size) {
-        throw new Error('Не выбраны все параметры пиццы')
-      }
-
       return {
         clientId: crypto.randomUUID(),
         name: this.pizzaName,
-        dough,
-        sauce,
-        size,
-        ingredients: this.ingredients,
+        doughId: this.doughId,
+        sauceId: this.sauceId,
+        sizeId: this.sizeId,
         quantity: 1,
+        ingredientsPizza: this.ingredients,
         price: this.pizzaPrice
       }
     },
