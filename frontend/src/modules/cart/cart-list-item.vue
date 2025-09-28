@@ -3,16 +3,27 @@ import AppCounter from '@/common/components/app-counter.vue'
 import { doughCartMap } from '@/common/constants/mappers.constants'
 import { CartPizza } from '@/common/types/pizza.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
+import { useDataStore } from '@/store'
+import { computed } from 'vue'
 
 interface Props {
   pizza: CartPizza
   pizzaTotalPrice: number
 }
 
-const props = defineProps<Props>()
-const ingredientsList = props.pizza.ingredients
-  .map((i) => i.name.toLowerCase())
-  .join(', ')
+const dataStore = useDataStore()
+const { pizza } = defineProps<Props>()
+
+const ingredientsList = computed(() =>
+  pizza.ingredientsPizza
+    .map((i) => {
+      const ingredient = dataStore.dataById('ingredients', i.id)
+      return ingredient?.name.toLowerCase()
+    })
+    .join(', ')
+)
+const size = computed(() => dataStore.dataById('sizes', pizza.sizeId))
+const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
 
 const emit = defineEmits<{
   (e: 'increment'): void
@@ -34,8 +45,8 @@ const emit = defineEmits<{
       <div class="product__text">
         <h2>{{ pizza.name }}</h2>
         <ul>
-          <li>{{ pizza.size.name }}, {{ doughCartMap[pizza.dough.id] }}</li>
-          <li>Соус: {{ pizza.sauce.name.toLowerCase() }}</li>
+          <li>{{ size?.name }}, {{ doughCartMap[pizza.doughId] }}</li>
+          <li>Соус: {{ sauce?.name.toLowerCase() }}</li>
           <li>Начинка: {{ ingredientsList }}</li>
         </ul>
       </div>

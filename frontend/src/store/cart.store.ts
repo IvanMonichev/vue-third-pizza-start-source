@@ -1,11 +1,11 @@
 import { OrderAddressDto } from '@/common/types/address.types'
-import { CartMisc, MiscDto } from '@/common/types/misc.types'
+import { MiscCart } from '@/common/types/misc.types'
 import { CartPizza } from '@/common/types/pizza.types'
 import { defineStore } from 'pinia'
 
 interface CartState {
   pizzas: CartPizza[]
-  miscList: CartMisc[]
+  miscList: MiscCart[]
   address: OrderAddressDto | null
 }
 
@@ -13,48 +13,19 @@ export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
     pizzas: [
       {
-        id: 'mock-pizza-1',
+        clientId: 'mock-pizza-1',
         name: 'Капричоза',
-        dough: {
-          id: 1,
-          name: 'Тонкое тесто',
-          price: 200,
-          className: '',
-          image: ''
-        },
-        sauce: {
-          id: 1,
-          name: 'Томатный',
-          price: 50,
-          className: ''
-        },
-        size: {
-          id: 1,
-          name: '30 см',
-          multiplier: 1,
-          image: ''
-        },
-        ingredients: [
+        sauceId: 1,
+        sizeId: 1,
+        doughId: 1,
+        ingredientsPizza: [
           {
             id: 1,
-            name: 'Грибы',
-            price: 40,
-            image: '/img/ingredients/mushrooms.svg',
-            className: 'mushrooms'
+            quantity: 2
           },
           {
             id: 2,
-            name: 'Ветчина',
-            price: 60,
-            image: '/img/ingredients/ham.svg',
-            className: 'ham'
-          },
-          {
-            id: 3,
-            name: 'Пармезан',
-            price: 70,
-            image: '/img/ingredients/parmesan.svg',
-            className: 'parmesan'
+            quantity: 1
           }
         ],
         quantity: 1,
@@ -96,20 +67,11 @@ export const useCartStore = defineStore('cart', {
     }
   },
   actions: {
-    buildMiscListCart(miscDto: MiscDto[]) {
-      this.miscList = miscDto.map((m) => {
-        return {
-          ...m,
-          quantity: 0
-        }
-      })
-    },
-
     addPizza(pizza: CartPizza) {
       this.pizzas.push(pizza)
     },
 
-    setMisc(misc: CartMisc) {
+    setMisc(misc: MiscCart) {
       const index = this.miscList.findIndex((m) => m.id === misc.id)
 
       if (index === -1) {
@@ -146,6 +108,45 @@ export const useCartStore = defineStore('cart', {
         } else {
           this.pizzas[index].quantity = quantity
         }
+      }
+    },
+
+    incrementMisc(miscId: number) {
+      const index = this.miscList.findIndex((m) => m.id === miscId)
+
+      if (index === -1) {
+        this.miscList.push({ id: miscId, quantity: 1 })
+        return
+      }
+
+      this.miscList[index].quantity++
+    },
+
+    decrementMisc(miscId: number) {
+      const index = this.miscList.findIndex((m) => m.id === miscId)
+      if (index === -1) return
+
+      if (this.miscList[index].quantity > 1) {
+        this.miscList[index].quantity--
+      } else {
+        this.miscList.splice(index, 1)
+      }
+    },
+
+    setMiscQuantity(miscId: number, quantity: number) {
+      const index = this.miscList.findIndex((m) => m.id === miscId)
+
+      if (index === -1) {
+        if (quantity > 0) {
+          this.miscList.push({ id: miscId, quantity })
+        }
+        return
+      }
+
+      if (quantity <= 0) {
+        this.miscList.splice(index, 1)
+      } else {
+        this.miscList[index].quantity = quantity
       }
     }
   }

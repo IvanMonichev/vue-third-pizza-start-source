@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import { miscImagesMap } from '@/common/constants/mappers.constants'
-import { CartMisc } from '@/common/types/misc.types'
+import { MiscDto } from '@/common/types/misc.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore } from '@/store'
 import { computed } from 'vue'
 
 interface Props {
-  misc: CartMisc
+  misc: MiscDto
 }
 
+const cartStore = useCartStore()
 const { misc } = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'increment', misc: CartMisc): void
-  (e: 'decrement', misc: CartMisc): void
-  (e: 'set-value', payload: { misc: CartMisc; value: number }): void
-}>()
 
-const finalPrice = computed(() => misc.quantity * misc.price)
+const miscQuantity = computed(
+  () => cartStore.miscList.find((m) => m.id === misc.id)?.quantity ?? 0
+)
+const finalPrice = computed(() => miscQuantity.value * misc.price)
 </script>
 
 <template>
@@ -35,11 +35,11 @@ const finalPrice = computed(() => misc.quantity * misc.price)
       <AppCounter
         color="orange"
         extra-class="additional-list__counter"
-        :value="misc.quantity"
+        :value="miscQuantity"
         :min="0"
-        @increment="emit('increment', misc)"
-        @decrement="emit('decrement', misc)"
-        @set-value="emit('set-value', { misc: misc, value: $event })"
+        @increment="cartStore.incrementMisc(misc.id)"
+        @decrement="cartStore.decrementMisc(misc.id)"
+        @set-value="cartStore.setMiscQuantity(misc.id, $event)"
       />
       <div class="additional-list__price">
         <b>× {{ finalPrice.toLocaleString(AppConfig.Locale) }} ₽</b>

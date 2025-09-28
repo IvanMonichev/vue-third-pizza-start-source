@@ -5,13 +5,13 @@ export interface MiscDto {
   image: string
 }
 
-export interface OrderMiscDto {
+export interface MiscOrderDto {
   id: number
   orderId: number
   miscId: number
   quantity: number
 }
 
-export interface CartMisc extends MiscDto {
+export interface MiscCart extends Pick<MiscDto, 'id'> {
   quantity: number
 }

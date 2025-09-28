@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
-import CartAdditionalList from '@/modules/cart/cart-additional-list.vue'
 import CartFooter from '@/modules/cart/cart-footer.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
-import CartItem from '@/modules/cart/cart-list-item.vue'
-import CartList from '@/modules/cart/cart-list.vue'
+import CartMiscList from '@/modules/cart/cart-misc-list.vue'
+import CartPizzas from '@/modules/cart/cart-pizzas.vue'
 import { useCartStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
 const cartStore = useCartStore()
-const { isEmpty, pizzas, pizzasPrice, pizzaFinalPrice, orderTotalPrice } =
-  storeToRefs(cartStore)
+const { isEmpty, orderTotalPrice } = storeToRefs(cartStore)
 </script>
 
 <template>
@@ -24,20 +22,9 @@ const { isEmpty, pizzas, pizzasPrice, pizzaFinalPrice, orderTotalPrice } =
         <div v-if="isEmpty" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
         </div>
+        <CartPizzas v-else />
 
-        <CartList v-else>
-          <CartItem
-            v-for="pizza in pizzas"
-            :key="pizza.clientId"
-            :pizza="pizza"
-            :pizza-total-price="pizzaFinalPrice(pizza.clientId)"
-            @increment="cartStore.incrementCartPizza(pizza.clientId)"
-            @decrement="cartStore.decrementCartPizza(pizza.clientId)"
-            @set-value="cartStore.setCartPizzaQuantity(pizza.clientId, $event)"
-          />
-        </CartList>
-
-        <CartAdditionalList />
+        <CartMiscList />
 
         <div class="cart__form">
           <CartForm />
