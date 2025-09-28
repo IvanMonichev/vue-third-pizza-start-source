@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dough from '@/mocks/dough.json'
 import RadioDough from '@/modules/constructor/radio-dough.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
@@ -8,7 +9,7 @@ import { onMounted } from 'vue'
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
 onMounted(async () => {
-  dataStore.loadDough()
+  dataStore.buildDough(dough)
 })
 
 const { doughId } = storeToRefs(pizzaStore)
@@ -18,7 +19,7 @@ const { doughId } = storeToRefs(pizzaStore)
   <div class="content__dough">
     <SheetLayout title="Выберите тесто" content-class="dough">
       <RadioDough
-        v-for="d in dataStore.dough"
+        v-for="d in dataStore.doughList"
         :key="d.id"
         v-model="doughId"
         :dough="d"

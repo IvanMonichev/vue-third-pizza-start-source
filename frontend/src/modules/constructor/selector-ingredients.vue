@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
+import ingredientsDto from '@/mocks/ingredients.json'
+import saucesDto from '@/mocks/sauces.json'
 import IngredientsList from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
 const pizzaStore = usePizzaStore()
+const dataStore = useDataStore()
 const { sauceId } = storeToRefs(pizzaStore)
 const { sauces } = useDataStore()
 
+onMounted(() => {
+  dataStore.buildSauces(saucesDto)
+  dataStore.buildIngredients(ingredientsDto)
+})
 const saucesOptions = computed<Option[]>(() =>
   sauces.map((s) => ({
     label: s.name,

@@ -1,21 +1,17 @@
 import {
   doughClassMap,
+  ingredientClassMap,
   saucesClassMap
 } from '@/common/constants/mappers.constants'
-import { Dough } from '@/common/types/dough.types'
-import { Ingredient } from '@/common/types/ingredient.types'
+import { Dough, DoughDto } from '@/common/types/dough.types'
+import { Ingredient, IngredientDto } from '@/common/types/ingredient.types'
 import { MiscDto } from '@/common/types/misc.types'
-import { Sauce } from '@/common/types/sauce.types'
+import { Sauce, SauceDto } from '@/common/types/sauce.types'
 import { SizeDto } from '@/common/types/size.types'
-import dough from '@/mocks/dough.json'
-import ingredients from '@/mocks/ingredients.json'
-import misc from '@/mocks/misc.json'
-import sauces from '@/mocks/sauces.json'
-import sizes from '@/mocks/sizes.json'
 import { defineStore } from 'pinia'
 
 interface DataState {
-  dough: Dough[]
+  doughList: Dough[]
   sauces: Sauce[]
   sizes: SizeDto[]
   ingredients: Ingredient[]
@@ -24,7 +20,7 @@ interface DataState {
 
 export const useDataStore = defineStore('data', {
   state: (): DataState => ({
-    dough: [],
+    doughList: [],
     sauces: [],
     sizes: [],
     ingredients: [],
@@ -42,23 +38,33 @@ export const useDataStore = defineStore('data', {
       }
   },
   actions: {
-    loadDough() {
-      this.dough = dough.map((d) => ({ ...d, className: doughClassMap[d.id] }))
+    buildDough(doughDto: DoughDto[]) {
+      this.doughList = doughDto.map((d) => ({
+        ...d,
+        className: doughClassMap[d.id]
+      }))
     },
-    loadSauces() {
-      this.sauces = sauces.map((s) => ({
+
+    buildSauces(saucesDto: SauceDto[]) {
+      this.sauces = saucesDto.map((s) => ({
         ...s,
         className: saucesClassMap[s.id]
       }))
     },
-    loadSizes() {
-      this.sizes = sizes
+
+    buildSizes(sizesDto: SizeDto[]) {
+      this.sizes = sizesDto
     },
-    loadIngredients() {
-      this.ingredients = ingredients
+
+    buildIngredients(ingredientsDto: IngredientDto[]) {
+      this.ingredients = ingredientsDto.map((i) => ({
+        ...i,
+        className: ingredientClassMap[i.id]
+      }))
     },
-    loadMiscList() {
-      this.miscList = misc
+
+    buildMisc(miscDto: MiscDto[]) {
+      this.miscList = miscDto
     }
   }
 })

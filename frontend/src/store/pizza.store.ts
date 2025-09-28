@@ -1,15 +1,14 @@
-import { ingredientClassMap } from '@/common/constants/mappers.constants'
-import { Ingredient, IngredientDto } from '@/common/types/ingredient.types'
+import { IngredientPizza } from '@/common/types/ingredient.types'
 import { CartPizza } from '@/common/types/pizza.types'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
 
 interface PizzaState {
   pizzaName: string
-  doughId: number | null
-  sizeId: number | null
-  sauceId: number | null
-  ingredients: Ingredient[]
+  doughId: number
+  sizeId: number
+  sauceId: number
+  ingredients: IngredientPizza[]
 }
 
 export const usePizzaStore = defineStore('pizza', {
@@ -21,16 +20,38 @@ export const usePizzaStore = defineStore('pizza', {
     ingredients: []
   }),
   getters: {
-    pizzaPrice: (state) => () => {
+    dough: (state) => {
       const dataStore = useDataStore()
-      const dough = dataStore.dataById('dough', state.doughId)
+      return dataStore.dataById('doughList', state.doughId) || null
+    },
+
+    sauce: (state) => {
+      const dataStore = useDataStore()
+      return dataStore.dataById('sauces', state.sauceId)
+    },
+
+    selectedIngredients: (state) => {
+      const dataStore = useDataStore()
+      return state.ingredients.map((i) => {
+        const ingredient = dataStore.dataById('ingredients', i.id)
+        if (!ingredient) {
+          throw new Error(`Ingredient with id ${i.id} not found`)
+        }
+        return {
+          ...ingredient,
+          quantity: i.quantity
+        }
+      })
+    },
+
+    // Цена пиццы (динамически вычисляется)
+    pizzaPrice: (state): number => {
+      const dataStore = useDataStore()
+      const dough = dataStore.dataById('doughList', state.doughId)
       const sauce = dataStore.dataById('sauces', state.sauceId)
       const size = dataStore.dataById('sizes', state.sizeId)
 
-      if (!dough) return 0
-      if (!sauce) return 0
-      if (!state.ingredients) return 0
-      if (!size?.multiplier) return 0
+      if (!dough || !sauce || !size) return 0
 
       const basePrice = dough.price + sauce.price
       const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
@@ -42,33 +63,62 @@ export const usePizzaStore = defineStore('pizza', {
     }
   },
   actions: {
-    buildIngredients(ingredientsDto: IngredientDto[]) {
-      this.ingredients = ingredientsDto.map((i) => ({
-        ...i,
-        className: ingredientClassMap[i.id],
-        quantity: 0
-      }))
+    setIngredient(id: number, quantity: number) {
+      const index = this.ingredients.findIndex((i) => i.id === id)
+
+      if (index === -1) {
+        this.ingredients.push({ id, quantity })
+      } else {
+        this.ingredients[index].quantity = quantity
+      }
     },
 
     incrementIngredient(id: number) {
       const index = this.ingredients.findIndex((i) => i.id === id)
       if (index === -1) {
-        throw new Error(`Ingredient with id ${id} not found`)
-      }
-      const foundIngredient = this.ingredients[index]
-      if (foundIngredient.quantity > 3) {
-        throw new Error('The quantity of ingredients must be more than 3')
+        this.ingredients.push({ id, quantity: 1 })
+        return
       }
 
-      this.ingredients[index].quantity++
+      const foundIngredient = this.ingredients[index]
+      if (foundIngredient.quantity >= 3) {
+        throw new Error('The quantity of ingredients must not exceed 3')
+      }
+
+      foundIngredient.quantity++
     },
 
-    setIngredient(ingredient: Ingredient) {
-      const index = this.ingredients.findIndex((i) => i.id === ingredient.id)
-      if (index === -1) {
-        throw new Error(`Ingredient with id ${ingredient.id} not found`)
+    decrementIngredient(id: number) {
+      const index = this.ingredients.findIndex((i) => i.id === id)
+      if (index === -1) return
+
+      const foundIngredient = this.ingredients[index]
+      if (foundIngredient.quantity <= 0) {
+        return
       }
-      this.ingredients[index] = ingredient
+
+      foundIngredient.quantity--
+
+      if (foundIngredient.quantity === 0) {
+        this.ingredients.splice(index, 1)
+      }
+    },
+
+    // Добавить или обновить ингредиент (если quantity > 0)
+    addIngredient(ingredient: IngredientPizza) {
+      const index = this.ingredients.findIndex((i) => i.id === ingredient.id)
+      if (ingredient.quantity <= 0) {
+        if (index !== -1) {
+          this.ingredients.splice(index, 1)
+        }
+        return
+      }
+
+      if (index === -1) {
+        this.ingredients.push(ingredient)
+      } else {
+        this.ingredients[index] = ingredient
+      }
     },
 
     toCartPizza(): CartPizza {

@@ -5,7 +5,6 @@ import AppInput from '@/common/components/app-input.vue'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
 
 const pizzaStore = usePizzaStore()
 const cartStore = useCartStore()
@@ -18,7 +17,8 @@ const handleDropIngredient = (payload: unknown) => {
   }
 }
 
-const { pizzaPrice, dough, sauce, pizzaName } = storeToRefs(pizzaStore)
+const { pizzaPrice, pizzaName, dough, sauce, selectedIngredients } =
+  storeToRefs(pizzaStore)
 
 const handleAddPizza = () => {
   try {
@@ -29,10 +29,6 @@ const handleAddPizza = () => {
     console.error(e)
   }
 }
-
-const addedIngredients = computed(() =>
-  pizzaStore.ingredients.filter((i) => i.quantity > 0)
-)
 </script>
 
 <template>
@@ -55,7 +51,7 @@ const addedIngredients = computed(() =>
         >
           <div class="pizza__wrapper">
             <div
-              v-for="i in addedIngredients"
+              v-for="i in selectedIngredients"
               :key="i.id"
               :class="[
                 'pizza__filling',

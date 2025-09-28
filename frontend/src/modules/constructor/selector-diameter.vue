@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import sizesMock from '@/mocks/sizes.json'
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
@@ -8,7 +9,7 @@ import { onMounted } from 'vue'
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
 onMounted(async () => {
-  dataStore.loadSizes()
+  dataStore.buildSizes(sizesMock)
 })
 
 const { sizes } = storeToRefs(dataStore)

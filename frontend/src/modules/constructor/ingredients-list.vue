@@ -1,30 +1,20 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import AppDrag from '@/common/components/app-drag.vue'
-import { Ingredient } from '@/common/types/ingredient.types'
-import { usePizzaStore } from '@/store'
+import { useDataStore, usePizzaStore } from '@/store'
+import { computed } from 'vue'
 
+const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
 
-const handleIncrementIngredient = (ingredient: Ingredient): void => {
-  if (ingredient.quantity > 3) return
-  pizzaStore.incrementIngredient(ingredient.id)
-}
-
-const handleDecrementIngredient = (ingredient: Ingredient): void => {
-  if (ingredient.quantity < 0) return
-  pizzaStore.setIngredient({ ...ingredient, quantity: ingredient.quantity - 1 })
-}
-
-const handleSetIngredient = (ingredient: Ingredient, value: number): void => {
-  pizzaStore.setIngredient({ ...ingredient, quantity: value })
-}
+const quantityById = (id: number) =>
+  computed(() => pizzaStore.ingredients.find((i) => i.id === id)?.quantity ?? 0)
 </script>
 
 <template>
   <ul class="ingredients__list">
     <li
-      v-for="ingredient in pizzaStore.ingredients"
+      v-for="ingredient in dataStore.ingredients"
       :key="ingredient.id"
       class="ingredients__item"
     >
@@ -34,13 +24,13 @@ const handleSetIngredient = (ingredient: Ingredient, value: number): void => {
         }}</span>
       </AppDrag>
       <AppCounter
-        :value="ingredient.quantity"
+        :value="quantityById(ingredient.id).value"
         extra-class="ingredients__counter"
         :min="0"
         :max="3"
-        @increment="handleIncrementIngredient(ingredient)"
-        @decrement="handleDecrementIngredient(ingredient)"
-        @set-value="handleSetIngredient(ingredient, $event)"
+        @increment="pizzaStore.incrementIngredient(ingredient.id)"
+        @decrement="pizzaStore.decrementIngredient(ingredient.id)"
+        @set-value="pizzaStore.setIngredient(ingredient.id, $event)"
       />
     </li>
   </ul>
