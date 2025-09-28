@@ -4,6 +4,17 @@ import ContentPizza from '@/modules/constructor/content-pizza.vue'
 import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
+import { useDataStore, usePizzaStore } from '@/store'
+import { onMounted } from 'vue'
+
+const dataStore = useDataStore()
+const pizzaStore = usePizzaStore()
+
+onMounted(() => {
+  dataStore.loadSauces()
+  dataStore.loadIngredients()
+  pizzaStore.buildIngredients(dataStore.ingredients)
+})
 </script>
 
 <template>

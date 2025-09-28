@@ -11,14 +11,18 @@ onMounted(async () => {
   dataStore.loadDough()
 })
 
-const { dough } = storeToRefs(dataStore)
 const { doughId } = storeToRefs(pizzaStore)
 </script>
 
 <template>
   <div class="content__dough">
     <SheetLayout title="Выберите тесто" content-class="dough">
-      <RadioDough v-for="d in dough" :key="d.id" v-model="doughId" :dough="d" />
+      <RadioDough
+        v-for="d in dataStore.dough"
+        :key="d.id"
+        v-model="doughId"
+        :dough="d"
+      />
     </SheetLayout>
   </div>
 </template>

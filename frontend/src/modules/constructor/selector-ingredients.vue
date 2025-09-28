@@ -5,23 +5,18 @@ import IngredientsList from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
-const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
-const { sauces } = storeToRefs(dataStore)
 const { sauceId } = storeToRefs(pizzaStore)
+const { sauces } = useDataStore()
 
 const saucesOptions = computed<Option[]>(() =>
-  sauces.value.map((s) => ({
+  sauces.map((s) => ({
     label: s.name,
     value: s.id
   }))
 )
-
-onMounted(async () => {
-  dataStore.loadSauces()
-})
 </script>
 
 <template>

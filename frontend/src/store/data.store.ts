@@ -1,6 +1,5 @@
 import {
   doughClassMap,
-  ingredientClassMap,
   saucesClassMap
 } from '@/common/constants/mappers.constants'
 import { Dough } from '@/common/types/dough.types'
@@ -56,10 +55,7 @@ export const useDataStore = defineStore('data', {
       this.sizes = sizes
     },
     loadIngredients() {
-      this.ingredients = ingredients.map((i) => ({
-        ...i,
-        className: ingredientClassMap[i.id]
-      }))
+      this.ingredients = ingredients
     },
     loadMiscList() {
       this.miscList = misc
