@@ -5,17 +5,12 @@ import { useCartStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
 const cartStore = useCartStore()
-const { pizzas, pizzaFinalPrice } = storeToRefs(cartStore)
+const { pizzas } = storeToRefs(cartStore)
 </script>
 
 <template>
   <CartList>
-    <CartItem
-      v-for="pizza in pizzas"
-      :key="pizza.clientId"
-      :pizza="pizza"
-      :pizza-total-price="pizzaFinalPrice(pizza.clientId)"
-    />
+    <CartItem v-for="pizza in pizzas" :key="pizza.clientId" :pizza="pizza" />
   </CartList>
 </template>
 

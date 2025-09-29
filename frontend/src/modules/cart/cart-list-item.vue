@@ -3,15 +3,15 @@ import AppCounter from '@/common/components/app-counter.vue'
 import { doughCartMap } from '@/common/constants/mappers.constants'
 import { CartPizza } from '@/common/types/pizza.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
-import { useDataStore } from '@/store'
+import { useCartStore, useDataStore } from '@/store'
 import { computed } from 'vue'
 
 interface Props {
   pizza: CartPizza
-  pizzaTotalPrice: number
 }
 
 const dataStore = useDataStore()
+const cartStore = useCartStore()
 const { pizza } = defineProps<Props>()
 
 const ingredientsList = computed(() =>
@@ -24,12 +24,6 @@ const ingredientsList = computed(() =>
 )
 const size = computed(() => dataStore.dataById('sizes', pizza.sizeId))
 const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
-
-const emit = defineEmits<{
-  (e: 'increment'): void
-  (e: 'decrement'): void
-  (e: 'set-value', value: number): void
-}>()
 </script>
 
 <template>
@@ -57,13 +51,20 @@ const emit = defineEmits<{
       color="orange"
       extra-class="cart-list__counter"
       :value="pizza.quantity"
-      @increment="emit('increment')"
-      @decrement="emit('decrement')"
-      @set-value="emit('set-value', $event)"
+      @increment="cartStore.incrementCartPizza(pizza.clientId)"
+      @decrement="cartStore.decrementCartPizza(pizza.clientId)"
+      @set-value="cartStore.setCartPizzaQuantity(pizza.clientId, $event)"
     />
 
     <div class="cart-list__price">
-      <b>{{ pizzaTotalPrice.toLocaleString(AppConfig.Locale) }} ₽</b>
+      <b
+        >{{
+          cartStore
+            .pizzaTotalPrice(pizza.clientId)
+            .toLocaleString(AppConfig.Locale)
+        }}
+        ₽</b
+      >
     </div>
 
     <div class="cart-list__button">

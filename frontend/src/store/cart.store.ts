@@ -2,10 +2,11 @@ import { OrderAddressDto } from '@/common/types/address.types'
 import { MiscCart } from '@/common/types/misc.types'
 import { CartPizza } from '@/common/types/pizza.types'
 import { defineStore } from 'pinia'
+import { useDataStore } from '@/store/data.store'
 
 interface CartState {
   pizzas: CartPizza[]
-  miscList: MiscCart[]
+  miscCartList: MiscCart[]
   address: OrderAddressDto | null
 }
 
@@ -32,7 +33,7 @@ export const useCartStore = defineStore('cart', {
         price: 200 + 50 + (40 + 60 + 70) // = 420
       }
     ],
-    miscList: [],
+    miscCartList: [],
     address: null
   }),
   getters: {
@@ -42,28 +43,39 @@ export const useCartStore = defineStore('cart', {
         0
       ),
 
-    miscPrice: (state): number =>
-      state.miscList.reduce((acc, item) => acc + item.price * item.quantity, 0),
-
-    isEmpty: (state): boolean => state.pizzas.length === 0,
-
-    pizzaFinalPrice: (state) => {
+    pizzaTotalPrice: (state) => {
       return (pizzaId: string) => {
         const pizza = state.pizzas.find((p) => p.clientId === pizzaId)
         return pizza ? pizza.price * pizza.quantity : 0
       }
     },
 
+    miscTotalPrice: (state) => {
+      return (miscId: number) => {
+        const dataStore = useDataStore()
+        const miscCart = state.miscCartList.find((m) => m.id === miscId)
+        const miscData = dataStore.miscList.find((m) => m.id === miscId)
+
+        return miscCart && miscData ? miscCart.quantity * miscData.price : 0
+      }
+    },
+
     orderTotalPrice: (state): number => {
-      const pizzasTotal = state.pizzas.reduce(
+      const dataStore = useDataStore()
+
+      // Общая цена всех пицц
+      const pizzasTotalPrice = state.pizzas.reduce(
         (acc, pizza) => acc + pizza.price * pizza.quantity,
         0
       )
-      const miscTotal = state.miscList.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      )
-      return pizzasTotal + miscTotal
+
+      // Общая цена всех доп. продуктов
+      const miscListTotalPrice = state.miscCartList.reduce((acc, miscCart) => {
+        const miscData = dataStore.miscList.find((m) => m.id === miscCart.id)
+        return acc + (miscData ? miscCart.quantity * miscData.price : 0)
+      }, 0)
+
+      return pizzasTotalPrice + miscListTotalPrice
     }
   },
   actions: {
@@ -72,14 +84,14 @@ export const useCartStore = defineStore('cart', {
     },
 
     setMisc(misc: MiscCart) {
-      const index = this.miscList.findIndex((m) => m.id === misc.id)
+      const index = this.miscCartList.findIndex((m) => m.id === misc.id)
 
       if (index === -1) {
-        this.miscList.push(misc)
+        this.miscCartList.push(misc)
         return
       }
 
-      this.miscList[index] = misc
+      this.miscCartList[index] = misc
     },
 
     incrementCartPizza(pizzaId: string) {
@@ -112,41 +124,41 @@ export const useCartStore = defineStore('cart', {
     },
 
     incrementMisc(miscId: number) {
-      const index = this.miscList.findIndex((m) => m.id === miscId)
+      const index = this.miscCartList.findIndex((m) => m.id === miscId)
 
       if (index === -1) {
-        this.miscList.push({ id: miscId, quantity: 1 })
+        this.miscCartList.push({ id: miscId, quantity: 1 })
         return
       }
 
-      this.miscList[index].quantity++
+      this.miscCartList[index].quantity++
     },
 
     decrementMisc(miscId: number) {
-      const index = this.miscList.findIndex((m) => m.id === miscId)
+      const index = this.miscCartList.findIndex((m) => m.id === miscId)
       if (index === -1) return
 
-      if (this.miscList[index].quantity > 1) {
-        this.miscList[index].quantity--
+      if (this.miscCartList[index].quantity > 1) {
+        this.miscCartList[index].quantity--
       } else {
-        this.miscList.splice(index, 1)
+        this.miscCartList.splice(index, 1)
       }
     },
 
     setMiscQuantity(miscId: number, quantity: number) {
-      const index = this.miscList.findIndex((m) => m.id === miscId)
+      const index = this.miscCartList.findIndex((m) => m.id === miscId)
 
       if (index === -1) {
         if (quantity > 0) {
-          this.miscList.push({ id: miscId, quantity })
+          this.miscCartList.push({ id: miscId, quantity })
         }
         return
       }
 
       if (quantity <= 0) {
-        this.miscList.splice(index, 1)
+        this.miscCartList.splice(index, 1)
       } else {
-        this.miscList[index].quantity = quantity
+        this.miscCartList[index].quantity = quantity
       }
     }
   }

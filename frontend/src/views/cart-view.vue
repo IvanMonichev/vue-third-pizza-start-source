@@ -6,9 +6,11 @@ import CartMiscList from '@/modules/cart/cart-misc-list.vue'
 import CartPizzas from '@/modules/cart/cart-pizzas.vue'
 import { useCartStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
 const cartStore = useCartStore()
-const { isEmpty, orderTotalPrice } = storeToRefs(cartStore)
+const { orderTotalPrice } = storeToRefs(cartStore)
+const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const { isEmpty, orderTotalPrice } = storeToRefs(cartStore)
           <AppTitle>Корзина</AppTitle>
         </div>
 
-        <div v-if="isEmpty" class="sheet cart__empty">
+        <div v-if="isEmptyPizzas" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
         </div>
         <CartPizzas v-else />
@@ -31,7 +33,7 @@ const { isEmpty, orderTotalPrice } = storeToRefs(cartStore)
         </div>
       </div>
     </main>
-    <CartFooter :total-price="orderTotalPrice" :is-empty="isEmpty" />
+    <CartFooter :total-price="orderTotalPrice" :is-empty="isEmptyPizzas" />
   </form>
 </template>
 

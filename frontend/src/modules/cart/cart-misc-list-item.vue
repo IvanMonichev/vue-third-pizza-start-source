@@ -14,9 +14,8 @@ const cartStore = useCartStore()
 const { misc } = defineProps<Props>()
 
 const miscQuantity = computed(
-  () => cartStore.miscList.find((m) => m.id === misc.id)?.quantity ?? 0
+  () => cartStore.miscCartList.find((m) => m.id === misc.id)?.quantity ?? 0
 )
-const finalPrice = computed(() => miscQuantity.value * misc.price)
 </script>
 
 <template>
@@ -42,7 +41,13 @@ const finalPrice = computed(() => miscQuantity.value * misc.price)
         @set-value="cartStore.setMiscQuantity(misc.id, $event)"
       />
       <div class="additional-list__price">
-        <b>× {{ finalPrice.toLocaleString(AppConfig.Locale) }} ₽</b>
+        <b
+          >×
+          {{
+            cartStore.miscTotalPrice(misc.id).toLocaleString(AppConfig.Locale)
+          }}
+          ₽</b
+        >
       </div>
     </div>
   </li>
