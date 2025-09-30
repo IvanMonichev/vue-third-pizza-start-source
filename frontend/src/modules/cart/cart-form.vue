@@ -1,46 +1,62 @@
 <script setup lang="ts">
 import AppInput from '@/common/components/app-input.vue'
 import AppSelect from '@/common/components/app-select.vue'
-import { ref } from 'vue'
+import { develiryTypeOptions } from '@/common/constants/address-form.constants'
+import { useCartStore } from '@/store'
+import { storeToRefs } from 'pinia'
+import { DeliveryType } from '@/common/enums/delivery-type.enum'
 
-const options = [
-  { value: '1', label: 'Заберу сам' },
-  { value: '2', label: 'Новый адрес' },
-  { value: '3', label: 'Дом' }
-]
-
-const value = ref<string>('1')
+const cartStore = useCartStore()
+const { addressForm } = storeToRefs(cartStore)
 </script>
 
 <template>
   <div class="cart-form">
     <AppSelect
-      v-model="value"
-      name="test"
-      :options="options"
+      v-model="addressForm.deliveryType"
+      name="delivery-type"
+      :options="develiryTypeOptions"
       label="Получение заказа:"
       extra-class="cart-form__select"
     />
     <AppInput
+      v-model="addressForm.phone"
       label="Контактный телефон:"
       name="tel"
       placeholder="+7 999-999-99-99"
       size="big"
     />
 
-    <div class="cart-form__address">
+    <div
+      v-if="addressForm.deliveryType === DeliveryType.NEW_ADDRESS"
+      class="cart-form__address"
+    >
       <span class="cart-form__label">Новый адрес:</span>
 
       <div class="cart-form__input">
-        <AppInput label="Улица*" name="street" :required="true" />
+        <AppInput
+          v-model="addressForm.street"
+          label="Улица*"
+          name="street"
+          :required="true"
+        />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppInput label="Дом*" name="house" :required="true" />
+        <AppInput
+          v-model="addressForm.house"
+          label="Дом*"
+          name="house"
+          :required="true"
+        />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppInput label="Квартира" name="apartment" :required="true" />
+        <AppInput
+          v-model="addressForm.apartment"
+          label="Квартира"
+          name="apartment"
+        />
       </div>
     </div>
   </div>

@@ -1,40 +1,26 @@
-import { OrderAddressDto } from '@/common/types/address.types'
+import { AddressForm, OrderAddressDto } from '@/common/types/address.types'
 import { MiscCart } from '@/common/types/misc.types'
 import { CartPizza } from '@/common/types/pizza.types'
 import { defineStore } from 'pinia'
 import { useDataStore } from '@/store/data.store'
+import { DeliveryType } from '@/common/enums/delivery-type.enum'
 
 interface CartState {
   pizzas: CartPizza[]
   miscCartList: MiscCart[]
   address: OrderAddressDto | null
+  addressForm: AddressForm
 }
 
 export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
-    pizzas: [
-      {
-        pizzaId: 'mock-pizza-1',
-        name: 'Капричоза',
-        sauceId: 1,
-        sizeId: 1,
-        doughId: 1,
-        ingredientsPizza: [
-          {
-            id: 1,
-            quantity: 2
-          },
-          {
-            id: 2,
-            quantity: 1
-          }
-        ],
-        quantity: 1,
-        price: 200 + 50 + (40 + 60 + 70) // = 420
-      }
-    ],
+    pizzas: [],
     miscCartList: [],
-    address: null
+    address: null,
+    addressForm: {
+      deliveryType: DeliveryType.PICK_UP,
+      phone: ''
+    }
   }),
   getters: {
     pizzasPrice: (state): number =>
@@ -173,6 +159,39 @@ export const useCartStore = defineStore('cart', {
       } else {
         this.miscCartList[index].quantity = quantity
       }
+    },
+
+    setDeliveryType(type: DeliveryType) {
+      this.addressForm.deliveryType = type
+
+      // при переключении можно сбрасывать адрес
+      if (type === DeliveryType.PICK_UP) {
+        this.addressForm = {
+          deliveryType: DeliveryType.PICK_UP,
+          phone: this.addressForm.phone
+        }
+      }
+
+      if (type === DeliveryType.NEW_ADDRESS) {
+        this.addressForm = {
+          deliveryType: DeliveryType.NEW_ADDRESS,
+          phone: this.addressForm.phone,
+          street: '',
+          house: '',
+          apartment: ''
+        }
+      }
+
+      if (type === DeliveryType.SAVED_ADDRESS) {
+        this.addressForm = {
+          deliveryType: DeliveryType.SAVED_ADDRESS,
+          phone: this.addressForm.phone
+        }
+      }
+    },
+
+    updateAddressForm(payload: Partial<AddressForm>) {
+      this.addressForm = { ...this.addressForm, ...payload }
     }
   }
 })
