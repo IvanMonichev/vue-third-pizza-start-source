@@ -14,7 +14,7 @@ export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
     pizzas: [
       {
-        clientId: 'mock-pizza-1',
+        pizzaId: 'mock-pizza-1',
         name: 'Капричоза',
         sauceId: 1,
         sizeId: 1,
@@ -45,7 +45,7 @@ export const useCartStore = defineStore('cart', {
 
     pizzaTotalPrice: (state) => {
       return (pizzaId: string) => {
-        const pizza = state.pizzas.find((p) => p.clientId === pizzaId)
+        const pizza = state.pizzas.find((p) => p.pizzaId === pizzaId)
         return pizza ? pizza.price * pizza.quantity : 0
       }
     },
@@ -76,11 +76,24 @@ export const useCartStore = defineStore('cart', {
       }, 0)
 
       return pizzasTotalPrice + miscListTotalPrice
+    },
+
+    pizzaById: (state) => {
+      return (pizzaId: string) => {
+        if (!pizzaId) return null
+        return state.pizzas.find((p) => p.pizzaId === pizzaId) || null
+      }
     }
   },
   actions: {
-    addPizza(pizza: CartPizza) {
-      this.pizzas.push(pizza)
+    savePizza(pizza: CartPizza) {
+      const index = this.pizzas.findIndex((p) => p.pizzaId === pizza.pizzaId)
+
+      if (index === -1) {
+        this.pizzas.push(pizza)
+      } else {
+        this.pizzas[index] = pizza
+      }
     },
 
     setMisc(misc: MiscCart) {
@@ -95,14 +108,14 @@ export const useCartStore = defineStore('cart', {
     },
 
     incrementCartPizza(pizzaId: string) {
-      const index = this.pizzas.findIndex((p) => p.clientId === pizzaId)
+      const index = this.pizzas.findIndex((p) => p.pizzaId === pizzaId)
       if (index === -1) return
 
       this.pizzas[index].quantity++
     },
 
     decrementCartPizza(pizzaId: string) {
-      const index = this.pizzas.findIndex((p) => p.clientId === pizzaId)
+      const index = this.pizzas.findIndex((p) => p.pizzaId === pizzaId)
       if (index === -1) return
 
       if (this.pizzas[index].quantity > 1) {
@@ -113,7 +126,7 @@ export const useCartStore = defineStore('cart', {
     },
 
     setCartPizzaQuantity(pizzaId: string, quantity: number) {
-      const index = this.pizzas.findIndex((p) => p.clientId === pizzaId)
+      const index = this.pizzas.findIndex((p) => p.pizzaId === pizzaId)
       if (index !== -1) {
         if (quantity <= 0) {
           this.pizzas.splice(index, 1)

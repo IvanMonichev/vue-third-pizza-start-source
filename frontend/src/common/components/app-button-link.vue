@@ -6,6 +6,7 @@ type Variant = 'default' | 'border' | 'arrow'
 interface Props {
   to: string
   variants?: Variant[]
+  className?: string
 }
 
 const props = defineProps<Props>()
@@ -17,7 +18,7 @@ const variantsClasses = computed(
 </script>
 
 <template>
-  <RouterLink :to="to" class="button" :class="variantsClasses">
+  <RouterLink :to="to" class="button" :class="[...variantsClasses, className]">
     <slot />
   </RouterLink>
 </template>

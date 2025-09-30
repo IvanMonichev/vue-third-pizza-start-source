@@ -5,9 +5,11 @@ import AppInput from '@/common/components/app-input.vue'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 
 const pizzaStore = usePizzaStore()
 const cartStore = useCartStore()
+const router = useRouter()
 
 const handleDropIngredient = (payload: unknown) => {
   if (typeof payload !== 'object' || payload === null) return
@@ -23,8 +25,9 @@ const { pizzaPrice, pizzaName, dough, sauce, selectedIngredients } =
 const handleAddPizza = () => {
   try {
     const pizza = pizzaStore.toCartPizza()
-    cartStore.addPizza(pizza)
+    cartStore.savePizza(pizza)
     pizzaStore.resetPizza()
+    router.push({ name: 'cart-view' })
   } catch (e) {
     console.error(e)
   }

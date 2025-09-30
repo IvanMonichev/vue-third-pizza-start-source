@@ -12,7 +12,7 @@ export interface OrderPizzaDto {
 }
 
 export interface CartPizza extends Pick<OrderPizzaDto, 'name' | 'quantity'> {
-  clientId: string
+  pizzaId: string
   sauceId: number
   doughId: number
   sizeId: number

@@ -5,6 +5,7 @@ import { CartPizza } from '@/common/types/pizza.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore, useDataStore } from '@/store'
 import { computed } from 'vue'
+import AppButtonLink from '@/common/components/app-button-link.vue'
 
 interface Props {
   pizza: CartPizza
@@ -51,16 +52,16 @@ const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
       color="orange"
       extra-class="cart-list__counter"
       :value="pizza.quantity"
-      @increment="cartStore.incrementCartPizza(pizza.clientId)"
-      @decrement="cartStore.decrementCartPizza(pizza.clientId)"
-      @set-value="cartStore.setCartPizzaQuantity(pizza.clientId, $event)"
+      @increment="cartStore.incrementCartPizza(pizza.pizzaId)"
+      @decrement="cartStore.decrementCartPizza(pizza.pizzaId)"
+      @set-value="cartStore.setCartPizzaQuantity(pizza.pizzaId, $event)"
     />
 
     <div class="cart-list__price">
       <b
         >{{
           cartStore
-            .pizzaTotalPrice(pizza.clientId)
+            .pizzaTotalPrice(pizza.pizzaId)
             .toLocaleString(AppConfig.Locale)
         }}
         ₽</b
@@ -68,7 +69,12 @@ const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
     </div>
 
     <div class="cart-list__button">
-      <button type="button" class="cart-list__edit">Изменить</button>
+      <AppButtonLink
+        :to="`/${pizza.pizzaId}`"
+        class-name="cart-list__edit"
+        :variants="['border']"
+        >Изменить</AppButtonLink
+      >
     </div>
   </li>
 </template>

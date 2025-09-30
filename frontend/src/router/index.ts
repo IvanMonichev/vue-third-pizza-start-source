@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/:pizzaId?',
     name: 'home-view',
     component: () => import('@/views/home-view.vue'),
     meta: { layout: 'app-layout-main' }

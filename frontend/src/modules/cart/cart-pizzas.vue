@@ -10,7 +10,7 @@ const { pizzas } = storeToRefs(cartStore)
 
 <template>
   <CartList>
-    <CartItem v-for="pizza in pizzas" :key="pizza.clientId" :pizza="pizza" />
+    <CartItem v-for="pizza in pizzas" :key="pizza.pizzaId" :pizza="pizza" />
   </CartList>
 </template>
 
