@@ -19,6 +19,11 @@ const routes: RouteRecordRaw[] = [
     meta: { layout: 'app-layout-main' }
   },
   {
+    path: '/success-order',
+    name: 'success-order-view',
+    component: () => import('@/views/success-order-view.vue')
+  },
+  {
     path: '/profile',
     name: 'profile-view',
     component: () => import('@/views/profile-view.vue'),

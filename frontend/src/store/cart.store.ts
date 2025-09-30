@@ -1,15 +1,16 @@
+import { DeliveryType } from '@/common/enums/delivery-type.enum'
 import { AddressForm, OrderAddressDto } from '@/common/types/address.types'
 import { MiscCart } from '@/common/types/misc.types'
 import { CartPizza } from '@/common/types/pizza.types'
-import { defineStore } from 'pinia'
 import { useDataStore } from '@/store/data.store'
-import { DeliveryType } from '@/common/enums/delivery-type.enum'
+import { defineStore } from 'pinia'
 
 interface CartState {
   pizzas: CartPizza[]
   miscCartList: MiscCart[]
   address: OrderAddressDto | null
   addressForm: AddressForm
+  isOrderSuccess: boolean
 }
 
 export const useCartStore = defineStore('cart', {
@@ -20,7 +21,8 @@ export const useCartStore = defineStore('cart', {
     addressForm: {
       deliveryType: DeliveryType.PICK_UP,
       phone: ''
-    }
+    },
+    isOrderSuccess: false
   }),
   getters: {
     pizzasPrice: (state): number =>
@@ -192,6 +194,10 @@ export const useCartStore = defineStore('cart', {
 
     updateAddressForm(payload: Partial<AddressForm>) {
       this.addressForm = { ...this.addressForm, ...payload }
+    },
+
+    setIsOrderSuccess(isOrderSuccess: boolean) {
+      this.isOrderSuccess = isOrderSuccess
     }
   }
 })
