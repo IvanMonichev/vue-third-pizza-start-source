@@ -3,7 +3,7 @@ import logo from '@/assets/img/logo.svg'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore } from '@/store'
 
-const { pizzasPrice } = useCartStore()
+const cartStore = useCartStore()
 </script>
 
 <template>
@@ -15,7 +15,10 @@ const { pizzasPrice } = useCartStore()
     </div>
     <div class="header__cart">
       <RouterLink to="/cart"
-        >{{ pizzasPrice.toLocaleString(AppConfig.Locale) }} ₽</RouterLink
+        >{{
+          cartStore.orderTotalPrice.toLocaleString(AppConfig.Locale)
+        }}
+        ₽</RouterLink
       >
     </div>
     <div class="header__user">
