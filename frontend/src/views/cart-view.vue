@@ -33,7 +33,7 @@ const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
         </div>
       </div>
     </main>
-    <CartFooter :total-price="orderTotalPrice" :is-empty="isEmptyPizzas" />
+    <CartFooter :total-price="orderTotalPrice" />
   </form>
 </template>
 

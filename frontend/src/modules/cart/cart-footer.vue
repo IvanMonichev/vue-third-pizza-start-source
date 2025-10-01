@@ -2,13 +2,22 @@
 import AppButtonLink from '@/common/components/app-button-link.vue'
 import AppButton from '@/common/components/app-button.vue'
 import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore } from '@/store'
+import { useRouter } from 'vue-router'
 
 interface Props {
-  isEmpty: boolean
   totalPrice: number
 }
 
+const router = useRouter()
+const { setIsOrderSuccess } = useCartStore()
+
 defineProps<Props>()
+
+const handleMakeOrder = () => {
+  setIsOrderSuccess(true)
+  router.push({ name: 'success-order-view' })
+}
 </script>
 
 <template>
@@ -26,7 +35,9 @@ defineProps<Props>()
     </div>
 
     <div class="footer__submit">
-      <AppButton :disabled="isEmpty">Оформить заказ</AppButton>
+      <AppButton :disabled="totalPrice === 0" @click="handleMakeOrder"
+        >Оформить заказ</AppButton
+      >
     </div>
   </section>
 </template>
