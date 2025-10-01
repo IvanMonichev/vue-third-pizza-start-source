@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, toRefs } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 
 type Variant = 'default' | 'border' | 'arrow'
 
 interface Props {
-  to: string
+  to: RouteLocationRaw
   variants?: Variant[]
   className?: string
 }
@@ -15,10 +16,19 @@ const { variants, to } = toRefs(props)
 const variantsClasses = computed(
   () => variants.value?.map((v) => `button--${v}`) ?? []
 )
+
+defineEmits<{
+  (e: 'click', event: MouseEvent): void
+}>()
 </script>
 
 <template>
-  <RouterLink :to="to" class="button" :class="[...variantsClasses, className]">
+  <RouterLink
+    :to="to"
+    class="button"
+    :class="[...variantsClasses, className]"
+    @click="$emit('click', $event)"
+  >
     <slot />
   </RouterLink>
 </template>

@@ -24,16 +24,18 @@ const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
         <div v-if="isEmptyPizzas" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
         </div>
-        <CartPizzas v-else />
+        <template v-else>
+          <CartPizzas />
 
-        <CartMiscList />
+          <CartMiscList />
 
-        <div class="cart__form">
-          <CartForm />
-        </div>
+          <div class="cart__form">
+            <CartForm />
+          </div>
+        </template>
       </div>
     </main>
-    <CartFooter :total-price="orderTotalPrice" />
+    <CartFooter v-if="!isEmptyPizzas" :total-price="orderTotalPrice" />
   </form>
 </template>
 

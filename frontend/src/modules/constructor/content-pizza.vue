@@ -26,7 +26,6 @@ const handleAddPizza = () => {
   try {
     const pizza = pizzaStore.toCartPizza()
     cartStore.savePizza(pizza)
-    pizzaStore.resetPizza()
     router.push({ name: 'cart-view' })
   } catch (e) {
     console.error(e)

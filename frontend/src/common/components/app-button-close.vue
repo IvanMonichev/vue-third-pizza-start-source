@@ -1,16 +1,26 @@
 <script setup lang="ts">
+import { RouteLocationRaw } from 'vue-router'
+
 interface Props {
-  to: string
+  to: RouteLocationRaw
   theme?: 'white' | 'black'
 }
 
 const { theme, to } = withDefaults(defineProps<Props>(), {
   theme: 'black'
 })
+
+defineEmits<{
+  (e: 'click', event: MouseEvent): void
+}>()
 </script>
 
 <template>
-  <RouterLink :to="to" :class="['close', `close--${theme}`]">
+  <RouterLink
+    :to="to"
+    :class="['close', `close--${theme}`]"
+    @click="$emit('click', $event)"
+  >
     <span class="visually-hidden">Закрыть форму авторизации</span>
   </RouterLink>
 </template>

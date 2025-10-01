@@ -22,7 +22,7 @@ export const useCartStore = defineStore('cart', {
       deliveryType: DeliveryType.PICK_UP,
       phone: ''
     },
-    isOrderSuccess: false
+    isOrderSuccess: true
   }),
   getters: {
     pizzasPrice: (state): number =>
@@ -198,6 +198,10 @@ export const useCartStore = defineStore('cart', {
 
     setIsOrderSuccess(isOrderSuccess: boolean) {
       this.isOrderSuccess = isOrderSuccess
+    },
+
+    resetStore() {
+      this.$reset()
     }
   }
 })

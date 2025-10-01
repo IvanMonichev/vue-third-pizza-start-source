@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AppButtonClose from '@/common/components/app-button-close.vue'
 import AppButtonLink from '@/common/components/app-button-link.vue'
-import { useCartStore } from '@/store'
+import { useCartStore, usePizzaStore } from '@/store'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const cartStore = useCartStore()
+const pizzaStore = usePizzaStore()
 const router = useRouter()
 
 onMounted(() => {
@@ -13,17 +14,24 @@ onMounted(() => {
     router.push({ name: 'home-view' })
   }
 })
+
+const handlePopupClose = () => {
+  cartStore.resetStore()
+  pizzaStore.resetPizza()
+}
 </script>
 
 <template>
   <div class="popup">
-    <AppButtonClose to="/" />
+    <AppButtonClose :to="{ name: 'orders-view' }" @click="handlePopupClose" />
     <div class="popup__title">
       <h2 class="title">Спасибо за заказ</h2>
     </div>
     <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
     <div class="popup__button">
-      <AppButtonLink to="/">Отлично, я жду!</AppButtonLink>
+      <AppButtonLink :to="{ name: 'orders-view' }" @click="handlePopupClose">
+        Отлично, я жду!</AppButtonLink
+      >
     </div>
   </div>
 </template>
