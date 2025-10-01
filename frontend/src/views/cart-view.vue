@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
-import CartAdditionalListItem from '@/modules/cart/cart-additional-list-item.vue'
-import CartAdditionalList from '@/modules/cart/cart-additional-list.vue'
-import CartForm from '@/modules/cart/cart-form.vue'
-import CartItem from '@/modules/cart/cart-list-item.vue'
-import CartList from '@/modules/cart/cart-list.vue'
 import CartFooter from '@/modules/cart/cart-footer.vue'
-import colaImg from '@/assets/img/cola.svg'
-import sauceImg from '@/assets/img/sauce.svg'
-import potatoImg from '@/assets/img/potato.svg'
+import CartForm from '@/modules/cart/cart-form.vue'
+import CartMiscList from '@/modules/cart/cart-misc-list.vue'
+import CartPizzas from '@/modules/cart/cart-pizzas.vue'
+import { useCartStore } from '@/store'
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+
+const cartStore = useCartStore()
+const { orderTotalPrice } = storeToRefs(cartStore)
+const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
 </script>
 
 <template>
@@ -19,44 +21,21 @@ import potatoImg from '@/assets/img/potato.svg'
           <AppTitle>Корзина</AppTitle>
         </div>
 
-        <!-- <div class="sheet cart__empty">
+        <div v-if="isEmptyPizzas" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
-        </div> -->
-
-        <CartList>
-          <CartItem />
-          <CartItem />
-        </CartList>
-
-        <div class="cart__additional">
-          <CartAdditionalList>
-            <CartAdditionalListItem
-              title="Coca-Cola 0,5 л"
-              :price="56"
-              :img-src="colaImg"
-              img-alt="Coca-Cola 0,5 литра"
-            />
-            <CartAdditionalListItem
-              title="Острый соус"
-              :price="30"
-              :img-src="sauceImg"
-              img-alt="Острый соус"
-            />
-            <CartAdditionalListItem
-              title="Картошка из печи"
-              :price="56"
-              :img-src="potatoImg"
-              img-alt="Картошка из печи"
-            />
-          </CartAdditionalList>
         </div>
+        <template v-else>
+          <CartPizzas />
 
-        <div class="cart__form">
-          <CartForm />
-        </div>
+          <CartMiscList />
+
+          <div class="cart__form">
+            <CartForm />
+          </div>
+        </template>
       </div>
     </main>
-    <CartFooter />
+    <CartFooter v-if="!isEmptyPizzas" :total-price="orderTotalPrice" />
   </form>
 </template>
 
@@ -68,11 +47,6 @@ import potatoImg from '@/assets/img/potato.svg'
 .container {
   width: 770px;
   margin: 0 auto;
-}
-
-.cart__additional {
-  margin-top: 15px;
-  margin-bottom: 25px;
 }
 
 .cart__title {
@@ -108,5 +82,9 @@ import potatoImg from '@/assets/img/potato.svg'
   border: 0;
 
   clip-path: inset(100%);
+}
+
+.cart__empty {
+  padding: 20px 30px;
 }
 </style>

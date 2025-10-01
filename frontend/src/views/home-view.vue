@@ -4,6 +4,26 @@ import ContentPizza from '@/modules/constructor/content-pizza.vue'
 import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
+import { useRoute } from 'vue-router'
+import { useCartStore, usePizzaStore } from '@/store'
+import { computed, onMounted } from 'vue'
+
+const cartStore = useCartStore()
+const pizzaStore = usePizzaStore()
+const route = useRoute()
+const pizzaId = computed(() => {
+  const param = route.params.pizzaId
+  return typeof param === 'string' ? param : null
+})
+
+const foundCartPizza = computed(() => {
+  return pizzaId.value ? cartStore.pizzaById(pizzaId.value) : null
+})
+
+onMounted(() => {
+  if (!foundCartPizza.value) return
+  pizzaStore.loadFromCartPizza(foundCartPizza.value)
+})
 </script>
 
 <template>

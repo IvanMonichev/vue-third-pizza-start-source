@@ -1,6 +1,23 @@
 <script setup lang="ts">
 import AppButtonLink from '@/common/components/app-button-link.vue'
 import AppButton from '@/common/components/app-button.vue'
+import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore } from '@/store'
+import { useRouter } from 'vue-router'
+
+interface Props {
+  totalPrice: number
+}
+
+const router = useRouter()
+const { setIsOrderSuccess } = useCartStore()
+
+defineProps<Props>()
+
+const handleMakeOrder = () => {
+  setIsOrderSuccess(true)
+  router.push({ name: 'success-order-view' })
+}
 </script>
 
 <template>
@@ -14,11 +31,13 @@ import AppButton from '@/common/components/app-button.vue'
       Перейти к конструктору<br />чтоб собрать ещё одну пиццу
     </p>
     <div class="footer__price">
-      <b>Итого: 2 228 ₽</b>
+      <b>Итого: {{ totalPrice.toLocaleString(AppConfig.Locale) }} ₽</b>
     </div>
 
     <div class="footer__submit">
-      <AppButton>Оформить заказ</AppButton>
+      <AppButton :disabled="totalPrice === 0" @click="handleMakeOrder"
+        >Оформить заказ</AppButton
+      >
     </div>
   </section>
 </template>

@@ -1,18 +1,17 @@
 <script setup lang="ts">
+import dough from '@/mocks/dough.json'
 import RadioDough from '@/modules/constructor/radio-dough.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { onMounted } from 'vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
 onMounted(async () => {
-  dataStore.loadDough()
-  pizzaStore.setDoughId(dataStore.dough[0].id)
+  dataStore.buildDough(dough)
 })
 
-const { dough } = storeToRefs(dataStore)
 const { doughId } = storeToRefs(pizzaStore)
 </script>
 
@@ -20,13 +19,10 @@ const { doughId } = storeToRefs(pizzaStore)
   <div class="content__dough">
     <SheetLayout title="Выберите тесто" content-class="dough">
       <RadioDough
-        v-for="d in dough"
+        v-for="d in dataStore.doughList"
         :key="d.id"
         v-model="doughId"
-        name="dough"
-        :description="d.description"
-        :label="d.name"
-        :value="d.id"
+        :dough="d"
       />
     </SheetLayout>
   </div>

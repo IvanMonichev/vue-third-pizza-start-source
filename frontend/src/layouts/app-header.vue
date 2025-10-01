@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import logo from '@/assets/img/logo.svg'
+import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore } from '@/store'
+
+const cartStore = useCartStore()
+</script>
+
 <template>
   <header class="header">
     <div class="header__logo">
@@ -6,7 +14,12 @@
       </RouterLink>
     </div>
     <div class="header__cart">
-      <RouterLink to="/cart">0 ₽</RouterLink>
+      <RouterLink to="/cart"
+        >{{
+          cartStore.orderTotalPrice.toLocaleString(AppConfig.Locale)
+        }}
+        ₽</RouterLink
+      >
     </div>
     <div class="header__user">
       <RouterLink to="/sign-in" class="header__login"
@@ -15,9 +28,6 @@
     </div>
   </header>
 </template>
-<script setup lang="ts">
-import logo from '@/assets/img/logo.svg'
-</script>
 <style lang="scss" scoped>
 @use '@/assets/sass/ds-system/ds-colors';
 @use '@/assets/sass/ds-system/ds-shadows';

@@ -1,37 +1,33 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import AppDrag from '@/common/components/app-drag.vue'
-import { mapIngredient } from '@/common/utils/ingredients.utils'
-import { computed, onMounted } from 'vue'
 import { useDataStore, usePizzaStore } from '@/store'
-import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
-const { ingredients } = storeToRefs(dataStore)
 
-onMounted(async () => {
-  dataStore.loadIngredients()
-})
-
-const viewIngredients = computed(() => ingredients.value.map(mapIngredient))
+const quantityById = (id: number) =>
+  computed(() => pizzaStore.ingredients.find((i) => i.id === id)?.quantity ?? 0)
 </script>
 
 <template>
   <ul class="ingredients__list">
     <li
-      v-for="ingredient in viewIngredients"
+      v-for="ingredient in dataStore.ingredients"
       :key="ingredient.id"
       class="ingredients__item"
     >
       <AppDrag :transfer-data="ingredient">
-        <span :class="`filling ${ingredient.class}`">{{
+        <span :class="['filling', `filling--${ingredient.className}`]">{{
           ingredient.name
         }}</span>
       </AppDrag>
       <AppCounter
-        :count="pizzaStore.getIngredientQuantity(ingredient.id)"
+        :value="quantityById(ingredient.id).value"
         extra-class="ingredients__counter"
+        :min="0"
+        :max="3"
         @increment="pizzaStore.incrementIngredient(ingredient.id)"
         @decrement="pizzaStore.decrementIngredient(ingredient.id)"
         @set-value="pizzaStore.setIngredient(ingredient.id, $event)"

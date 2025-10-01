@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppButtonClose from '@/common/components/app-button-close.vue'
 import AppButton from '@/common/components/app-button.vue'
 import AppInput from '@/common/components/app-input.vue'
 import AppTitle from '@/common/components/app-title.vue'
@@ -6,9 +7,7 @@ import AppTitle from '@/common/components/app-title.vue'
 
 <template>
   <div class="sign-form">
-    <RouterLink to="/" class="close close--white">
-      <span class="visually-hidden">Закрыть форму авторизации</span>
-    </RouterLink>
+    <AppButtonClose />
     <div class="sign-form__title">
       <AppTitle type="small">Авторизуйтесь на сайте</AppTitle>
     </div>
@@ -62,67 +61,5 @@ import AppTitle from '@/common/components/app-title.vue'
 
 .sign-form__input {
   margin-bottom: 16px;
-}
-
-.close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-
-  width: 25px;
-  height: 25px;
-
-  cursor: pointer;
-  transition: 0.3s;
-  text-decoration: none;
-
-  color: ds-colors.$black;
-  border-radius: 50%;
-  outline: none;
-
-  &::before,
-  &::after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
-    width: 25px;
-    height: 2px;
-
-    content: '';
-
-    border-radius: 2px;
-    background-color: ds-colors.$black;
-  }
-
-  &::before {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-
-  &::after {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:active {
-    opacity: 0.5;
-  }
-
-  &:focus {
-    &::before,
-    &::after {
-      background-color: ds-colors.$orange-100;
-    }
-  }
-
-  &--white {
-    &::before,
-    &::after {
-      background-color: ds-colors.$white;
-    }
-  }
 }
 </style>

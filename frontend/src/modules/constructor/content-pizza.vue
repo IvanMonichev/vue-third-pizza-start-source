@@ -2,15 +2,35 @@
 import AppButton from '@/common/components/app-button.vue'
 import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
-import { ref } from 'vue'
-import { usePizzaStore } from '@/store'
-
-const pizzaName = ref('')
-const handleDropIngredient = (payload: object) => {
-  console.log(payload)
-}
+import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore, usePizzaStore } from '@/store'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 
 const pizzaStore = usePizzaStore()
+const cartStore = useCartStore()
+const router = useRouter()
+
+const handleDropIngredient = (payload: unknown) => {
+  if (typeof payload !== 'object' || payload === null) return
+
+  if ('id' in payload && typeof payload.id === 'number') {
+    pizzaStore.incrementIngredient(payload.id)
+  }
+}
+
+const { pizzaPrice, pizzaName, dough, sauce, selectedIngredients } =
+  storeToRefs(pizzaStore)
+
+const handleAddPizza = () => {
+  try {
+    const pizza = pizzaStore.toCartPizza()
+    cartStore.savePizza(pizza)
+    router.push({ name: 'cart-view' })
+  } catch (e) {
+    console.error(e)
+  }
+}
 </script>
 
 <template>
@@ -25,19 +45,33 @@ const pizzaStore = usePizzaStore()
 
     <AppDrop @drop="handleDropIngredient">
       <div class="content__constructor">
-        <div class="pizza pizza--foundation--big-tomato">
+        <div
+          :class="[
+            `pizza`,
+            `pizza--foundation--${dough?.className}-${sauce?.className}`
+          ]"
+        >
           <div class="pizza__wrapper">
-            <div class="pizza__filling pizza__filling--ananas" />
-            <div class="pizza__filling pizza__filling--bacon" />
-            <div class="pizza__filling pizza__filling--cheddar" />
+            <div
+              v-for="i in selectedIngredients"
+              :key="i.id"
+              :class="[
+                'pizza__filling',
+                `pizza__filling--${i.className}`,
+                i.quantity === 2 ? 'pizza__filling--second' : '',
+                i.quantity === 3 ? 'pizza__filling--third' : ''
+              ]"
+            />
           </div>
         </div>
       </div>
     </AppDrop>
 
     <div class="content__result">
-      <p>Итого: {{ pizzaStore.pizzaPrice }} ₽</p>
-      <AppButton type="button" disabled>Готовьте!</AppButton>
+      <p>Итого: {{ pizzaPrice.toLocaleString(AppConfig.Locale) }} ₽</p>
+      <AppButton type="button" :disabled="!pizzaName" @click="handleAddPizza"
+        >Готовьте!</AppButton
+      >
     </div>
   </div>
 </template>
@@ -69,19 +103,19 @@ const pizzaStore = usePizzaStore()
   background-position: center;
   background-size: 100%;
 
-  &--foundation--big-creamy {
+  &--foundation--large-creamy {
     background-image: url('@/assets/img/foundation/big-creamy.svg');
   }
 
-  &--foundation--big-tomato {
+  &--foundation--large-tomato {
     background-image: url('@/assets/img/foundation/big-tomato.svg');
   }
 
-  &--foundation--small-creamy {
+  &--foundation--light-creamy {
     background-image: url('@/assets/img/foundation/small-creamy.svg');
   }
 
-  &--foundation--small-tomato {
+  &--foundation--light-tomato {
     background-image: url('@/assets/img/foundation/small-tomato.svg');
   }
 }

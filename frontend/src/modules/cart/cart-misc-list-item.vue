@@ -1,27 +1,53 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
+import { miscImagesMap } from '@/common/constants/mappers.constants'
+import { MiscDto } from '@/common/types/misc.types'
+import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore } from '@/store'
+import { computed } from 'vue'
 
 interface Props {
-  imgSrc: string
-  imgAlt: string
-  title: string
-  price: number
+  misc: MiscDto
 }
 
-const props = defineProps<Props>()
+const cartStore = useCartStore()
+const { misc } = defineProps<Props>()
+
+const miscQuantity = computed(
+  () => cartStore.miscCartList.find((m) => m.id === misc.id)?.quantity ?? 0
+)
 </script>
 
 <template>
   <li class="additional-list__item sheet">
     <p class="additional-list__description">
-      <img :src="props.imgSrc" width="39" height="60" :alt="props.imgAlt" />
-      <span>{{ props.title }}</span>
+      <img
+        :src="miscImagesMap[misc.image]"
+        width="39"
+        height="60"
+        :alt="misc.name"
+      />
+      <span>{{ misc.name }}</span>
     </p>
 
     <div class="additional-list__wrapper">
-      <AppCounter color="orange" extra-class="additional-list__counter" />
+      <AppCounter
+        color="orange"
+        extra-class="additional-list__counter"
+        :value="miscQuantity"
+        :min="0"
+        @increment="cartStore.incrementMisc(misc.id)"
+        @decrement="cartStore.decrementMisc(misc.id)"
+        @set-value="cartStore.setMiscQuantity(misc.id, $event)"
+      />
       <div class="additional-list__price">
-        <b>× {{ props.price }} ₽</b>
+        <b
+          >×
+          {{
+            cartStore.miscTotalPrice(misc.id).toLocaleString(AppConfig.Locale)
+          }}
+          ₽</b
+        >
       </div>
     </div>
   </li>

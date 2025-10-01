@@ -1,102 +1,152 @@
-import { PizzaIngredient } from '@/common/types/ingredient.types'
-import { defineStore } from 'pinia'
+import { IngredientPizza } from '@/common/types/ingredient.types'
+import { CartPizza } from '@/common/types/pizza.types'
 import { useDataStore } from '@/store/data.store'
+import { defineStore } from 'pinia'
 
 interface PizzaState {
-  doughId: number | null
-  sizeId: number | null
-  sauceId: number | null
-  ingredients: PizzaIngredient[]
+  pizzaId: string | null
+  pizzaName: string
+  doughId: number
+  sizeId: number
+  sauceId: number
+  ingredients: IngredientPizza[]
 }
 
 export const usePizzaStore = defineStore('pizza', {
   state: (): PizzaState => ({
-    doughId: null,
-    sizeId: null,
-    sauceId: null,
+    pizzaId: null,
+    pizzaName: '',
+    doughId: 1,
+    sizeId: 1,
+    sauceId: 1,
     ingredients: []
   }),
   getters: {
-    pizzaPrice: (state) => {
+    dough: (state) => {
       const dataStore = useDataStore()
-      const dough = dataStore.getById('dough', state.doughId)
-      const sauce = dataStore.getById('sauces', state.sauceId)
-      const size = dataStore.getById('sizes', state.sizeId)
+      return dataStore.dataById('doughList', state.doughId) || null
+    },
 
-      if (!dough) return 0
-      if (!sauce) return 0
-      if (!state.ingredients) return 0
-      if (!size?.multiplier) return 0
+    sauce: (state) => {
+      const dataStore = useDataStore()
+      return dataStore.dataById('sauces', state.sauceId)
+    },
+
+    selectedIngredients: (state) => {
+      const dataStore = useDataStore()
+      return state.ingredients.map((i) => {
+        const ingredient = dataStore.dataById('ingredients', i.id)
+        if (!ingredient) {
+          throw new Error(`Ingredient with id ${i.id} not found`)
+        }
+        return {
+          ...ingredient,
+          quantity: i.quantity
+        }
+      })
+    },
+
+    // Цена пиццы (динамически вычисляется)
+    pizzaPrice: (state): number => {
+      const dataStore = useDataStore()
+      const dough = dataStore.dataById('doughList', state.doughId)
+      const sauce = dataStore.dataById('sauces', state.sauceId)
+      const size = dataStore.dataById('sizes', state.sizeId)
+
+      if (!dough || !sauce || !size) return 0
 
       const basePrice = dough.price + sauce.price
       const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
-        const ingredient = dataStore.getById('ingredients', ing.id)
+        const ingredient = dataStore.dataById('ingredients', ing.id)
         return acc + (ingredient ? ingredient.price * ing.quantity : 0)
       }, 0)
 
       return size.multiplier * (basePrice + ingredientsPrice)
-    },
-    getIngredientQuantity:
-      (state) =>
-      (id: number): number => {
-        return state.ingredients.find((i) => i.id === id)?.quantity || 0
-      }
+    }
   },
   actions: {
-    setIngredient(id: number, value: number) {
-      if (value < 1) {
-        this.ingredients = this.ingredients.filter((i) => i.id !== id)
-        return
-      }
+    setIngredient(id: number, quantity: number) {
+      const index = this.ingredients.findIndex((i) => i.id === id)
 
-      if (value > 3) return
-
-      const ingredient = this.ingredients.find((i) => i.id === id)
-      if (ingredient) {
-        ingredient.quantity = value
+      if (index === -1) {
+        this.ingredients.push({ id, quantity })
       } else {
-        this.ingredients.push({ id, quantity: value })
+        this.ingredients[index].quantity = quantity
       }
     },
 
     incrementIngredient(id: number) {
-      const ingredient = this.ingredients.find((i) => i.id === id)
-      if (!ingredient) {
+      const index = this.ingredients.findIndex((i) => i.id === id)
+      if (index === -1) {
         this.ingredients.push({ id, quantity: 1 })
         return
       }
 
-      if (ingredient.quantity >= 3) return
-      ingredient.quantity++
+      const foundIngredient = this.ingredients[index]
+      if (foundIngredient.quantity >= 3) {
+        throw new Error('The quantity of ingredients must not exceed 3')
+      }
+
+      foundIngredient.quantity++
     },
 
     decrementIngredient(id: number) {
       const index = this.ingredients.findIndex((i) => i.id === id)
       if (index === -1) return
 
-      const ingredient = this.ingredients[index]
-      if (ingredient.quantity <= 1) {
-        this.ingredients.splice(index, 1)
+      const foundIngredient = this.ingredients[index]
+      if (foundIngredient.quantity <= 0) {
         return
       }
 
-      ingredient.quantity--
+      foundIngredient.quantity--
+
+      if (foundIngredient.quantity === 0) {
+        this.ingredients.splice(index, 1)
+      }
     },
 
-    removeIngredient(id: number) {
-      this.ingredients = this.ingredients.filter((i) => i.id !== id)
+    // Добавить или обновить ингредиент (если quantity > 0)
+    addIngredient(ingredient: IngredientPizza) {
+      const index = this.ingredients.findIndex((i) => i.id === ingredient.id)
+      if (ingredient.quantity <= 0) {
+        if (index !== -1) {
+          this.ingredients.splice(index, 1)
+        }
+        return
+      }
+
+      if (index === -1) {
+        this.ingredients.push(ingredient)
+      } else {
+        this.ingredients[index] = ingredient
+      }
     },
 
-    setDoughId(id: number) {
-      this.doughId = id
+    toCartPizza(): CartPizza {
+      return {
+        pizzaId: this.pizzaId ?? crypto.randomUUID(),
+        name: this.pizzaName,
+        doughId: this.doughId,
+        sauceId: this.sauceId,
+        sizeId: this.sizeId,
+        quantity: 1,
+        ingredientsPizza: this.ingredients,
+        price: this.pizzaPrice
+      }
     },
 
-    setSizeId(id: number) {
-      this.sizeId = id
+    loadFromCartPizza(cartPizza: CartPizza) {
+      this.pizzaId = cartPizza.pizzaId
+      this.pizzaName = cartPizza.name
+      this.doughId = cartPizza.doughId
+      this.sauceId = cartPizza.sauceId
+      this.sizeId = cartPizza.sizeId
+      this.ingredients = [...cartPizza.ingredientsPizza]
     },
 
-    setSauceId(id: number) {
-      this.sauceId = id
+    resetPizza() {
+      this.$reset()
     }
   }
 })

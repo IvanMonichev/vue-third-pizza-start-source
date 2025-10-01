@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/:pizzaId?',
     name: 'home-view',
     component: () => import('@/views/home-view.vue'),
     meta: { layout: 'app-layout-main' }
@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     name: 'cart-view',
     component: () => import('@/views/cart-view.vue'),
     meta: { layout: 'app-layout-main' }
+  },
+  {
+    path: '/success-order',
+    name: 'success-order-view',
+    component: () => import('@/views/success-order-view.vue')
   },
   {
     path: '/profile',

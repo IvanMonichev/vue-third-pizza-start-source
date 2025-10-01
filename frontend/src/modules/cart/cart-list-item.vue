@@ -1,5 +1,30 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
+import { doughCartMap } from '@/common/constants/mappers.constants'
+import { CartPizza } from '@/common/types/pizza.types'
+import { AppConfig } from '@/modules/cart/config/app.config'
+import { useCartStore, useDataStore } from '@/store'
+import { computed } from 'vue'
+import AppButtonLink from '@/common/components/app-button-link.vue'
+
+interface Props {
+  pizza: CartPizza
+}
+
+const dataStore = useDataStore()
+const cartStore = useCartStore()
+const { pizza } = defineProps<Props>()
+
+const ingredientsList = computed(() =>
+  pizza.ingredientsPizza
+    .map((i) => {
+      const ingredient = dataStore.dataById('ingredients', i.id)
+      return ingredient?.name.toLowerCase()
+    })
+    .join(', ')
+)
+const size = computed(() => dataStore.dataById('sizes', pizza.sizeId))
+const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
 </script>
 
 <template>
@@ -13,23 +38,43 @@ import AppCounter from '@/common/components/app-counter.vue'
         alt="Капричоза"
       />
       <div class="product__text">
-        <h2>Капричоза</h2>
+        <h2>{{ pizza.name }}</h2>
         <ul>
-          <li>30 см, на тонком тесте</li>
-          <li>Соус: томатный</li>
-          <li>Начинка: грибы, лук, ветчина, пармезан, ананас</li>
+          <li>{{ size?.name }}, {{ doughCartMap[pizza.doughId] }}</li>
+          <li>Соус: {{ sauce?.name.toLowerCase() }}</li>
+          <li>Начинка: {{ ingredientsList }}</li>
         </ul>
       </div>
     </div>
 
-    <AppCounter :count="0" color="orange" extra-class="cart-list__counter" />
+    <AppCounter
+      :min="0"
+      color="orange"
+      extra-class="cart-list__counter"
+      :value="pizza.quantity"
+      @increment="cartStore.incrementCartPizza(pizza.pizzaId)"
+      @decrement="cartStore.decrementCartPizza(pizza.pizzaId)"
+      @set-value="cartStore.setCartPizzaQuantity(pizza.pizzaId, $event)"
+    />
 
     <div class="cart-list__price">
-      <b>782 ₽</b>
+      <b
+        >{{
+          cartStore
+            .pizzaTotalPrice(pizza.pizzaId)
+            .toLocaleString(AppConfig.Locale)
+        }}
+        ₽</b
+      >
     </div>
 
     <div class="cart-list__button">
-      <button type="button" class="cart-list__edit">Изменить</button>
+      <AppButtonLink
+        :to="`/${pizza.pizzaId}`"
+        class-name="cart-list__edit"
+        :variants="['border']"
+        >Изменить</AppButtonLink
+      >
     </div>
   </li>
 </template>

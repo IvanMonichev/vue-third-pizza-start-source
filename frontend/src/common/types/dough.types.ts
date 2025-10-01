@@ -1,5 +1,3 @@
-import { DoughSize } from '@/common/enums/dough-size.enum'
-
 export interface DoughDto {
   id: number
   name: string
@@ -8,6 +6,6 @@ export interface DoughDto {
   price: number
 }
 
-export interface PizzaDough extends DoughDto {
-  value: DoughSize
+export interface Dough extends DoughDto {
+  className: string
 }

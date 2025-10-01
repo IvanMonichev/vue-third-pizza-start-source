@@ -5,12 +5,10 @@ export interface IngredientDto {
   price: number
 }
 
-export interface PizzaIngredientDto extends Pick<IngredientDto, 'id'> {
-  pizzaId: number
-  ingredientId: number
-  quantity: number
+export interface Ingredient extends IngredientDto {
+  className: string
 }
 
-export interface PizzaIngredient extends Pick<IngredientDto, 'id'> {
+export interface IngredientPizza extends Pick<IngredientDto, 'id'> {
   quantity: number
 }

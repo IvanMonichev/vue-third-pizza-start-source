@@ -6,5 +6,3 @@ export interface SizeDto {
   image: string
   multiplier: PizzaSizeValue
 }
-
-export type PizzaSize = Pick<SizeDto, 'id'>

@@ -1,29 +1,29 @@
 <script setup lang="ts">
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
-import Ingredients from '@/modules/constructor/ingredients-list.vue'
+import ingredientsDto from '@/mocks/ingredients.json'
+import saucesDto from '@/mocks/sauces.json'
+import IngredientsList from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
-import { computed, onMounted } from 'vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { computed, onMounted } from 'vue'
 
-const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
-const { sauces } = storeToRefs(dataStore)
+const dataStore = useDataStore()
+const { sauceId } = storeToRefs(pizzaStore)
+const { sauces } = useDataStore()
 
+onMounted(() => {
+  dataStore.buildSauces(saucesDto)
+  dataStore.buildIngredients(ingredientsDto)
+})
 const saucesOptions = computed<Option[]>(() =>
-  sauces.value.map((s) => ({
+  sauces.map((s) => ({
     label: s.name,
     value: s.id
   }))
 )
-
-onMounted(async () => {
-  dataStore.loadSauces()
-  pizzaStore.setSauceId(dataStore.sauces[0].id)
-})
-
-const { sauceId } = storeToRefs(pizzaStore)
 </script>
 
 <template>
@@ -41,7 +41,7 @@ const { sauceId } = storeToRefs(pizzaStore)
 
       <div class="ingredients__filling">
         <p>Начинка:</p>
-        <Ingredients />
+        <IngredientsList />
       </div>
     </SheetLayout>
   </div>

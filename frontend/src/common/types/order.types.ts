@@ -1,5 +1,5 @@
 import { Address, OrderAddressDto } from '@/common/types/address.types'
-import { MiscDto, OrderMiscDto } from '@/common/types/misc.types'
+import { MiscDto, MiscOrderDto } from '@/common/types/misc.types'
 import { OrderPizzaDto } from '@/common/types/pizza.types'
 
 export interface OrderDto {
@@ -7,7 +7,7 @@ export interface OrderDto {
   userId: string
   addressId: number
   orderPizzas: OrderPizzaDto[]
-  orderMisc: OrderMiscDto[]
+  orderMisc: MiscOrderDto[]
   orderAddress: OrderAddressDto
 }
 
