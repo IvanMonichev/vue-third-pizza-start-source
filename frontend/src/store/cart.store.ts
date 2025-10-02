@@ -1,5 +1,5 @@
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
-import { AddressForm, OrderAddressDto } from '@/common/types/address.types'
+import { AddressForm, OrderAddress } from '@/common/types/address.types'
 import { MiscCart } from '@/common/types/misc.types'
 import { CartPizza } from '@/common/types/pizza.types'
 import { useDataStore } from '@/store/data.store'
@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 interface CartState {
   pizzas: CartPizza[]
   miscCartList: MiscCart[]
-  address: OrderAddressDto | null
+  address: OrderAddress | null
   addressForm: AddressForm
   isOrderSuccess: boolean
 }
