@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
-import { addressesService } from '@/services/http/resources/addresses.service'
+import { addressesService } from '@/services/resources/addresses.service'
 import { AddressCreate, AdressUpdate } from '@/common/types/address.types'
 
 export const useAddresses = () => {

@@ -4,7 +4,7 @@ import {
   saucesClassMap
 } from '@/common/constants/mappers.constants'
 import { Dough, DoughDto } from '@/common/types/dough.types'
-import { Ingredient, IngredientDto } from '@/common/types/ingredient.types'
+import { Ingredient, IngredientResponse } from '@/common/types/ingredient.types'
 import { MiscDto } from '@/common/types/misc.types'
 import { Sauce, SauceDto } from '@/common/types/sauce.types'
 import { SizeDto } from '@/common/types/size.types'
@@ -56,7 +56,7 @@ export const useDataStore = defineStore('data', {
       this.sizes = sizesDto
     },
 
-    buildIngredients(ingredientsDto: IngredientDto[]) {
+    buildIngredients(ingredientsDto: IngredientResponse[]) {
       this.ingredients = ingredientsDto.map((i) => ({
         ...i,
         className: ingredientClassMap[i.id]

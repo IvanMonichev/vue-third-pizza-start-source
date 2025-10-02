@@ -1,14 +1,14 @@
-export interface IngredientDto {
+export interface IngredientResponse {
   id: number
   name: string
   image: string
   price: number
 }
 
-export interface Ingredient extends IngredientDto {
+export interface Ingredient extends IngredientResponse {
   className: string
 }
 
-export interface IngredientPizza extends Pick<IngredientDto, 'id'> {
+export interface IngredientPizza extends Pick<IngredientResponse, 'id'> {
   quantity: number
 }

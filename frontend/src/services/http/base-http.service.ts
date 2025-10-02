@@ -16,8 +16,8 @@ export function createCrudService<Request, Response = Request>(
   client: AxiosInstance,
   resource: string
 ) {
-  const getAll = (params?: any): Promise<Array<Response>> =>
-    handleRequest(client.get<Array<Response>>(`/${resource}`, { params }))
+  const getAll = (): Promise<Array<Response>> =>
+    handleRequest(client.get<Array<Response>>(`/${resource}`))
 
   const getOne = (id: number | string): Promise<Response> =>
     handleRequest(client.get<Response>(`/${resource}/${id}`))

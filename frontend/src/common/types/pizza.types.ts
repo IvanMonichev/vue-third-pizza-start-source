@@ -1,4 +1,7 @@
-import { IngredientDto, IngredientPizza } from '@/common/types/ingredient.types'
+import {
+  IngredientPizza,
+  IngredientResponse
+} from '@/common/types/ingredient.types'
 
 export interface OrderPizzaDto {
   id: number
@@ -8,7 +11,7 @@ export interface OrderPizzaDto {
   sizeId: number
   quantity: number
   orderId: number
-  ingredients: IngredientDto[]
+  ingredients: IngredientResponse[]
 }
 
 export interface CartPizza extends Pick<OrderPizzaDto, 'name' | 'quantity'> {
