@@ -1,25 +1,69 @@
 <script setup lang="ts">
+import { useLogin } from '@/api/auth.api'
 import AppButtonClose from '@/common/components/app-button-close.vue'
 import AppButton from '@/common/components/app-button.vue'
 import AppInput from '@/common/components/app-input.vue'
 import AppTitle from '@/common/components/app-title.vue'
+import { useField, useForm } from 'vee-validate'
+import { useRouter } from 'vue-router'
+import { object, string } from 'yup'
+
+const loginSchema = object({
+  email: string().required('Введите email').email('Некорректный email'),
+  password: string().required('Введите пароль').min(6, 'Минимум 6 символов')
+})
+
+const router = useRouter()
+const login = useLogin()
+const { value: email, errorMessage: emailError } = useField('email')
+const { value: password, errorMessage: passwordError } = useField('password')
+
+const { handleSubmit, isSubmitting } = useForm({
+  validationSchema: loginSchema
+})
+
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    await login.mutateAsync(values)
+    router.push({ name: 'home-view' })
+  } catch {
+    // ошибка авторизации
+  }
+})
 </script>
 
 <template>
   <div class="sign-form">
-    <AppButtonClose />
+    <AppButtonClose to="/" />
     <div class="sign-form__title">
       <AppTitle type="small">Авторизуйтесь на сайте</AppTitle>
     </div>
-    <form action="#" method="post">
+    <form @submit.prevent="onSubmit">
       <div class="sign-form__input">
-        <AppInput type="email" name="email" placeholder="example@mail.ru" />
+        <AppInput
+          v-model="email"
+          type="email"
+          name="email"
+          placeholder="example@mail.ru"
+        />
+        <p v-if="emailError" class="error">{{ emailError }}</p>
       </div>
 
       <div class="sign-form__input">
-        <AppInput type="password" name="password" placeholder="*********" />
+        <AppInput
+          v-model="password"
+          type="password"
+          name="password"
+          placeholder="*********"
+        />
+        <p v-if="passwordError" class="error">{{ passwordError }}</p>
       </div>
-      <AppButton type="submit">Авторизоваться</AppButton>
+
+      <AppButton type="submit" :disabled="isSubmitting || login.isPending">
+        Авторизоваться
+      </AppButton>
+
+      <p v-if="login.isError" class="error">Неверный логин или пароль</p>
     </form>
   </div>
 </template>

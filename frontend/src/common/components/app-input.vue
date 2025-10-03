@@ -10,7 +10,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const modelValue = defineModel<string>()
+const modelValue = defineModel<string>({ default: '' })
 </script>
 
 <template>
