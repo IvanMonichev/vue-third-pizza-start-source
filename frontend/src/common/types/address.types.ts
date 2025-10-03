@@ -1,6 +1,6 @@
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
 
-export interface AddressResponse {
+export interface Address {
   id: number
   name: string
   userId: string
@@ -10,12 +10,12 @@ export interface AddressResponse {
   comment: string
 }
 
-export type AddressCreate = Omit<AddressResponse, 'id'>
-export type AddressUpdate = AddressResponse
+export type AddressCreate = Omit<Address, 'id'>
+export type AddressUpdate = Address
 
-export type OrderAddress = AddressResponse
+export type OrderAddress = Address
 
-export interface Address extends Pick<AddressResponse, 'id'> {
+export interface AddressUi extends Pick<Address, 'id'> {
   label: string
   fullAddress: string
 }

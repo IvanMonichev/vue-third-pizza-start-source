@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Dough } from '@/common/types/dough.types'
+import { DoughUi } from '@/common/types/dough.types'
 
 const { dough } = defineProps<{
-  dough: Dough
+  dough: DoughUi
 }>()
 
 const { name, className, description, id } = dough

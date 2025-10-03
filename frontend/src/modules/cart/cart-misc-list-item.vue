@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
 import { miscImagesMap } from '@/common/constants/mappers.constants'
-import { MiscDto } from '@/common/types/misc.types'
+import { Misc } from '@/common/types/misc.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore } from '@/store'
 import { computed } from 'vue'
 
 interface Props {
-  misc: MiscDto
+  misc: Misc
 }
 
 const cartStore = useCartStore()
