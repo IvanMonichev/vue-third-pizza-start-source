@@ -1,4 +1,4 @@
-import { Address, OrderAddressDto } from '@/common/types/address.types'
+import { Address, OrderAddress } from '@/common/types/address.types'
 import { MiscDto, MiscOrderDto } from '@/common/types/misc.types'
 import { OrderPizzaDto } from '@/common/types/pizza.types'
 
@@ -8,7 +8,7 @@ export interface OrderDto {
   addressId: number
   orderPizzas: OrderPizzaDto[]
   orderMisc: MiscOrderDto[]
-  orderAddress: OrderAddressDto
+  orderAddress: OrderAddress
 }
 
 export interface ProfileOrder {

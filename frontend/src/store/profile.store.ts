@@ -1,10 +1,10 @@
 import { Address } from '@/common/types/address.types'
 import { ProfileOrder } from '@/common/types/order.types'
-import { UserDto } from '@/common/types/profile.types'
+import { UserResponse } from '@/common/types/profile.types'
 import { defineStore } from 'pinia'
 
 interface ProfileState {
-  user: UserDto | null
+  user: UserResponse | null
   addresses: Address[]
   orders: ProfileOrder[]
 }

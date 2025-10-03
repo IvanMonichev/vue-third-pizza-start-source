@@ -1,9 +1,9 @@
-export interface SauceDto {
+export interface SauceResponse {
   id: number
   name: string
   price: number
 }
 
-export interface Sauce extends SauceDto {
+export interface Sauce extends SauceResponse {
   className: string
 }
