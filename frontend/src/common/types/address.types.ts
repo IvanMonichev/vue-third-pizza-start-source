@@ -11,7 +11,7 @@ export interface AddressResponse {
 }
 
 export type AddressCreate = Omit<AddressResponse, 'id'>
-export type AdressUpdate = AddressResponse
+export type AddressUpdate = AddressResponse
 
 export type OrderAddress = AddressResponse
 

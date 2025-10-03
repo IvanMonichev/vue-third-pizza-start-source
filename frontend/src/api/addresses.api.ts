@@ -1,6 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { AddressCreate, AddressUpdate } from '@/common/types/address.types'
 import { addressesService } from '@/services/resources/addresses.service'
-import { AddressCreate, AdressUpdate } from '@/common/types/address.types'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 
 export const useAddresses = () => {
   return useQuery({
@@ -25,7 +25,7 @@ export const useUpdateAddress = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (payload: { id: number; data: AdressUpdate }) =>
+    mutationFn: (payload: { id: number; data: AddressUpdate }) =>
       addressesService.update(payload.id, payload.data),
 
     onSuccess: () => {
