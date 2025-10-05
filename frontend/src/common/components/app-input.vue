@@ -6,6 +6,7 @@ interface Props {
   name?: string
   required?: boolean
   size?: 'big'
+  type?: 'text' | 'password' | 'email'
 }
 
 const props = defineProps<Props>()
@@ -20,7 +21,7 @@ const modelValue = defineModel<string>({ default: '' })
     }}</span>
     <input
       v-model="modelValue"
-      type="text"
+      :type="type"
       :name="name"
       :placeholder="placeholder"
       :required="required"

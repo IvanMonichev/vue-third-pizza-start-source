@@ -8,21 +8,32 @@ import { useField, useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
 
+interface LoginForm {
+  email: string
+  password: string
+}
+
 const loginSchema = object({
   email: string().required('Введите email').email('Некорректный email'),
   password: string().required('Введите пароль').min(6, 'Минимум 6 символов')
 })
 
-const router = useRouter()
-const login = useLogin()
-const { value: email, errorMessage: emailError } = useField('email')
-const { value: password, errorMessage: passwordError } = useField('password')
-
-const { handleSubmit, isSubmitting } = useForm({
-  validationSchema: loginSchema
+const { handleSubmit, isSubmitting } = useForm<LoginForm>({
+  validationSchema: loginSchema,
+  initialValues: {
+    email: 'user@example.com',
+    password: 'user@example.com'
+  }
 })
 
+const router = useRouter()
+const login = useLogin()
+const { value: email, errorMessage: emailError } = useField<string>('email')
+const { value: password, errorMessage: passwordError } =
+  useField<string>('password')
+
 const onSubmit = handleSubmit(async (values) => {
+  console.log('work')
   try {
     await login.mutateAsync(values)
     router.push({ name: 'home-view' })
@@ -59,7 +70,10 @@ const onSubmit = handleSubmit(async (values) => {
         <p v-if="passwordError" class="error">{{ passwordError }}</p>
       </div>
 
-      <AppButton type="submit" :disabled="isSubmitting || login.isPending">
+      <AppButton
+        type="submit"
+        :disabled="isSubmitting || login.isPending.value"
+      >
         Авторизоваться
       </AppButton>
 
