@@ -63,7 +63,6 @@ const onSubmit = handleSubmit(async (values) => {
       <div class="sign-form__input">
         <AppInput type="password" name="password" placeholder="*********" />
       </div>
-      <p v-if="serverError" class="sign-form__error">{{ serverError }}</p>
       <AppButton
         type="submit"
         :disabled="isSubmitting || login.isPending.value"
