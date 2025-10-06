@@ -6,7 +6,7 @@ import { useMutation, useQuery } from '@tanstack/vue-query'
 export const useAuthUser = () => {
   return useQuery({
     queryKey: ['auth'],
-    enabled: !!tokenManager.exists(),
+    retry: false,
     queryFn: () => {
       return authService.whoAmI()
     }

@@ -8,7 +8,6 @@ import { tokenManager } from './services/token-manager'
 const { data: user, isLoading, isError } = useAuthUser()
 
 const authStore = useAuthStore()
-
 watch(user, (newUser) => {
   if (newUser) {
     authStore.setAuth({

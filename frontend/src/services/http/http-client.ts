@@ -1,4 +1,3 @@
-import router from '@/router'
 import { useAuthStore } from '@/store/auth.store'
 import axios from 'axios'
 import { tokenManager } from '../token-manager'
@@ -15,7 +14,7 @@ export const httpClient = axios.create({
 httpClient.interceptors.request.use(
   (config) => {
     const token = tokenManager.get()
-    if (!token) {
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
 
@@ -32,7 +31,6 @@ httpClient.interceptors.response.use(
     if (error.response?.status === 401) {
       const authStore = useAuthStore()
       authStore.clearAuth()
-      router.push('/login')
     }
 
     return Promise.reject(error)
