@@ -1,19 +1,19 @@
-import { User } from '@/common/types/user.types'
 import { authService } from '@/services/resources/auth.service'
 import { tokenManager } from '@/services/token-manager'
 import { useAuthStore } from '@/store/auth.store'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useMutation, useQuery } from '@tanstack/vue-query'
 
 export const useAuthUser = () => {
-  return useQuery<User>({
+  return useQuery({
     queryKey: ['auth'],
-    queryFn: () => authService.whoAmI(),
-    enabled: tokenManager.exists()
+    enabled: !!tokenManager.exists(),
+    queryFn: () => {
+      return authService.whoAmI()
+    }
   })
 }
 
 export const useLogin = () => {
-  const queryClient = useQueryClient()
   const authStore = useAuthStore()
 
   return useMutation({
@@ -22,6 +22,7 @@ export const useLogin = () => {
       tokenManager.set(response.token)
       return response
     },
+
     onSuccess: async (response) => {
       tokenManager.set(response.token)
 
@@ -31,8 +32,6 @@ export const useLogin = () => {
         user,
         token: response.token
       })
-
-      await queryClient.invalidateQueries({ queryKey: ['auth'] })
     },
 
     onError: (error) => {
