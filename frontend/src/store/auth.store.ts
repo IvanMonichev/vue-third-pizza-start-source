@@ -14,6 +14,39 @@ export const useAuthStore = defineStore('auth', {
     authStatus: AuthStatus.UNKNOWN
   }),
 
+  getters: {
+    isAuthenticated: (state) => state.authStatus === AuthStatus.AUTHENTICATED,
+    isUnauthenticated: (state: AuthState) =>
+      state.authStatus === AuthStatus.UNAUTHENTICATED,
+
+    isUnknown: (state: AuthState) => state.authStatus === AuthStatus.UNKNOWN,
+
+    userImages: (state) => {
+      if (!state.user?.avatar) return null
+
+      const basePath = state.user.avatar
+
+      const [pathWithoutExt] = basePath.split(/\.(?=[^.]+$)/)
+
+      return {
+        jpg: `${pathWithoutExt}.jpg`,
+        webp: `${pathWithoutExt}.webp`,
+        jpg2x: `${pathWithoutExt}@2x.jpg`,
+        webp2x: `${pathWithoutExt}@2x.webp`,
+        jpg4x: `${pathWithoutExt}@4x.jpg`,
+        webp4x: `${pathWithoutExt}@4x.webp`,
+        all: [
+          `${pathWithoutExt}.jpg`,
+          `${pathWithoutExt}.webp`,
+          `${pathWithoutExt}@2x.jpg`,
+          `${pathWithoutExt}@2x.webp`,
+          `${pathWithoutExt}@4x.jpg`,
+          `${pathWithoutExt}@4x.webp`
+        ]
+      }
+    }
+  },
+
   actions: {
     setAuth(payload: { user: User; token: string }) {
       this.user = payload.user
