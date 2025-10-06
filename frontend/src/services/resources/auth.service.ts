@@ -10,5 +10,5 @@ export const authService = {
 
   logout: () => handleRequest(httpClient.delete<void>('/logout')),
 
-  whoAmI: () => handleRequest(httpClient.get<User>('/whoAmI'))
+  whoAmI: () => handleRequest<User>(httpClient.get<User>('/whoAmI'))
 }
