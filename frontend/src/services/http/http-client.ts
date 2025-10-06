@@ -15,9 +15,13 @@ export const httpClient = axios.create({
 httpClient.interceptors.request.use(
   (config) => {
     const token = tokenManager.get()
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+    if (!token) {
+      const authStore = useAuthStore()
+      authStore.clearAuth()
+      router.push('/login')
     }
+
+    config.headers.Authorization = `Bearer ${token}`
     return config
   },
   (error) => Promise.reject(error)
