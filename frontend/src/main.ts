@@ -1,10 +1,12 @@
 import router from '@/router'
-import { createApp } from 'vue'
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+import 'vue3-toastify/dist/index.css'
+import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify'
 
 import App from './app.vue'
 import '@/assets/sass/style.scss'
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 
 const app = createApp(App)
 const queryClient = new QueryClient({
@@ -17,6 +19,18 @@ const queryClient = new QueryClient({
     }
   }
 })
+
+const options: ToastContainerOptions = {
+  autoClose: 3000,
+  position: 'top-center',
+  pauseOnHover: true,
+  closeOnClick: true,
+  closeButton: false,
+  theme: 'light',
+  hideProgressBar: true
+}
+
+app.use(Vue3Toastify, options)
 
 app.use(createPinia())
 app.use(router)

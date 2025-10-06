@@ -4,8 +4,10 @@ import AppButtonClose from '@/common/components/app-button-close.vue'
 import AppButton from '@/common/components/app-button.vue'
 import AppInput from '@/common/components/app-input.vue'
 import AppTitle from '@/common/components/app-title.vue'
-import { useField, useForm } from 'vee-validate'
+import { AxiosError } from 'axios'
+import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 import { object, string } from 'yup'
 
 interface LoginForm {
@@ -14,7 +16,9 @@ interface LoginForm {
 }
 
 const loginSchema = object({
-  email: string().required('Введите email').email('Некорректный email'),
+  email: string()
+    .required('Введите email')
+    .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Некорректный email'),
   password: string().required('Введите пароль').min(6, 'Минимум 6 символов')
 })
 
@@ -28,17 +32,19 @@ const { handleSubmit, isSubmitting } = useForm<LoginForm>({
 
 const router = useRouter()
 const login = useLogin()
-const { value: email, errorMessage: emailError } = useField<string>('email')
-const { value: password, errorMessage: passwordError } =
-  useField<string>('password')
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log('work')
   try {
     await login.mutateAsync(values)
     router.push({ name: 'home-view' })
-  } catch {
-    // ошибка авторизации
+  } catch (e: unknown) {
+    console.log('e', e)
+    if (e instanceof AxiosError) {
+      const errorMessage = e?.response?.data.error.message
+      if (errorMessage) {
+        toast.error(errorMessage)
+      }
+    }
   }
 })
 </script>
@@ -49,35 +55,21 @@ const onSubmit = handleSubmit(async (values) => {
     <div class="sign-form__title">
       <AppTitle type="small">Авторизуйтесь на сайте</AppTitle>
     </div>
-    <form @submit.prevent="onSubmit">
+    <form novalidate @submit="onSubmit">
       <div class="sign-form__input">
-        <AppInput
-          v-model="email"
-          type="email"
-          name="email"
-          placeholder="example@mail.ru"
-        />
-        <p v-if="emailError" class="error">{{ emailError }}</p>
+        <AppInput type="email" name="email" placeholder="example@mail.ru" />
       </div>
 
       <div class="sign-form__input">
-        <AppInput
-          v-model="password"
-          type="password"
-          name="password"
-          placeholder="*********"
-        />
-        <p v-if="passwordError" class="error">{{ passwordError }}</p>
+        <AppInput type="password" name="password" placeholder="*********" />
       </div>
-
+      <p v-if="serverError" class="sign-form__error">{{ serverError }}</p>
       <AppButton
         type="submit"
         :disabled="isSubmitting || login.isPending.value"
       >
         Авторизоваться
       </AppButton>
-
-      <p v-if="login.isError" class="error">Неверный логин или пароль</p>
     </form>
   </div>
 </template>
@@ -109,6 +101,14 @@ const onSubmit = handleSubmit(async (values) => {
     margin: 0 auto;
     padding: 16px 14px;
   }
+
+  &__error {
+    color: ds-colors.$red-900;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1;
+    margin: 0;
+  }
 }
 
 .sign-form__title {
@@ -118,6 +118,6 @@ const onSubmit = handleSubmit(async (values) => {
 }
 
 .sign-form__input {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 </style>

@@ -35,7 +35,6 @@ export const useLogin = () => {
       await queryClient.invalidateQueries({ queryKey: ['auth'] })
     },
 
-    // (опционально)
     onError: (error) => {
       console.error('Ошибка авторизации:', error)
       authStore.clearAuth()
