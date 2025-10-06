@@ -38,7 +38,6 @@ const onSubmit = handleSubmit(async (values) => {
     await login.mutateAsync(values)
     router.push({ name: 'home-view' })
   } catch (e: unknown) {
-    console.log('e', e)
     if (e instanceof AxiosError) {
       const errorMessage = e?.response?.data.error.message
       if (errorMessage) {
@@ -55,7 +54,7 @@ const onSubmit = handleSubmit(async (values) => {
     <div class="sign-form__title">
       <AppTitle type="small">Авторизуйтесь на сайте</AppTitle>
     </div>
-    <form novalidate @submit="onSubmit">
+    <form novalidate @submit.prevent="onSubmit">
       <div class="sign-form__input">
         <AppInput type="email" name="email" placeholder="example@mail.ru" />
       </div>

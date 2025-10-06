@@ -34,8 +34,7 @@ export const useLogin = () => {
       })
     },
 
-    onError: (error) => {
-      console.error('Ошибка авторизации:', error)
+    onError: () => {
       authStore.clearAuth()
     }
   })

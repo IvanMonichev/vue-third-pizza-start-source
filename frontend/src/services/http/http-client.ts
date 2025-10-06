@@ -16,12 +16,9 @@ httpClient.interceptors.request.use(
   (config) => {
     const token = tokenManager.get()
     if (!token) {
-      const authStore = useAuthStore()
-      authStore.clearAuth()
-      router.push('/login')
+      config.headers.Authorization = `Bearer ${token}`
     }
 
-    config.headers.Authorization = `Bearer ${token}`
     return config
   },
   (error) => Promise.reject(error)
