@@ -23,6 +23,6 @@ watch(user, (newUser) => {
 
 <template>
   <AppLayout>
-    <router-view></router-view>
+    <RouterView />
   </AppLayout>
 </template>
