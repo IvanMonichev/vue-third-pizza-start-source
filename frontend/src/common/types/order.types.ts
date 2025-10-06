@@ -1,20 +1,20 @@
-import { Address, OrderAddress } from '@/common/types/address.types'
-import { MiscDto, MiscOrderDto } from '@/common/types/misc.types'
-import { OrderPizzaDto } from '@/common/types/pizza.types'
+import { AddressUi, OrderAddress } from '@/common/types/address.types'
+import { Misc, MiscOrder } from '@/common/types/misc.types'
+import { OrderPizza } from '@/common/types/pizza.types'
 
-export interface OrderDto {
+export interface Order {
   id: number
   userId: string
   addressId: number
-  orderPizzas: OrderPizzaDto[]
-  orderMisc: MiscOrderDto[]
+  orderPizzas: OrderPizza[]
+  orderMisc: MiscOrder[]
   orderAddress: OrderAddress
 }
 
 export interface ProfileOrder {
   id: number
   total: number
-  pizzas: OrderPizzaDto[]
-  misc: MiscDto[]
-  address: Address
+  pizzas: OrderPizza[]
+  misc: Misc[]
+  address: AddressUi
 }

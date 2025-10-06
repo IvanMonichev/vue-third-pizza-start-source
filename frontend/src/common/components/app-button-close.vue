@@ -6,7 +6,7 @@ interface Props {
   theme?: 'white' | 'black'
 }
 
-const { theme, to } = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   theme: 'black'
 })
 
@@ -17,8 +17,8 @@ defineEmits<{
 
 <template>
   <RouterLink
-    :to="to"
-    :class="['close', `close--${theme}`]"
+    :to="props.to"
+    :class="['close', `close--${props.theme}`]"
     @click="$emit('click', $event)"
   >
     <span class="visually-hidden">Закрыть форму авторизации</span>

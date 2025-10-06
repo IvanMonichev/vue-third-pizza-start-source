@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import { defineConfig } from 'vite'
 
 const projectRootDir = resolve(__dirname)
 
@@ -22,6 +22,11 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000/',
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+
+      '/public': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
       }
     }
   }

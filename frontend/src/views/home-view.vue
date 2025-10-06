@@ -4,9 +4,9 @@ import ContentPizza from '@/modules/constructor/content-pizza.vue'
 import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
-import { useRoute } from 'vue-router'
 import { useCartStore, usePizzaStore } from '@/store'
 import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 const cartStore = useCartStore()
 const pizzaStore = usePizzaStore()

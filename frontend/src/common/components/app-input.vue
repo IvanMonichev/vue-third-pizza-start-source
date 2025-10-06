@@ -1,30 +1,43 @@
 <script setup lang="ts">
+import { useField } from 'vee-validate'
+
 interface Props {
+  name: string
+  type: 'text' | 'password' | 'email'
   placeholder?: string
   label?: string
   labelHidden?: boolean
-  name?: string
   required?: boolean
   size?: 'big'
 }
 
 const props = defineProps<Props>()
-
-const modelValue = defineModel<string>()
+const { value, errorMessage } = useField(() => props.name, undefined, {
+  validateOnValueUpdate: false
+})
 </script>
 
 <template>
-  <label :class="['input', { 'input--big-label': props.size === 'big' }]">
+  <label
+    :class="[
+      'input',
+      {
+        'input--big-label': props.size === 'big',
+        'input--error': errorMessage
+      }
+    ]"
+  >
     <span v-if="label" :class="{ 'visually-hidden': props.labelHidden }">{{
       label
     }}</span>
     <input
-      v-model="modelValue"
-      type="text"
+      v-model="value"
+      :type="type"
       :name="name"
       :placeholder="placeholder"
       :required="required"
     />
+    <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
   </label>
 </template>
 
@@ -34,6 +47,7 @@ const modelValue = defineModel<string>()
 
 .input {
   display: block;
+  position: relative;
 
   span {
     @include ds-typography.r-s14-h16;
@@ -62,15 +76,31 @@ const modelValue = defineModel<string>()
     background-color: ds-colors.$white;
 
     font-family: inherit;
+  }
 
-    &:focus {
-      border-color: ds-colors.$green-500;
+  &:not(.input--error):focus {
+    border-color: ds-colors.$green-500;
+  }
+
+  &:not(.input--error):hover {
+    input {
+      border-color: ds-colors.$black;
     }
   }
 
-  &:hover {
+  &--error {
     input {
-      border-color: ds-colors.$black;
+      border-color: ds-colors.$red-800;
+    }
+
+    .error {
+      position: absolute;
+      color: ds-colors.$red-900;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 1;
+      left: 0;
+      bottom: -18px;
     }
   }
 

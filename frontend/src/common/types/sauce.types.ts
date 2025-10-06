@@ -1,9 +1,9 @@
-export interface SauceResponse {
+export interface Sauce {
   id: number
   name: string
   price: number
 }
 
-export interface Sauce extends SauceResponse {
+export interface SauceUi extends Sauce {
   className: string
 }

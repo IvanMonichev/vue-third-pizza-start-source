@@ -1,4 +1,4 @@
-import { UserResponse } from '@/common/types/profile.types'
+import { User } from '@/common/types/user.types'
 import { handleRequest } from '@/services/http/base-http.service'
 import { httpClient } from '@/services/http/http-client'
 
@@ -10,5 +10,5 @@ export const authService = {
 
   logout: () => handleRequest(httpClient.delete<void>('/logout')),
 
-  whoAmI: () => handleRequest(httpClient.get<UserResponse>('/whoAmI'))
+  whoAmI: () => handleRequest<User>(httpClient.get<User>('/whoAmI'))
 }

@@ -3,13 +3,8 @@ import { AxiosInstance, AxiosResponse } from 'axios'
 export const handleRequest = async <T>(
   request: Promise<AxiosResponse<T>>
 ): Promise<T> => {
-  try {
-    const response = await request
-    return response.data
-  } catch (error: any) {
-    console.error('HTTP Error:', error.response?.data || error.message)
-    throw error
-  }
+  const response = await request
+  return response.data
 }
 
 export function createCrudService<R>(client: AxiosInstance, resource: string) {

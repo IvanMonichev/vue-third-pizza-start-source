@@ -1,17 +1,60 @@
 <script setup lang="ts">
+import { useLogin } from '@/api/auth.api'
 import AppButtonClose from '@/common/components/app-button-close.vue'
 import AppButton from '@/common/components/app-button.vue'
 import AppInput from '@/common/components/app-input.vue'
 import AppTitle from '@/common/components/app-title.vue'
+import { AxiosError } from 'axios'
+import { useForm } from 'vee-validate'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import { object, string } from 'yup'
+
+interface LoginForm {
+  email: string
+  password: string
+}
+
+const loginSchema = object({
+  email: string()
+    .required('Введите email')
+    .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Некорректный email'),
+  password: string().required('Введите пароль').min(6, 'Минимум 6 символов')
+})
+
+const { handleSubmit, isSubmitting } = useForm<LoginForm>({
+  validationSchema: loginSchema,
+  initialValues: {
+    email: 'user@example.com',
+    password: 'user@example.com'
+  }
+})
+
+const router = useRouter()
+const login = useLogin()
+
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    await login.mutateAsync(values)
+    router.push({ name: 'home-view' })
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      const errorMessage = e?.response?.data.error.message
+      if (errorMessage) {
+        toast.error(errorMessage)
+      }
+    }
+  }
+})
 </script>
 
 <template>
   <div class="sign-form">
-    <AppButtonClose />
+    <AppButtonClose to="/" />
     <div class="sign-form__title">
       <AppTitle type="small">Авторизуйтесь на сайте</AppTitle>
     </div>
-    <form action="#" method="post">
+    <form novalidate @submit.prevent="onSubmit">
       <div class="sign-form__input">
         <AppInput type="email" name="email" placeholder="example@mail.ru" />
       </div>
@@ -19,7 +62,12 @@ import AppTitle from '@/common/components/app-title.vue'
       <div class="sign-form__input">
         <AppInput type="password" name="password" placeholder="*********" />
       </div>
-      <AppButton type="submit">Авторизоваться</AppButton>
+      <AppButton
+        type="submit"
+        :disabled="isSubmitting || login.isPending.value"
+      >
+        Авторизоваться
+      </AppButton>
     </form>
   </div>
 </template>
@@ -51,6 +99,14 @@ import AppTitle from '@/common/components/app-title.vue'
     margin: 0 auto;
     padding: 16px 14px;
   }
+
+  &__error {
+    color: ds-colors.$red-900;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1;
+    margin: 0;
+  }
 }
 
 .sign-form__title {
@@ -60,6 +116,6 @@ import AppTitle from '@/common/components/app-title.vue'
 }
 
 .sign-form__input {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 </style>

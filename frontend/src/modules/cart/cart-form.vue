@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import AppInput from '@/common/components/app-input.vue'
 import AppSelect from '@/common/components/app-select.vue'
-import { develiryTypeOptions } from '@/common/constants/address-form.constants'
+import { deliveryTypeOptions } from '@/common/constants/address-form.constants'
+import { DeliveryType } from '@/common/enums/delivery-type.enum'
 import { useCartStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { DeliveryType } from '@/common/enums/delivery-type.enum'
 
 const cartStore = useCartStore()
 const { addressForm } = storeToRefs(cartStore)
@@ -15,7 +15,7 @@ const { addressForm } = storeToRefs(cartStore)
     <AppSelect
       v-model="addressForm.deliveryType"
       name="delivery-type"
-      :options="develiryTypeOptions"
+      :options="deliveryTypeOptions"
       label="Получение заказа:"
       extra-class="cart-form__select"
     />

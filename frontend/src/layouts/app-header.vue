@@ -2,8 +2,16 @@
 import logo from '@/assets/img/logo.svg'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore } from '@/store'
+import { useAuthStore } from '@/store/auth.store'
+import { computed } from 'vue'
 
 const cartStore = useCartStore()
+const authStore = useAuthStore()
+const images = computed(() => authStore.userImages)
+
+const handleClick = () => {
+  authStore.clearAuth()
+}
 </script>
 
 <template>
@@ -22,8 +30,34 @@ const cartStore = useCartStore()
       >
     </div>
     <div class="header__user">
-      <RouterLink to="/sign-in" class="header__login"
+      <RouterLink v-if="authStore.isAuthenticated" :to="{ name: 'user-view' }">
+        <picture v-if="images">
+          <source
+            type="image/webp"
+            :srcset="`${images.webp} 1x, ${images.webp2x} 2x`"
+          />
+          <img
+            :src="images.jpg"
+            :srcset="`${images.jpg2x} 2x`"
+            :alt="authStore.user?.name || 'User avatar'"
+            width="32"
+            height="32"
+          />
+        </picture>
+        <span>{{ authStore.user?.name }}</span>
+      </RouterLink>
+      <RouterLink
+        v-if="authStore.isUnauthenticated"
+        to="/sign-in"
+        class="header__login"
         ><span>Войти</span></RouterLink
+      >
+      <RouterLink
+        v-if="authStore.isAuthenticated"
+        to="/"
+        class="header__logout"
+        @click="handleClick"
+        ><span>Выйти</span></RouterLink
       >
     </div>
   </header>
@@ -146,6 +180,22 @@ const cartStore = useCartStore()
     width: 32px;
     height: 32px;
     margin-left: 8px;
+
+    content: '';
+    vertical-align: middle;
+
+    background: url(@/assets/img/login.svg) no-repeat center;
+    background-size: auto 50%;
+  }
+}
+
+.header__logout {
+  &::before {
+    display: inline-block;
+
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
 
     content: '';
     vertical-align: middle;
