@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sizeDiamterMap } from '@/common/constants/mappers.constants'
+import { sizeDiameterMap } from '@/common/constants/mappers.constants'
 import { Size } from '@/common/types/size.types'
 
 const { size } = defineProps<{
@@ -7,7 +7,7 @@ const { size } = defineProps<{
 }>()
 
 const modelValue = defineModel<Size['id']>()
-const sizeDiameterName = sizeDiamterMap[size.multiplier]
+const sizeDiameterName = sizeDiameterMap[size.multiplier]
 </script>
 
 <template>
@@ -17,6 +17,7 @@ const sizeDiameterName = sizeDiamterMap[size.multiplier]
       type="radio"
       name="diameter"
       class="visually-hidden"
+      :value="size.id"
     />
     <div class="diameter__select">
       <img

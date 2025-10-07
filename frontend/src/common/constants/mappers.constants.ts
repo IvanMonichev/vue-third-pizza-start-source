@@ -2,7 +2,7 @@ import colaImg from '@/assets/img/cola.svg'
 import potatoImg from '@/assets/img/potato.svg'
 import sauceImg from '@/assets/img/sauce.svg'
 
-export const sizeDiamterMap: Record<number, string> = {
+export const sizeDiameterMap: Record<number, string> = {
   1: 'small',
   2: 'normal',
   3: 'big'
