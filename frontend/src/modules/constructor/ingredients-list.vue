@@ -19,9 +19,14 @@ const quantityById = (id: number) =>
       class="ingredients__item"
     >
       <AppDrag :transfer-data="ingredient">
-        <span :class="['filling', `filling--${ingredient.className}`]">{{
-          ingredient.name
-        }}</span>
+        <div class="filling">
+          <img
+            :src="ingredient.image"
+            :alt="ingredient.name"
+            class="filling__img"
+          />
+          <span class="filling__name">{{ ingredient.name }}</span>
+        </div>
       </AppDrag>
       <AppCounter
         :value="quantityById(ingredient.id).value"
@@ -66,87 +71,21 @@ const quantityById = (id: number) =>
 .filling {
   @include ds-typography.r-s14-h16;
 
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-  display: block;
-
-  padding-left: 36px;
-
-  &::before {
-    @include m_center.p_center-v;
-
-    display: block;
-
-    width: 32px;
-    height: 32px;
-
-    content: '';
-
+  &__img {
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     background-color: ds-colors.$white;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 80% 80%;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
-  &--tomatoes::before {
-    background-image: url('@/assets/img/filling/tomatoes.svg');
-  }
-
-  &--ananas::before {
-    background-image: url('@/assets/img/filling/ananas.svg');
-  }
-
-  &--bacon::before {
-    background-image: url('@/assets/img/filling/bacon.svg');
-  }
-
-  &--blue_cheese::before {
-    background-image: url('@/assets/img/filling/blue_cheese.svg');
-  }
-
-  &--cheddar::before {
-    background-image: url('@/assets/img/filling/cheddar.svg');
-  }
-
-  &--chile::before {
-    background-image: url('@/assets/img/filling/chile.svg');
-  }
-
-  &--ham::before {
-    background-image: url('@/assets/img/filling/ham.svg');
-  }
-
-  &--jalapeno::before {
-    background-image: url('@/assets/img/filling/jalapeno.svg');
-  }
-
-  &--mozzarella::before {
-    background-image: url('@/assets/img/filling/mozzarella.svg');
-  }
-
-  &--mushrooms::before {
-    background-image: url('@/assets/img/filling/mushrooms.svg');
-  }
-
-  &--olives::before {
-    background-image: url('@/assets/img/filling/olives.svg');
-  }
-
-  &--onion::before {
-    background-image: url('@/assets/img/filling/onion.svg');
-  }
-
-  &--parmesan::before {
-    background-image: url('@/assets/img/filling/parmesan.svg');
-  }
-
-  &--salami::before {
-    background-image: url('@/assets/img/filling/salami.svg');
-  }
-
-  &--salmon::before {
-    background-image: url('@/assets/img/filling/salmon.svg');
+  &__name {
+    display: block;
   }
 }
 </style>
