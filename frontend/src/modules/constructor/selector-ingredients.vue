@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useIngredients } from '@/api/ingredients.api'
+import { useIngredientsQuery } from '@/api/ingredients.api'
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
 import saucesDto from '@/mocks/sauces.json'
@@ -14,7 +14,7 @@ const dataStore = useDataStore()
 const { sauceId } = storeToRefs(pizzaStore)
 const { sauces } = useDataStore()
 
-const { data: ingredients } = useIngredients()
+const { data: ingredients } = useIngredientsQuery()
 
 onMounted(() => {
   dataStore.buildSauces(saucesDto)

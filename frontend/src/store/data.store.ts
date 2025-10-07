@@ -1,8 +1,5 @@
-import {
-  doughClassMap,
-  saucesClassMap
-} from '@/common/constants/mappers.constants'
-import { Dough, DoughUi } from '@/common/types/dough.types'
+import { saucesClassMap } from '@/common/constants/mappers.constants'
+import { Dough } from '@/common/types/dough.types'
 import { Ingredient } from '@/common/types/ingredient.types'
 import { Misc } from '@/common/types/misc.types'
 import { Sauce, SauceUi } from '@/common/types/sauce.types'
@@ -10,7 +7,7 @@ import { Size } from '@/common/types/size.types'
 import { defineStore } from 'pinia'
 
 interface DataState {
-  doughList: DoughUi[]
+  doughList: Dough[]
   sauces: SauceUi[]
   sizes: Size[]
   ingredients: Ingredient[]
@@ -37,11 +34,8 @@ export const useDataStore = defineStore('data', {
       }
   },
   actions: {
-    buildDough(doughDto: Dough[]) {
-      this.doughList = doughDto.map((d) => ({
-        ...d,
-        className: doughClassMap[d.id]
-      }))
+    buildDough(doughList: Dough[]) {
+      this.doughList = doughList
     },
 
     buildSauces(saucesDto: Sauce[]) {
