@@ -5,6 +5,10 @@ export interface Ingredient {
   price: number
 }
 
+export interface IngredientUi extends Ingredient {
+  className: string
+}
+
 export interface IngredientPizza extends Pick<Ingredient, 'id'> {
   quantity: number
 }

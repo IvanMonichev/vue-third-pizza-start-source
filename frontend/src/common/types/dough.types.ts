@@ -5,3 +5,7 @@ export interface Dough {
   description: string
   price: number
 }
+
+export interface DoughUi extends Dough {
+  className: string
+}

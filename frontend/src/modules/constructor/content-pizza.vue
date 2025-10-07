@@ -36,11 +36,11 @@ const handleAddPizza = () => {
 <template>
   <div class="content__pizza">
     <AppInput
-      v-model="pizzaName"
       placeholder="Введите название пиццы"
       name="pizza_name"
       label="Название пиццы"
       :label-hidden="true"
+      type="text"
     />
 
     <AppDrop @drop="handleDropIngredient">
