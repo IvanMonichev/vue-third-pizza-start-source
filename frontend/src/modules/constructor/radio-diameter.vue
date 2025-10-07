@@ -1,27 +1,31 @@
 <script setup lang="ts">
-import { pizzaSizeMap } from '@/common/constants/mappers.constants'
-import { PizzaSizeValue } from '@/common/enums/pizza-size-value.enum'
+import { sizeDiamterMap } from '@/common/constants/mappers.constants'
+import { Size } from '@/common/types/size.types'
 
-const props = defineProps<{
-  label: string
-  name: string
-  value: PizzaSizeValue
+const { size } = defineProps<{
+  size: Size
 }>()
 
-const size = pizzaSizeMap[props.value]
-const modelValue = defineModel<PizzaSizeValue>()
+const modelValue = defineModel<Size['id']>()
+const sizeDiameterName = sizeDiamterMap[size.multiplier]
 </script>
 
 <template>
-  <label :class="['diameter__input', `diameter__input--${size}`]">
+  <label class="diameter__input">
     <input
       v-model="modelValue"
       type="radio"
-      :name="name"
-      :value="value"
+      name="diameter"
       class="visually-hidden"
     />
-    <span>{{ label }}</span>
+    <div class="diameter__select">
+      <img
+        :src="size.image"
+        :alt="size.name"
+        :class="['diameter__image', `diameter__image--${sizeDiameterName}`]"
+      />
+    </div>
+    <span class="diameter__name">{{ size.name }}</span>
   </label>
 </template>
 
@@ -32,69 +36,67 @@ const modelValue = defineModel<PizzaSizeValue>()
 @use '@/assets/sass/mixins/m_center';
 
 .diameter__input {
+  display: flex;
+  position: relative;
+  align-items: center;
   margin-right: 8.7%;
   margin-bottom: 20px;
   padding-top: 7px;
   padding-bottom: 6px;
-
+  gap: 10px;
   cursor: pointer;
 
-  span {
-    @include ds-typography.r-s16-h19;
+  .diameter__name {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    font-style: normal;
+  }
 
-    position: relative;
+  .diameter__select {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    background-color: ds-colors.$green-100;
+    border-radius: 50%;
+    transition: 0.3s;
+    display: flex;
+    align-content: center;
+    justify-content: center;
 
-    padding-left: 46px;
-
-    &::before {
-      @include m_center.p_center_v;
-
-      width: 36px;
-      height: 36px;
-
-      content: '';
-      transition: 0.3s;
-
+    .diameter__image {
+      width: 100%;
       border-radius: 50%;
-      background-color: ds-colors.$green-100;
-      background-image: url('@/assets/img/diameter.svg');
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  }
+      object-fit: contain;
 
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
+      &--small {
+        width: 50%;
+      }
 
-  &--small {
-    span::before {
-      background-size: 18px;
-    }
-  }
+      &--normal {
+        width: 80%;
+      }
 
-  &--normal {
-    span::before {
-      background-size: 29px;
-    }
-  }
-
-  &--big {
-    span::before {
-      background-size: 100%;
+      &--big {
+        width: 100%;
+      }
     }
   }
 
   &:hover {
-    span::before {
+    .diameter__select {
       box-shadow: ds-shadows.$shadow-regular;
     }
   }
 
   input {
-    &:checked + span::before {
+    &:checked + .diameter__select {
       box-shadow: ds-shadows.$shadow-large;
     }
+  }
+
+  &:nth-child(3n) {
+    margin-right: 0;
   }
 }
 </style>

@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import sizesMock from '@/mocks/sizes.json'
+import { useSizesQuery } from '@/api/sizes.api'
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
-import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { computed, watch } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
-onMounted(async () => {
-  dataStore.buildSizes(sizesMock)
-})
 
-const { sizes } = storeToRefs(dataStore)
-const { sizeId } = storeToRefs(pizzaStore)
+const sizeId = computed(() => pizzaStore.sizeId)
+
+const { data: sizes } = useSizesQuery()
+watch(sizes, (data) => {
+  if (!data) return
+  dataStore.buildSizes(data)
+})
 </script>
 
 <template>
@@ -23,9 +24,7 @@ const { sizeId } = storeToRefs(pizzaStore)
         v-for="s in sizes"
         :key="s.id"
         v-model="sizeId"
-        name="diameter"
-        :label="s.name"
-        :value="s.id"
+        :size="s"
       />
     </SheetLayout>
   </div>
