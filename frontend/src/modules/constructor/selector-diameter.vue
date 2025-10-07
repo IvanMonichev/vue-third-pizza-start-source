@@ -36,4 +36,8 @@ watch(sizes, (data) => {
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
+:deep(.diameter) {
+  padding-bottom: 15px;
+}
 </style>

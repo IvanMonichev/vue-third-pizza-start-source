@@ -40,9 +40,6 @@ const sizeDiameterName = sizeDiamterMap[size.multiplier]
   position: relative;
   align-items: center;
   margin-right: 8.7%;
-  margin-bottom: 20px;
-  padding-top: 7px;
-  padding-bottom: 6px;
   gap: 10px;
   cursor: pointer;
 

@@ -1,33 +1,31 @@
 <script setup lang="ts">
 import { useIngredientsQuery } from '@/api/ingredients.api'
+import { useSaucesQuery } from '@/api/sauces.api'
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
-import saucesDto from '@/mocks/sauces.json'
 import IngredientsList from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, watchEffect } from 'vue'
+import { computed, watch } from 'vue'
 
 const pizzaStore = usePizzaStore()
 const dataStore = useDataStore()
 const { sauceId } = storeToRefs(pizzaStore)
-const { sauces } = useDataStore()
 
 const { data: ingredients } = useIngredientsQuery()
+const { data: sauces } = useSaucesQuery()
 
-onMounted(() => {
-  dataStore.buildSauces(saucesDto)
+watch(ingredients, (data) => {
+  if (data) dataStore.buildIngredients(data)
 })
 
-watchEffect(() => {
-  if (ingredients.value) {
-    dataStore.buildIngredients(ingredients.value)
-  }
+watch(sauces, (data) => {
+  if (data) dataStore.buildSauces(data)
 })
 
 const saucesOptions = computed<Option[]>(() =>
-  sauces.map((s) => ({
+  dataStore.sauces.map((s) => ({
     label: s.name,
     value: s.id
   }))
