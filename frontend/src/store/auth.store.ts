@@ -1,5 +1,6 @@
 import { AuthStatus } from '@/common/enums/auth-status.enum'
 import { tokenManager } from '@/services/token-manager'
+import { useProfileStore } from '@/store/profile.store'
 import { defineStore } from 'pinia'
 
 interface AuthState {
@@ -26,8 +27,10 @@ export const useAuthStore = defineStore('auth', {
     },
 
     clearAuth() {
+      const profileStore = useProfileStore()
       tokenManager.remove()
       this.authStatus = AuthStatus.UNAUTHENTICATED
+      profileStore.setUser({ user: null })
     }
   }
 })

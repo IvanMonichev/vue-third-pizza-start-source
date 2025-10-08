@@ -3,7 +3,7 @@ import logo from '@/assets/img/logo.svg'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore, useProfileStore } from '@/store'
 import { useAuthStore } from '@/store/auth.store'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 const cartStore = useCartStore()
 const authStore = useAuthStore()
@@ -13,6 +13,12 @@ const images = computed(() => profileStore.userImages)
 const handleClick = () => {
   authStore.clearAuth()
 }
+
+watch(
+  () => profileStore.userImages,
+  (v) => console.log('userImages changed:', v),
+  { immediate: true }
+)
 </script>
 
 <template>
