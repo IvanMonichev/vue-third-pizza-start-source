@@ -2,7 +2,12 @@
 import AppInput from '@/common/components/app-input.vue'
 import { Field } from 'vee-validate'
 
-defineProps<{ name: string; type?: string; placeholder?: string }>()
+defineProps<{
+  name: string
+  type?: string
+  placeholder?: string
+  label?: string
+}>()
 </script>
 
 <template>
@@ -21,6 +26,7 @@ defineProps<{ name: string; type?: string; placeholder?: string }>()
       :type="type"
       :error="errorMessage"
       :placeholder="placeholder"
+      :label="label"
       @input="field.onInput"
       @blur="field.onBlur"
     />

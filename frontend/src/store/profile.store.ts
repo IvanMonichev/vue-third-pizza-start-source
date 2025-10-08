@@ -1,11 +1,12 @@
-import { Address } from '@/common/types/address.types'
+import { Address, AddressProfile } from '@/common/types/address.types'
 import { ProfileOrder } from '@/common/types/order.types'
 import { User } from '@/common/types/user.types'
 import { defineStore } from 'pinia'
+import { AddressMode } from '@/common/enums/address-mode.enum'
 
 interface ProfileState {
   user: User | null
-  addresses: Address[]
+  addresses: AddressProfile[]
   orders: ProfileOrder[]
 }
 
@@ -54,14 +55,35 @@ export const useProfileStore = defineStore('profile', {
       this.user = payload.user
     },
 
-    setAddresses(payload: { addresses: Address[] }) {
-      this.addresses = payload.addresses
-    },
-
     clearProfile() {
       this.user = null
       this.addresses = []
       this.orders = []
+    },
+
+    buildAddresses(addresses: Address[]) {
+      const userAddresses = addresses.filter((a) => a.userId === this.user?.id)
+      this.addresses = userAddresses.map((a) => {
+        return {
+          ...a,
+          addressMode: AddressMode.EDIT
+        }
+      })
+    },
+
+    addAddress() {
+      if (!this.userId) return
+
+      const address: AddressProfile = {
+        id: 'new-address',
+        name: '',
+        userId: this.userId,
+        flat: '',
+        addressMode: AddressMode.ADD,
+        building: '',
+        street: ''
+      }
+      this.addresses.push(address)
     }
   }
 })

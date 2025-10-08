@@ -1,4 +1,5 @@
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
+import { AddressMode } from '@/common/enums/address-mode.enum'
 
 export interface Address {
   id: number
@@ -6,8 +7,8 @@ export interface Address {
   userId: string
   street: string
   building: string
-  flat: string
-  comment: string
+  flat?: string
+  comment?: string
 }
 
 export type AddressCreate = Omit<Address, 'id'>
@@ -15,9 +16,9 @@ export type AddressUpdate = Address
 
 export type OrderAddress = Address
 
-export interface AddressUi extends Pick<Address, 'id'> {
-  label: string
-  fullAddress: string
+export interface AddressProfile extends Omit<Address, 'id'> {
+  id: string | number
+  addressMode: AddressMode
 }
 
 export interface AddressForm {

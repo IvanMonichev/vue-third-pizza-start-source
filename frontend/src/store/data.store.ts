@@ -65,6 +65,6 @@ export const useDataStore = defineStore('data', {
 
     buildMisc(miscDto: Misc[]) {
       this.miscList = miscDto
-    }
+    },
   }
 })
