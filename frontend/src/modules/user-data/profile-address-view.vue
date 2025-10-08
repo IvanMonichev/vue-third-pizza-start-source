@@ -1,12 +1,27 @@
 <script setup lang="ts">
 import AppButtonIcon from '@/common/components/app-button-icon.vue'
+import { AddressMode } from '@/common/enums/address-mode.enum'
 import { AddressProfile } from '@/common/types/address.types'
+import { useProfileStore } from '@/store'
+import { computed } from 'vue'
 
 interface Props {
   address: AddressProfile
 }
 
 const { address } = defineProps<Props>()
+const profileStore = useProfileStore()
+
+const fullAddress = computed(() => {
+  const parts = [address.street, address.building]
+  if (address?.flat) parts.push(address.flat)
+  return parts.join(', ')
+})
+
+const handleEdit = () => {
+  if (typeof address.id !== 'number') return
+  profileStore.setAddressMode(address.id, AddressMode.EDIT)
+}
 </script>
 
 <template>
@@ -14,10 +29,10 @@ const { address } = defineProps<Props>()
     <div class="address-form__header">
       <b>{{ address.name }}</b>
       <div class="address-form__edit">
-        <AppButtonIcon>Изменить адрес</AppButtonIcon>
+        <AppButtonIcon @click="handleEdit">Изменить адрес</AppButtonIcon>
       </div>
     </div>
-    <p>{{ address.fullAddress }}</p>
+    <p>{{ fullAddress }}</p>
     <small v-if="address.comment">{{ address?.comment }}</small>
   </div>
 </template>

@@ -1,12 +1,18 @@
 <script setup lang="ts">
-import AppButton from '@/common/components/app-button.vue'
-import { AddressProfile } from '@/common/types/address.types'
-import { computed } from 'vue'
-import { AddressMode } from '@/common/enums/address-mode.enum'
+import {
+  useCreateAddressMutation,
+  useDeleteAddressMutation,
+  useUpdateAddressMutation
+} from '@/api/addresses.api'
 import AppButtonIcon from '@/common/components/app-button-icon.vue'
-import { useForm } from 'vee-validate'
-import { object, string } from 'yup'
+import AppButton from '@/common/components/app-button.vue'
 import AppFormInput from '@/common/components/app-form-input.vue'
+import { AddressMode } from '@/common/enums/address-mode.enum'
+import { AddressProfile } from '@/common/types/address.types'
+import { useProfileStore } from '@/store'
+import { useForm } from 'vee-validate'
+import { computed } from 'vue'
+import { object, string } from 'yup'
 
 interface Props {
   address: AddressProfile
@@ -20,6 +26,10 @@ interface ProfileForm {
   comment?: string
 }
 
+const createAddress = useCreateAddressMutation()
+const deleteAddress = useDeleteAddressMutation()
+const updateAddress = useUpdateAddressMutation()
+const profileStore = useProfileStore()
 const { address } = defineProps<Props>()
 const isEditMode = computed(() => address.addressMode === AddressMode.EDIT)
 const isAddMode = computed(() => address.addressMode === AddressMode.ADD)
@@ -44,8 +54,46 @@ const { handleSubmit, isSubmitting } = useForm<ProfileForm>({
 })
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log('values', values)
+  if (!profileStore.userId) return
+  try {
+    if (isAddMode.value) {
+      await createAddress.mutateAsync({
+        ...values,
+        userId: profileStore.userId
+      })
+    }
+
+    if (isEditMode.value && typeof address.id === 'number') {
+      await updateAddress.mutateAsync({
+        id: address.id,
+        data: { ...values, id: address.id, userId: profileStore.userId }
+      })
+    }
+  } catch (e) {
+    console.error(e)
+  }
 })
+
+const handleViewMode = () => {
+  if (!isEditMode.value) return
+  if (typeof address.id !== 'number') return
+  profileStore.setAddressMode(address.id, AddressMode.VIEW)
+}
+
+const handleDelete = async () => {
+  if (isAddMode.value && typeof address.id === 'string') {
+    profileStore.removeAddress(address.id)
+    return
+  }
+
+  try {
+    if (typeof address.id === 'number') {
+      await deleteAddress.mutateAsync(address.id)
+    }
+  } catch (e) {
+    console.error('Ошибка при удалении адреса:', e)
+  }
+}
 </script>
 
 <template>
@@ -58,7 +106,7 @@ const onSubmit = handleSubmit(async (values) => {
       <b v-if="isAddMode">Новый адрес</b>
       <b v-if="isEditMode">{{ address.name }}</b>
       <div v-if="isEditMode" class="address-form__edit">
-        <AppButtonIcon>Изменить адрес</AppButtonIcon>
+        <AppButtonIcon @click="handleViewMode">Изменить адрес</AppButtonIcon>
       </div>
     </div>
 
@@ -102,7 +150,13 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
 
     <div class="address-form__buttons">
-      <AppButton type="button" variant="transparent">Удалить</AppButton>
+      <AppButton
+        type="button"
+        variant="transparent"
+        :disabled="createAddress.isPending.value"
+        @click="handleDelete"
+        >Удалить
+      </AppButton>
       <AppButton type="submit" :disabled="isSubmitting">Сохранить</AppButton>
     </div>
   </form>
@@ -112,6 +166,7 @@ const onSubmit = handleSubmit(async (values) => {
 @use '@/assets/sass/ds-system/ds-colors';
 @use '@/assets/sass/ds-system/ds-shadows';
 @use '@/assets/sass/ds-system/ds-typography';
+
 .address-form {
   $bl: &;
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { useAddressesQuery } from '@/api/addresses.api'
 import AppButton from '@/common/components/app-button.vue'
 import AppTitle from '@/common/components/app-title.vue'
 import ProfileAddress from '@/modules/user-data/profile-address.vue'
 import UserData from '@/modules/user-data/user-data.vue'
-import { useAddressesQuery } from '@/api/addresses.api'
 import { useProfileStore } from '@/store'
 import { watch } from 'vue'
 
@@ -16,7 +16,7 @@ watch(addresses, (data) => {
 })
 
 const handleAddAddress = () => {
-  profileStore.addAddress()
+  profileStore.addNewAddress()
 }
 </script>
 
