@@ -3,6 +3,24 @@ import AppButton from '@/common/components/app-button.vue'
 import AppTitle from '@/common/components/app-title.vue'
 import AddressForm from '@/modules/user-data/address-form.vue'
 import UserData from '@/modules/user-data/user-data.vue'
+import { useAddressesQuery } from '@/api/addresses.api'
+import { useProfileStore } from '@/store'
+import { watch } from 'vue'
+
+const { data: addresses } = useAddressesQuery()
+const profileStore = useProfileStore()
+
+watch(addresses, (data) => {
+  const userId = profileStore.userId
+  if (!data) return
+  if (!userId) return
+
+  const addresses = data.filter(
+    (address) => address.userId === profileStore.user?.id
+  )
+
+  profileStore.setAddresses({ addresses })
+})
 </script>
 
 <template>
