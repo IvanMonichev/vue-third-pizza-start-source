@@ -4,16 +4,18 @@ import { useAuthStore } from '@/store/auth.store'
 import { watch } from 'vue'
 import { useAuthUser } from './api/auth.api'
 import { tokenManager } from './services/token-manager'
+import { useProfileStore } from '@/store'
 
 const { data: user, isLoading, isError } = useAuthUser()
 
 const authStore = useAuthStore()
+const profileStore = useProfileStore()
 watch(user, (newUser) => {
   if (newUser) {
     authStore.setAuth({
-      user: newUser,
       token: tokenManager.get()!
     })
+    profileStore.setUser({ user: newUser })
   } else if (!isLoading.value && isError.value) {
     authStore.clearAuth()
   }
