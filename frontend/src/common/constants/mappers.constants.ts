@@ -1,7 +1,3 @@
-import colaImg from '@/assets/img/cola.svg'
-import potatoImg from '@/assets/img/potato.svg'
-import sauceImg from '@/assets/img/sauce.svg'
-
 export const sizeDiameterMap: Record<number, string> = {
   1: 'small',
   2: 'normal',
@@ -40,9 +36,3 @@ export const doughClassMap: Record<number, string> = {
   1: 'light',
   2: 'large'
 } as const
-
-export const miscImagesMap: Record<string, string> = {
-  cola: colaImg,
-  potato: potatoImg,
-  sauce: sauceImg
-}
