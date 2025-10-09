@@ -11,6 +11,14 @@ export interface Order {
   orderAddress: OrderAddress
 }
 
+export interface CreateOrder {
+  userId: string
+  phone: string
+  address: OrderAddress
+  pizzas: OrderPizza[]
+  misc: MiscOrder[]
+}
+
 export interface ProfileOrder {
   id: number
   total: number
