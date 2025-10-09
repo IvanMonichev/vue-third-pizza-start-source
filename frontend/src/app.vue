@@ -15,7 +15,6 @@ watch(user, (newUser) => {
     authStore.setAuth({
       token: tokenManager.get()!
     })
-    console.log('newUser', newUser)
     profileStore.setUser(newUser)
   } else if (!isLoading.value && isError.value) {
     authStore.clearAuth()

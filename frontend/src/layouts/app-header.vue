@@ -13,8 +13,6 @@ const images = computed(() => profileStore.userImages)
 const handleClick = () => {
   authStore.clearAuth()
 }
-
-console.log('images', images.value)
 </script>
 
 <template>

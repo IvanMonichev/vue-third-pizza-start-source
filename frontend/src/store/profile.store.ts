@@ -20,7 +20,6 @@ export const useProfileStore = defineStore('profile', {
     userId: (state) => state.user?.id,
 
     userImages: (state) => {
-      console.log('state.user', state.user)
       if (!state.user) return null
 
       const basePath = state.user.avatar
