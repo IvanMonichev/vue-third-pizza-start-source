@@ -3,12 +3,12 @@ import { useSizesQuery } from '@/api/sizes.api'
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
-import { computed, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { watch } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
-
-const sizeId = computed(() => pizzaStore.sizeId)
+const { sizeId } = storeToRefs(pizzaStore)
 
 const { data: sizes } = useSizesQuery()
 watch(sizes, (data) => {
