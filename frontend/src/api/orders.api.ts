@@ -9,16 +9,12 @@ export const useOrdersQuery = () => {
   })
 }
 
-/**
- * Создание нового заказа
- */
 export const useCreateOrderMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (data: CreateOrder) => ordersService.create(data),
     onSuccess: () => {
-      // Обновляем список заказов после успешного создания
       queryClient.invalidateQueries({ queryKey: ['orders'] })
     }
   })
