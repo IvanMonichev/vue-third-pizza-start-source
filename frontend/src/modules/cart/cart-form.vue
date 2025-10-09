@@ -1,15 +1,16 @@
 <script setup lang="ts">
+import { useAddressesQuery } from '@/api/addresses.api'
+import AppFormInput from '@/common/components/app-form-input.vue'
 import AppSelect from '@/common/components/app-select.vue'
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
-import { computed } from 'vue'
+import { DeliverySelectValue } from '@/common/types/cart.types'
 import { useField } from 'vee-validate'
-import AppFormInput from '@/common/components/app-form-input.vue'
-import { useAddressesQuery } from '@/api/addresses.api'
+import { computed } from 'vue'
 
 const { data: addresses } = useAddressesQuery()
 
 const { value: deliveryTypeValue, errorMessage: deliveryTypeError } =
-  useField('deliveryType')
+  useField<DeliverySelectValue>('deliveryType')
 
 const deliveryOptions = computed(() => {
   const base = [
@@ -46,7 +47,7 @@ const deliveryOptions = computed(() => {
     />
 
     <div
-      v-if="deliveryTypeValue === DeliveryType.NEW_ADDRESS"
+      v-if="deliveryTypeValue !== DeliveryType.PICK_UP"
       class="cart-form__address"
     >
       <span class="cart-form__label">Новый адрес:</span>

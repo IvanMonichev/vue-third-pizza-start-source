@@ -5,14 +5,15 @@ import AppTitle from '@/common/components/app-title.vue'
 import ProfileAddress from '@/modules/user-data/profile-address.vue'
 import UserData from '@/modules/user-data/user-data.vue'
 import { useProfileStore } from '@/store'
-import { watch } from 'vue'
+import { watchEffect } from 'vue'
 
 const { data: addresses } = useAddressesQuery()
 const profileStore = useProfileStore()
 
-watch(addresses, (data) => {
-  if (!data) return
-  profileStore.buildAddresses(data)
+watchEffect(() => {
+  if (addresses.value) {
+    profileStore.buildAddresses(addresses.value)
+  }
 })
 
 const handleAddAddress = () => {
@@ -26,9 +27,6 @@ const handleAddAddress = () => {
   </div>
 
   <UserData />
-
-  <!--  <ProfileAddress mode="view" />-->
-  <!--  <ProfileAddress mode="edit" />-->
 
   <ProfileAddress
     v-for="address in profileStore.addresses"

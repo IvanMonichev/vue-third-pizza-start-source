@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
+import { DeliveryType } from '@/common/enums/delivery-type.enum'
+import { CartAddressForm } from '@/common/types/cart.types'
 import CartFooter from '@/modules/cart/cart-footer.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
 import CartMiscList from '@/modules/cart/cart-misc-list.vue'
 import CartPizzas from '@/modules/cart/cart-pizzas.vue'
 import { useCartStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { object, string } from 'yup'
-import { useForm } from 'vee-validate'
-import { CartAddressForm } from '@/common/types/cart.types'
-import { DeliveryType } from '@/common/enums/delivery-type.enum'
 
 const cartStore = useCartStore()
 const { orderTotalPrice } = storeToRefs(cartStore)
@@ -35,7 +35,7 @@ const validationSchema = object({
   apartment: string().nullable()
 })
 
-const { handleSubmit, values, errors } = useForm<CartAddressForm>({
+const { handleSubmit } = useForm<CartAddressForm>({
   validationSchema,
   initialValues: {
     deliveryType: DeliveryType.PICK_UP
