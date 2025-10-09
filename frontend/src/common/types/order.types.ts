@@ -1,5 +1,5 @@
 import { AddressOrderCreate } from '@/common/types/address.types'
-import { Misc, MiscOrder } from '@/common/types/misc.types'
+import { Misc, MiscOrder, MiscOrderCreate } from '@/common/types/misc.types'
 import { PizzaOrder, PizzaOrderCreate } from '@/common/types/pizza.types'
 
 export interface Order {
@@ -12,11 +12,11 @@ export interface Order {
 }
 
 export interface OrderCreate {
-  userId: string
+  userId: string | null
   phone: string
-  address: AddressOrderCreate
+  address: AddressOrderCreate | null
   pizzas: PizzaOrderCreate[]
-  misc: MiscOrder[]
+  misc: MiscOrderCreate[]
 }
 
 export interface OrderProfile {

@@ -15,3 +15,8 @@ export interface MiscOrder {
 export interface MiscCart extends Pick<Misc, 'id'> {
   quantity: number
 }
+
+export interface MiscOrderCreate {
+  miscId: number
+  quantity: number
+}

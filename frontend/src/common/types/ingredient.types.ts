@@ -12,3 +12,8 @@ export interface IngredientUi extends Ingredient {
 export interface IngredientPizza extends Pick<Ingredient, 'id'> {
   quantity: number
 }
+
+export interface IngredientPizzaCreate {
+  ingredientId: number
+  quantity: number
+}

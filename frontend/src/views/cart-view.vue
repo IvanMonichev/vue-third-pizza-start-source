@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useAddressesQuery } from '@/api/addresses.api'
+import { useCreateOrderMutation } from '@/api/orders.api'
 import AppTitle from '@/common/components/app-title.vue'
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
 import { Address } from '@/common/types/address.types'
 import { CartAddressForm } from '@/common/types/cart.types'
+import { OrderCreate } from '@/common/types/order.types'
 import CartFooter from '@/modules/cart/cart-footer.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
 import CartMiscList from '@/modules/cart/cart-misc-list.vue'
@@ -11,15 +13,19 @@ import CartPizzas from '@/modules/cart/cart-pizzas.vue'
 import { useCartStore, useProfileStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
 
 const { data: addresses } = useAddressesQuery()
+const createOrder = useCreateOrderMutation()
 
+const router = useRouter()
 const cartStore = useCartStore()
 const profileStore = useProfileStore()
 
 const { orderTotalPrice } = storeToRefs(cartStore)
+const selectedAddress = ref<Address | null>(null)
 
 const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
 const userPhone = computed(() => profileStore.user?.phone ?? null)
@@ -43,7 +49,6 @@ const validationSchema = object({
   apartment: string().nullable()
 })
 
-console.log('userPhone.value', userPhone.value)
 const { handleSubmit, setFieldValue } = useForm<CartAddressForm>({
   validationSchema,
   initialValues: {
@@ -57,17 +62,57 @@ const handleAddressSelect = (address: Address | null) => {
     setFieldValue('street', '')
     setFieldValue('house', '')
     setFieldValue('apartment', '')
+    selectedAddress.value = null
     return
   }
 
   setFieldValue('street', address.street)
   setFieldValue('house', address.building)
   setFieldValue('apartment', address.flat ?? '')
+  selectedAddress.value = address
 }
 
-const onSubmit = handleSubmit((values) => {
-  console.log('✅ Отправка формы:', values)
-  // здесь делаем cartStore.makeOrder(values)
+const onSubmit = handleSubmit(async (values) => {
+  let address = null
+  if (values.deliveryType !== DeliveryType.PICK_UP) {
+    address = {
+      street: values.street,
+      building: values.house,
+      flat: values.apartment,
+      comment: selectedAddress.value?.comment
+    }
+  }
+
+  const payload: OrderCreate = {
+    userId: profileStore.user?.id ?? null,
+    phone: values.phone,
+    address: address,
+    pizzas: cartStore.pizzas.map((p) => ({
+      name: p.name,
+      sauceId: p.sauceId,
+      doughId: p.doughId,
+      sizeId: p.sizeId,
+      quantity: p.quantity,
+      ingredients: p.ingredients.map((i) => ({
+        ingredientId: i.id,
+        quantity: i.quantity
+      }))
+    })),
+    misc: cartStore.miscCartList.map((m) => ({
+      miscId: m.id,
+      quantity: m.quantity
+    }))
+  }
+
+  try {
+    await createOrder.mutateAsync(payload)
+
+    cartStore.resetStore()
+    cartStore.setIsOrderSuccess(true)
+    await router.push({ name: 'success-order-view' })
+  } catch (err) {
+    console.error('Ошибка при создании заказа:', err)
+  }
 })
 </script>
 

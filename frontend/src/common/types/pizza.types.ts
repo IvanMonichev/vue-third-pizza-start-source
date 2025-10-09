@@ -1,4 +1,8 @@
-import { Ingredient, IngredientPizza } from '@/common/types/ingredient.types'
+import {
+  Ingredient,
+  IngredientPizza,
+  IngredientPizzaCreate
+} from '@/common/types/ingredient.types'
 
 export interface PizzaOrder {
   id: number
@@ -20,4 +24,9 @@ export interface PizzaCart extends Pick<PizzaOrder, 'name' | 'quantity'> {
   ingredients: IngredientPizza[]
 }
 
-export type PizzaOrderCreate = Omit<PizzaCart, 'pizzaId' | 'price'>
+export type PizzaOrderCreate = Omit<
+  PizzaCart,
+  'pizzaId' | 'price' | 'ingredients'
+> & {
+  ingredients: IngredientPizzaCreate[]
+}
