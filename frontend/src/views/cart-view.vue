@@ -1,20 +1,28 @@
 <script setup lang="ts">
+import { useAddressesQuery } from '@/api/addresses.api'
 import AppTitle from '@/common/components/app-title.vue'
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
+import { Address } from '@/common/types/address.types'
 import { CartAddressForm } from '@/common/types/cart.types'
 import CartFooter from '@/modules/cart/cart-footer.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
 import CartMiscList from '@/modules/cart/cart-misc-list.vue'
 import CartPizzas from '@/modules/cart/cart-pizzas.vue'
-import { useCartStore } from '@/store'
+import { useCartStore, useProfileStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { object, string } from 'yup'
 
+const { data: addresses } = useAddressesQuery()
+
 const cartStore = useCartStore()
+const profileStore = useProfileStore()
+
 const { orderTotalPrice } = storeToRefs(cartStore)
+
 const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
+const userPhone = computed(() => profileStore.user?.phone ?? null)
 
 const validationSchema = object({
   deliveryType: string().required('Выберите способ доставки'),
@@ -35,12 +43,27 @@ const validationSchema = object({
   apartment: string().nullable()
 })
 
-const { handleSubmit } = useForm<CartAddressForm>({
+console.log('userPhone.value', userPhone.value)
+const { handleSubmit, setFieldValue } = useForm<CartAddressForm>({
   validationSchema,
   initialValues: {
-    deliveryType: DeliveryType.PICK_UP
+    deliveryType: DeliveryType.PICK_UP,
+    phone: userPhone.value ?? ''
   }
 })
+
+const handleAddressSelect = (address: Address | null) => {
+  if (!address) {
+    setFieldValue('street', '')
+    setFieldValue('house', '')
+    setFieldValue('apartment', '')
+    return
+  }
+
+  setFieldValue('street', address.street)
+  setFieldValue('house', address.building)
+  setFieldValue('apartment', address.flat ?? '')
+}
 
 const onSubmit = handleSubmit((values) => {
   console.log('✅ Отправка формы:', values)
@@ -65,7 +88,10 @@ const onSubmit = handleSubmit((values) => {
           <CartMiscList />
 
           <div class="cart__form">
-            <CartForm />
+            <CartForm
+              :addresses="addresses"
+              @select-address="handleAddressSelect"
+            />
           </div>
         </template>
       </div>

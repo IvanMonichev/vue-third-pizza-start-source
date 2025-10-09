@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { useAddressesQuery } from '@/api/addresses.api'
 import AppFormInput from '@/common/components/app-form-input.vue'
 import AppSelect from '@/common/components/app-select.vue'
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
+import { Address } from '@/common/types/address.types'
 import { DeliverySelectValue } from '@/common/types/cart.types'
 import { useField } from 'vee-validate'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
-const { data: addresses } = useAddressesQuery()
+interface Props {
+  addresses?: Address[]
+}
+
+const { addresses } = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'select-address', address: Address | null): void
+}>()
 
 const { value: deliveryTypeValue, errorMessage: deliveryTypeError } =
   useField<DeliverySelectValue>('deliveryType')
@@ -18,14 +25,37 @@ const deliveryOptions = computed(() => {
     { label: 'Новый адрес', value: DeliveryType.NEW_ADDRESS }
   ]
 
-  if (!addresses.value) return base
+  if (!addresses) return base
 
-  const existing = addresses.value.map((a) => ({
+  const existing = addresses.map((a) => ({
     label: a.name,
     value: String(a.id)
   }))
 
   return [...base, ...existing]
+})
+const isAddressReadonly = computed(() => {
+  if (!deliveryTypeValue.value) return false
+  return (
+    deliveryTypeValue.value !== DeliveryType.PICK_UP &&
+    deliveryTypeValue.value !== DeliveryType.NEW_ADDRESS
+  )
+})
+
+watch(deliveryTypeValue, (value) => {
+  if (
+    !value ||
+    value === DeliveryType.PICK_UP ||
+    value === DeliveryType.NEW_ADDRESS
+  ) {
+    emit('select-address', null)
+    return
+  }
+
+  if (!addresses) return
+
+  const selected = addresses.find((a) => a.id === Number(value))
+  emit('select-address', selected ?? null)
 })
 </script>
 
@@ -53,15 +83,23 @@ const deliveryOptions = computed(() => {
       <span class="cart-form__label">Новый адрес:</span>
 
       <div class="cart-form__input">
-        <AppFormInput label="Улица*" name="street" />
+        <AppFormInput
+          label="Улица*"
+          name="street"
+          :disabled="isAddressReadonly"
+        />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppFormInput label="Дом*" name="house" />
+        <AppFormInput label="Дом*" name="house" :disabled="isAddressReadonly" />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppFormInput label="Квартира" name="apartment" />
+        <AppFormInput
+          label="Квартира"
+          name="apartment"
+          :disabled="isAddressReadonly"
+        />
       </div>
     </div>
   </div>

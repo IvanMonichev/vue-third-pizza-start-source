@@ -8,5 +8,4 @@ export interface CartAddressForm {
   street: string
   house: string
   apartment?: string
-  selectedAddressId?: string
 }

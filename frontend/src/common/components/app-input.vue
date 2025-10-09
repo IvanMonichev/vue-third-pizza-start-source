@@ -8,9 +8,10 @@ interface Props {
   required?: boolean
   size?: 'big'
   error?: string
+  disabled?: boolean
 }
 
-const { size, error, labelHidden } = defineProps<Props>()
+const { size, error, labelHidden, disabled } = defineProps<Props>()
 const modelValue = defineModel<string>()
 </script>
 
@@ -33,6 +34,7 @@ const modelValue = defineModel<string>()
       :placeholder="placeholder"
       :required="required"
       :name="name"
+      :disabled="disabled"
     />
     <span v-if="error" class="error">{{ error }}</span>
   </label>
