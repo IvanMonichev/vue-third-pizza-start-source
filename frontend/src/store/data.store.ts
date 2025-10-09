@@ -1,6 +1,5 @@
 import {
   doughClassMap,
-  ingredientClassMap,
   saucesClassMap
 } from '@/common/constants/mappers.constants'
 import { Dough, DoughUi } from '@/common/types/dough.types'
@@ -57,14 +56,24 @@ export const useDataStore = defineStore('data', {
     },
 
     buildIngredients(ingredientsDto: Ingredient[]) {
-      this.ingredients = ingredientsDto.map((i) => ({
-        ...i,
-        className: ingredientClassMap[i.id]
-      }))
+      this.ingredients = ingredientsDto.map((i) => {
+        // Получаем имя ингредиента без расширения
+        const className =
+          i.image
+            ?.split('/')
+            .pop()
+            ?.replace(/\.[^/.]+$/, '')
+            ?.trim() ?? ''
+
+        return {
+          ...i,
+          className
+        }
+      })
     },
 
     buildMisc(miscDto: Misc[]) {
       this.miscList = miscDto
-    },
+    }
   }
 })
