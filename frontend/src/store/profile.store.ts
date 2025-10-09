@@ -1,13 +1,13 @@
 import { AddressMode } from '@/common/enums/address-mode.enum'
 import { Address, AddressProfile } from '@/common/types/address.types'
-import { ProfileOrder } from '@/common/types/order.types'
+import { OrderProfile } from '@/common/types/order.types'
 import { User } from '@/common/types/user.types'
 import { defineStore } from 'pinia'
 
 interface ProfileState {
   user: User | null
   addresses: AddressProfile[]
-  orders: ProfileOrder[]
+  orders: OrderProfile[]
 }
 
 export const useProfileStore = defineStore('profile', {

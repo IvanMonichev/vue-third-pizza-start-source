@@ -1,15 +1,11 @@
-import { DeliveryType } from '@/common/enums/delivery-type.enum'
-import { AddressForm, OrderAddress } from '@/common/types/address.types'
 import { MiscCart } from '@/common/types/misc.types'
-import { CartPizza } from '@/common/types/pizza.types'
+import { PizzaCart } from '@/common/types/pizza.types'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
 
 interface CartState {
-  pizzas: CartPizza[]
+  pizzas: PizzaCart[]
   miscCartList: MiscCart[]
-  address: OrderAddress | null
-  addressForm: AddressForm
   isOrderSuccess: boolean
 }
 
@@ -17,11 +13,6 @@ export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
     pizzas: [],
     miscCartList: [],
-    address: null,
-    addressForm: {
-      deliveryType: DeliveryType.PICK_UP,
-      phone: ''
-    },
     isOrderSuccess: true
   }),
   getters: {
@@ -74,7 +65,7 @@ export const useCartStore = defineStore('cart', {
     }
   },
   actions: {
-    savePizza(pizza: CartPizza) {
+    savePizza(pizza: PizzaCart) {
       const index = this.pizzas.findIndex((p) => p.pizzaId === pizza.pizzaId)
 
       if (index === -1) {
@@ -161,32 +152,6 @@ export const useCartStore = defineStore('cart', {
       } else {
         this.miscCartList[index].quantity = quantity
       }
-    },
-
-    setDeliveryType(type: DeliveryType) {
-      this.addressForm.deliveryType = type
-
-      // при переключении можно сбрасывать адрес
-      if (type === DeliveryType.PICK_UP) {
-        this.addressForm = {
-          deliveryType: DeliveryType.PICK_UP,
-          phone: this.addressForm.phone
-        }
-      }
-
-      if (type === DeliveryType.NEW_ADDRESS) {
-        this.addressForm = {
-          deliveryType: DeliveryType.NEW_ADDRESS,
-          phone: this.addressForm.phone,
-          street: '',
-          house: '',
-          apartment: ''
-        }
-      }
-    },
-
-    updateAddressForm(payload: Partial<AddressForm>) {
-      this.addressForm = { ...this.addressForm, ...payload }
     },
 
     setIsOrderSuccess(isOrderSuccess: boolean) {

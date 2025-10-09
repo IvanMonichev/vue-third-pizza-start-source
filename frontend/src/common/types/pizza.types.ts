@@ -1,6 +1,6 @@
 import { Ingredient, IngredientPizza } from '@/common/types/ingredient.types'
 
-export interface OrderPizza {
+export interface PizzaOrder {
   id: number
   name: string
   sauceId: number
@@ -11,11 +11,13 @@ export interface OrderPizza {
   ingredients: Ingredient[]
 }
 
-export interface CartPizza extends Pick<OrderPizza, 'name' | 'quantity'> {
+export interface PizzaCart extends Pick<PizzaOrder, 'name' | 'quantity'> {
   pizzaId: string
   sauceId: number
   doughId: number
   sizeId: number
   price: number
-  ingredientsPizza: IngredientPizza[]
+  ingredients: IngredientPizza[]
 }
+
+export type PizzaOrderCreate = Omit<PizzaCart, 'pizzaId' | 'price'>

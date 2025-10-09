@@ -1,4 +1,4 @@
-import { CreateOrder } from '@/common/types/order.types'
+import { OrderCreate } from '@/common/types/order.types'
 import { ordersService } from '@/services/resources/orders.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 
@@ -13,7 +13,7 @@ export const useCreateOrderMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreateOrder) => ordersService.create(data),
+    mutationFn: (data: OrderCreate) => ordersService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
     }
