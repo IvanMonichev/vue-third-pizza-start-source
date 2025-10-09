@@ -21,7 +21,10 @@ const foundCartPizza = computed(() => {
 })
 
 onMounted(() => {
-  if (!foundCartPizza.value) return
+  if (!foundCartPizza.value) {
+    pizzaStore.resetPizza()
+    return
+  }
   pizzaStore.loadFromCartPizza(foundCartPizza.value)
 })
 </script>
