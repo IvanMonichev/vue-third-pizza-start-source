@@ -2,6 +2,7 @@ import { authService } from '@/services/resources/auth.service'
 import { tokenManager } from '@/services/token-manager'
 import { useAuthStore } from '@/store/auth.store'
 import { useMutation, useQuery } from '@tanstack/vue-query'
+import { useProfileStore } from '@/store'
 
 export const useAuthUser = () => {
   return useQuery({
@@ -15,6 +16,7 @@ export const useAuthUser = () => {
 
 export const useLogin = () => {
   const authStore = useAuthStore()
+  const profileStore = useProfileStore()
 
   return useMutation({
     mutationFn: async (payload: { email: string; password: string }) => {
@@ -28,10 +30,8 @@ export const useLogin = () => {
 
       const user = await authService.whoAmI()
 
-      authStore.setAuth({
-        user,
-        token: response.token
-      })
+      profileStore.setUser(user)
+      authStore.setAuth({ token: response.token })
     },
 
     onError: () => {

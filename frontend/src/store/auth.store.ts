@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', {
       const profileStore = useProfileStore()
       tokenManager.remove()
       this.authStatus = AuthStatus.UNAUTHENTICATED
-      profileStore.setUser({ user: null })
+      profileStore.setUser(null)
     }
   }
 })

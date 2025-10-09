@@ -20,6 +20,7 @@ export const useProfileStore = defineStore('profile', {
     userId: (state) => state.user?.id,
 
     userImages: (state) => {
+      console.log('state.user', state.user)
       if (!state.user) return null
 
       const basePath = state.user.avatar
@@ -51,8 +52,8 @@ export const useProfileStore = defineStore('profile', {
       state.orders.reduce((acc, order) => acc + order.total, 0)
   },
   actions: {
-    setUser(payload: { user: User | null }) {
-      this.user = payload.user
+    setUser(user: User | null) {
+      this.user = user
     },
 
     clearProfile() {
