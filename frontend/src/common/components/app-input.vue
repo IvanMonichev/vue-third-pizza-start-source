@@ -96,7 +96,7 @@ const modelValue = defineModel<string>()
       font-weight: 600;
       font-size: 12px;
       line-height: 1;
-      left: 0;
+      right: 0;
       bottom: -18px;
     }
   }
@@ -105,7 +105,7 @@ const modelValue = defineModel<string>()
     display: flex;
     align-items: center;
 
-    span {
+    span:not(.error) {
       @include ds-typography.b-s16-h19;
 
       margin-right: 16px;

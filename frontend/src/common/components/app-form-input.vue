@@ -7,6 +7,7 @@ defineProps<{
   type?: string
   placeholder?: string
   label?: string
+  size?: 'big'
 }>()
 </script>
 
@@ -27,6 +28,7 @@ defineProps<{
       :error="errorMessage"
       :placeholder="placeholder"
       :label="label"
+      :size="size"
       @input="field.onInput"
       @blur="field.onBlur"
     />

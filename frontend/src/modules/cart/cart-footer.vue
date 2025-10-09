@@ -15,8 +15,8 @@ const { setIsOrderSuccess } = useCartStore()
 defineProps<Props>()
 
 const handleMakeOrder = () => {
-  setIsOrderSuccess(true)
-  router.push({ name: 'success-order-view' })
+  // setIsOrderSuccess(true)
+  // router.push({ name: 'success-order-view' })
 }
 </script>
 
@@ -35,7 +35,10 @@ const handleMakeOrder = () => {
     </div>
 
     <div class="footer__submit">
-      <AppButton :disabled="totalPrice === 0" @click="handleMakeOrder"
+      <AppButton
+        type="submit"
+        :disabled="totalPrice === 0"
+        @click="handleMakeOrder"
         >Оформить заказ</AppButton
       >
     </div>

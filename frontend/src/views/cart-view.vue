@@ -7,14 +7,49 @@ import CartPizzas from '@/modules/cart/cart-pizzas.vue'
 import { useCartStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
+import { object, string } from 'yup'
+import { useForm } from 'vee-validate'
+import { CartAddressForm } from '@/common/types/cart.types'
+import { DeliveryType } from '@/common/enums/delivery-type.enum'
 
 const cartStore = useCartStore()
 const { orderTotalPrice } = storeToRefs(cartStore)
 const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
+
+const validationSchema = object({
+  deliveryType: string().required('Выберите способ доставки'),
+  phone: string()
+    .required('Введите телефон')
+    .matches(
+      /^(\+7|8)\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/,
+      'Некорректный формат телефона'
+    ),
+  street: string().when('deliveryType', {
+    is: DeliveryType.NEW_ADDRESS,
+    then: (schema) => schema.required('Введите улицу')
+  }),
+  house: string().when('deliveryType', {
+    is: DeliveryType.NEW_ADDRESS,
+    then: (schema) => schema.required('Введите дом')
+  }),
+  apartment: string().nullable()
+})
+
+const { handleSubmit, values, errors } = useForm<CartAddressForm>({
+  validationSchema,
+  initialValues: {
+    deliveryType: DeliveryType.PICK_UP
+  }
+})
+
+const onSubmit = handleSubmit((values) => {
+  console.log('✅ Отправка формы:', values)
+  // здесь делаем cartStore.makeOrder(values)
+})
 </script>
 
 <template>
-  <form action="#" method="post" class="layout-form">
+  <form class="layout-form" @submit.prevent="onSubmit">
     <main class="content cart">
       <div class="container">
         <div class="cart__title">

@@ -1,4 +1,4 @@
-import { AddressUi, OrderAddress } from '@/common/types/address.types'
+import { OrderAddress } from '@/common/types/address.types'
 import { Misc, MiscOrder } from '@/common/types/misc.types'
 import { OrderPizza } from '@/common/types/pizza.types'
 
@@ -16,5 +16,5 @@ export interface ProfileOrder {
   total: number
   pizzas: OrderPizza[]
   misc: Misc[]
-  address: AddressUi
+  address: OrderAddress
 }

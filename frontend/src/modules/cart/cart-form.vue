@@ -1,62 +1,66 @@
 <script setup lang="ts">
-import AppInput from '@/common/components/app-input.vue'
 import AppSelect from '@/common/components/app-select.vue'
-import { deliveryTypeOptions } from '@/common/constants/address-form.constants'
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
-import { useCartStore } from '@/store'
-import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import { useField } from 'vee-validate'
+import AppFormInput from '@/common/components/app-form-input.vue'
+import { useAddressesQuery } from '@/api/addresses.api'
 
-const cartStore = useCartStore()
-const { addressForm } = storeToRefs(cartStore)
+const { data: addresses } = useAddressesQuery()
+
+const { value: deliveryTypeValue, errorMessage: deliveryTypeError } =
+  useField('deliveryType')
+
+const deliveryOptions = computed(() => {
+  const base = [
+    { label: 'Заберу сам', value: DeliveryType.PICK_UP },
+    { label: 'Новый адрес', value: DeliveryType.NEW_ADDRESS }
+  ]
+
+  if (!addresses.value) return base
+
+  const existing = addresses.value.map((a) => ({
+    label: a.name,
+    value: String(a.id)
+  }))
+
+  return [...base, ...existing]
+})
 </script>
 
 <template>
   <div class="cart-form">
     <AppSelect
-      v-model="addressForm.deliveryType"
-      name="delivery-type"
-      :options="deliveryTypeOptions"
+      v-model="deliveryTypeValue"
+      :options="deliveryOptions"
       label="Получение заказа:"
       extra-class="cart-form__select"
+      :error="deliveryTypeError"
+      name="deliveryType"
     />
-    <AppInput
-      v-model="addressForm.phone"
-      label="Контактный телефон:"
-      name="tel"
+    <AppFormInput
+      label="Контактный телефон*:"
+      name="phone"
       placeholder="+7 999-999-99-99"
       size="big"
     />
 
     <div
-      v-if="addressForm.deliveryType === DeliveryType.NEW_ADDRESS"
+      v-if="deliveryTypeValue === DeliveryType.NEW_ADDRESS"
       class="cart-form__address"
     >
       <span class="cart-form__label">Новый адрес:</span>
 
       <div class="cart-form__input">
-        <AppInput
-          v-model="addressForm.street"
-          label="Улица*"
-          name="street"
-          :required="true"
-        />
+        <AppFormInput label="Улица*" name="street" />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppInput
-          v-model="addressForm.house"
-          label="Дом*"
-          name="house"
-          :required="true"
-        />
+        <AppFormInput label="Дом*" name="house" />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppInput
-          v-model="addressForm.apartment"
-          label="Квартира"
-          name="apartment"
-        />
+        <AppFormInput label="Квартира" name="apartment" />
       </div>
     </div>
   </div>

@@ -183,13 +183,6 @@ export const useCartStore = defineStore('cart', {
           apartment: ''
         }
       }
-
-      if (type === DeliveryType.SAVED_ADDRESS) {
-        this.addressForm = {
-          deliveryType: DeliveryType.SAVED_ADDRESS,
-          phone: this.addressForm.phone
-        }
-      }
     },
 
     updateAddressForm(payload: Partial<AddressForm>) {
