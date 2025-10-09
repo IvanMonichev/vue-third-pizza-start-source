@@ -106,23 +106,6 @@ export const usePizzaStore = defineStore('pizza', {
       }
     },
 
-    // Добавить или обновить ингредиент (если quantity > 0)
-    addIngredient(ingredient: IngredientPizza) {
-      const index = this.ingredients.findIndex((i) => i.id === ingredient.id)
-      if (ingredient.quantity <= 0) {
-        if (index !== -1) {
-          this.ingredients.splice(index, 1)
-        }
-        return
-      }
-
-      if (index === -1) {
-        this.ingredients.push(ingredient)
-      } else {
-        this.ingredients[index] = ingredient
-      }
-    },
-
     toCartPizza(): PizzaCart {
       return {
         pizzaId: this.pizzaId ?? crypto.randomUUID(),
