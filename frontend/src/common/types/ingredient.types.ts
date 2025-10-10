@@ -14,6 +14,7 @@ export interface IngredientOrderResponse {
 
 export interface Ingredient extends IngredientResponse {
   className: string
+  quantity: number
 }
 
 export interface IngredientPizza extends Pick<IngredientResponse, 'id'> {

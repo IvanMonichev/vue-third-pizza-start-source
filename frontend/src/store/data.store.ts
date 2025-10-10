@@ -4,7 +4,7 @@ import {
 } from '@/common/constants/mappers.constants'
 import { Dough, DoughResponse } from '@/common/types/dough.types'
 import { Ingredient, IngredientResponse } from '@/common/types/ingredient.types'
-import { MiscResponse } from '@/common/types/misc.types'
+import { Misc, MiscResponse } from '@/common/types/misc.types'
 import { Sauce, SauceResponse } from '@/common/types/sauce.types'
 import { Size } from '@/common/types/size.types'
 import { defineStore } from 'pinia'
@@ -14,7 +14,7 @@ interface DataState {
   sauces: Sauce[]
   sizes: Size[]
   ingredients: Ingredient[]
-  miscList: MiscResponse[]
+  miscList: Misc[]
 }
 
 export const useDataStore = defineStore('data', {
@@ -67,13 +67,14 @@ export const useDataStore = defineStore('data', {
 
         return {
           ...i,
-          className
+          className,
+          quantity: 0
         }
       })
     },
 
     buildMisc(miscDto: MiscResponse[]) {
-      this.miscList = miscDto
+      this.miscList = miscDto.map((m) => ({ ...m, quantity: 0 }))
     }
   }
 })

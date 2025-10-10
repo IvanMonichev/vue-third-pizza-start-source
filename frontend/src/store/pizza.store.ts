@@ -1,5 +1,6 @@
-import { IngredientPizza } from '@/common/types/ingredient.types'
-import { PizzaCart } from '@/common/types/pizza.types'
+import { Ingredient, IngredientPizza } from '@/common/types/ingredient.types'
+import { Pizza } from '@/common/types/pizza.types'
+import { calculatePizzaPrice } from '@/common/utils/price.utils'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
 
@@ -55,13 +56,22 @@ export const usePizzaStore = defineStore('pizza', {
 
       if (!dough || !sauce || !size) return 0
 
-      const basePrice = dough.price + sauce.price
-      const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
-        const ingredient = dataStore.dataById('ingredients', ing.id)
-        return acc + (ingredient ? ingredient.price * ing.quantity : 0)
-      }, 0)
+      const ingredients = state.ingredients
+        .map((i) => {
+          const dataIngredient = dataStore.dataById('ingredients', i.id)
 
-      return size.multiplier * (basePrice + ingredientsPrice)
+          return dataIngredient
+            ? { ...dataIngredient, quantity: i.quantity }
+            : null
+        })
+        .filter((i): i is Ingredient => Boolean(i))
+
+      return calculatePizzaPrice(
+        dough.price,
+        sauce.price,
+        size.multiplier,
+        ingredients
+      )
     }
   },
   actions: {
@@ -106,7 +116,7 @@ export const usePizzaStore = defineStore('pizza', {
       }
     },
 
-    toCartPizza(): PizzaCart {
+    toCartPizza(): Pizza {
       return {
         pizzaId: this.pizzaId ?? crypto.randomUUID(),
         name: this.pizzaName,
@@ -119,7 +129,7 @@ export const usePizzaStore = defineStore('pizza', {
       }
     },
 
-    loadFromCartPizza(cartPizza: PizzaCart) {
+    loadFromCartPizza(cartPizza: Pizza) {
       this.pizzaId = cartPizza.pizzaId
       this.pizzaName = cartPizza.name
       this.doughId = cartPizza.doughId

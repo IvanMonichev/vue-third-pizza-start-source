@@ -2,13 +2,13 @@
 import AppButtonLink from '@/common/components/app-button-link.vue'
 import AppCounter from '@/common/components/app-counter.vue'
 import { doughCartMap } from '@/common/constants/mappers.constants'
-import { PizzaCart } from '@/common/types/pizza.types'
+import { Pizza } from '@/common/types/pizza.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore, useDataStore } from '@/store'
 import { computed } from 'vue'
 
 interface Props {
-  pizza: PizzaCart
+  pizza: Pizza
 }
 
 const dataStore = useDataStore()

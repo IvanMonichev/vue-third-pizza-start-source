@@ -3,7 +3,7 @@ import {
   AddressResponse
 } from '@/common/types/address.types'
 import {
-  MiscOrder,
+  Misc,
   MiscOrderCreate,
   MiscOrderResponse
 } from '@/common/types/misc.types'
@@ -27,7 +27,7 @@ export interface Order {
   name: string
   price: number
   pizza: PizzaOrder
-  misc: MiscOrder
+  misc: Misc
   address: AddressResponse
 }
 

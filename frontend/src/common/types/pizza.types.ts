@@ -23,11 +23,10 @@ export interface PizzaOrder extends Pick<PizzaOrderResponse, 'id' | 'name'> {
   sauce: SauceResponse
   dough: DoughResponse
   size: Size
-  ingredients: Ingredient
+  ingredients: Ingredient[]
 }
 
-export interface PizzaCart
-  extends Pick<PizzaOrderResponse, 'name' | 'quantity'> {
+export interface Pizza extends Pick<PizzaOrderResponse, 'name' | 'quantity'> {
   pizzaId: string
   sauceId: number
   doughId: number
@@ -37,7 +36,7 @@ export interface PizzaCart
 }
 
 export type PizzaOrderCreate = Omit<
-  PizzaCart,
+  Pizza,
   'pizzaId' | 'price' | 'ingredients'
 > & {
   ingredients: IngredientPizzaCreate[]

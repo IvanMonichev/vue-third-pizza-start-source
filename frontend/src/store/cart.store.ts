@@ -1,10 +1,11 @@
-import { MiscCart } from '@/common/types/misc.types'
-import { PizzaCart } from '@/common/types/pizza.types'
+import { Misc, MiscCart } from '@/common/types/misc.types'
+import { Pizza } from '@/common/types/pizza.types'
+import { calculateOrderTotal } from '@/common/utils/price.utils'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
 
 interface CartState {
-  pizzas: PizzaCart[]
+  pizzas: Pizza[]
   miscCartList: MiscCart[]
   isOrderSuccess: boolean
 }
@@ -36,19 +37,14 @@ export const useCartStore = defineStore('cart', {
     orderTotalPrice: (state): number => {
       const dataStore = useDataStore()
 
-      // Общая цена всех пицц
-      const pizzasTotalPrice = state.pizzas.reduce(
-        (acc, pizza) => acc + pizza.price * pizza.quantity,
-        0
-      )
+      const miscList: Misc[] = state.miscCartList
+        .map((m) => {
+          const miscData = dataStore.miscList.find((md) => md.id === m.id)
+          return miscData ? { ...miscData, quantity: m.quantity } : null
+        })
+        .filter((m): m is Misc => Boolean(m))
 
-      // Общая цена всех доп. продуктов
-      const miscListTotalPrice = state.miscCartList.reduce((acc, miscCart) => {
-        const miscData = dataStore.miscList.find((m) => m.id === miscCart.id)
-        return acc + (miscData ? miscCart.quantity * miscData.price : 0)
-      }, 0)
-
-      return pizzasTotalPrice + miscListTotalPrice
+      return calculateOrderTotal(state.pizzas, miscList)
     },
 
     pizzaById: (state) => {
@@ -59,7 +55,7 @@ export const useCartStore = defineStore('cart', {
     }
   },
   actions: {
-    savePizza(pizza: PizzaCart) {
+    savePizza(pizza: Pizza) {
       const index = this.pizzas.findIndex((p) => p.pizzaId === pizza.pizzaId)
 
       if (index === -1) {

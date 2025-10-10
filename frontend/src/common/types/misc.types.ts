@@ -12,7 +12,7 @@ export interface MiscOrderResponse {
   quantity: number
 }
 
-export interface MiscOrder {
+export interface Misc {
   id: number
   name: string
   price: number
