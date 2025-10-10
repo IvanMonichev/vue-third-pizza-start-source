@@ -16,12 +16,6 @@ export const useCartStore = defineStore('cart', {
     isOrderSuccess: true
   }),
   getters: {
-    pizzasPrice: (state): number =>
-      state.pizzas.reduce(
-        (acc, pizza) => acc + pizza.price * pizza.quantity,
-        0
-      ),
-
     pizzaTotalPrice: (state) => {
       return (pizzaId: string) => {
         const pizza = state.pizzas.find((p) => p.pizzaId === pizzaId)

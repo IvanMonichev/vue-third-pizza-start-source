@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppButton from '@/common/components/app-button.vue'
-import { MiscView } from '@/common/types/order.types'
 import OrderAdditional from '@/modules/order/order-additional.vue'
 import OrderListItem from '@/modules/order/order-list-item.vue'
 import OrderList from '@/modules/order/order-list.vue'
@@ -8,8 +7,15 @@ import productImg from '@/assets/img/product.svg'
 import colaImg from '@/assets/img/cola.svg'
 import sauceImg from '@/assets/img/sauce.svg'
 import potatoImg from '@/assets/img/potato.svg'
+import { Order } from '@/common/types/order.types'
 
-const additionalItems: MiscView[] = [
+interface Props {
+  order: Order
+}
+
+const { order } = defineProps<Props>()
+
+const additionalItems = [
   {
     name: 'Coca-Cola 0,5 литра',
     price: 56,
