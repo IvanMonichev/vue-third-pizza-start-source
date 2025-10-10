@@ -1,28 +1,15 @@
 <script setup lang="ts">
-import { useIngredientsQuery } from '@/api/ingredients.api'
-import { useSaucesQuery } from '@/api/sauces.api'
 import AppRadioGroup from '@/common/components/app-radio-group.vue'
 import { Option } from '@/common/types/core.types'
 import IngredientsList from '@/modules/constructor/ingredients-list.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 
 const pizzaStore = usePizzaStore()
 const dataStore = useDataStore()
 const { sauceId } = storeToRefs(pizzaStore)
-
-const { data: ingredients } = useIngredientsQuery()
-const { data: sauces } = useSaucesQuery()
-
-watch(ingredients, (data) => {
-  if (data) dataStore.buildIngredients(data)
-})
-
-watch(sauces, (data) => {
-  if (data) dataStore.buildSauces(data)
-})
 
 const saucesOptions = computed<Option[]>(() =>
   dataStore.sauces.map((s) => ({

@@ -1,23 +1,18 @@
 <script setup lang="ts">
-import { useAddressesQuery } from '@/api/addresses.api'
 import AppButton from '@/common/components/app-button.vue'
 import AppTitle from '@/common/components/app-title.vue'
 import ProfileAddress from '@/modules/user-data/profile-address.vue'
 import UserData from '@/modules/user-data/user-data.vue'
-import { useProfileStore } from '@/store'
-import { watchEffect } from 'vue'
+import { useAddressStore, useProfileStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
-const { data: addresses } = useAddressesQuery()
+const addressStore = useAddressStore()
 const profileStore = useProfileStore()
-
-watchEffect(() => {
-  if (addresses.value) {
-    profileStore.buildAddresses(addresses.value)
-  }
-})
+const { userId } = storeToRefs(profileStore)
 
 const handleAddAddress = () => {
-  profileStore.addNewAddress()
+  if (!userId.value) return
+  addressStore.addNewAddress(userId.value)
 }
 </script>
 
@@ -29,7 +24,7 @@ const handleAddAddress = () => {
   <UserData />
 
   <ProfileAddress
-    v-for="address in profileStore.addresses"
+    v-for="address in addressStore.addressesFull"
     :key="address.id"
     :address="address"
   />

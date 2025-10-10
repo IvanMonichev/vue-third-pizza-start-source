@@ -8,14 +8,14 @@ import AppButtonIcon from '@/common/components/app-button-icon.vue'
 import AppButton from '@/common/components/app-button.vue'
 import AppFormInput from '@/common/components/app-form-input.vue'
 import { AddressMode } from '@/common/enums/address-mode.enum'
-import { AddressProfile } from '@/common/types/address.types'
-import { useProfileStore } from '@/store'
+import { Address } from '@/common/types/address.types'
+import { useAddressStore, useProfileStore } from '@/store'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { object, string } from 'yup'
 
 interface Props {
-  address: AddressProfile
+  address: Address
 }
 
 interface ProfileForm {
@@ -29,7 +29,10 @@ interface ProfileForm {
 const createAddress = useCreateAddressMutation()
 const deleteAddress = useDeleteAddressMutation()
 const updateAddress = useUpdateAddressMutation()
+
 const profileStore = useProfileStore()
+const addressStore = useAddressStore()
+
 const { address } = defineProps<Props>()
 const isEditMode = computed(() => address.addressMode === AddressMode.EDIT)
 const isAddMode = computed(() => address.addressMode === AddressMode.ADD)
@@ -77,12 +80,12 @@ const onSubmit = handleSubmit(async (values) => {
 const handleViewMode = () => {
   if (!isEditMode.value) return
   if (typeof address.id !== 'number') return
-  profileStore.setAddressMode(address.id, AddressMode.VIEW)
+  addressStore.setAddressMode(address.id, AddressMode.VIEW)
 }
 
 const handleDelete = async () => {
   if (isAddMode.value && typeof address.id === 'string') {
-    profileStore.removeAddress(address.id)
+    addressStore.removeAddress(address.id)
     return
   }
 

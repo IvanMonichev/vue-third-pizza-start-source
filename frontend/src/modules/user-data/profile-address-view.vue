@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import AppButtonIcon from '@/common/components/app-button-icon.vue'
 import { AddressMode } from '@/common/enums/address-mode.enum'
-import { AddressProfile } from '@/common/types/address.types'
-import { useProfileStore } from '@/store'
+import { Address } from '@/common/types/address.types'
+import { useAddressStore } from '@/store'
 import { computed } from 'vue'
 
 interface Props {
-  address: AddressProfile
+  address: Address
 }
 
 const { address } = defineProps<Props>()
-const profileStore = useProfileStore()
+
+const addressStore = useAddressStore()
 
 const fullAddress = computed(() => {
   const parts = [address.street, address.building]
@@ -20,7 +21,7 @@ const fullAddress = computed(() => {
 
 const handleEdit = () => {
   if (typeof address.id !== 'number') return
-  profileStore.setAddressMode(address.id, AddressMode.EDIT)
+  addressStore.setAddressMode(address.id, AddressMode.EDIT)
 }
 </script>
 

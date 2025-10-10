@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAddressesQuery } from '@/api/addresses.api'
 import { useCreateOrderMutation } from '@/api/orders.api'
 import AppTitle from '@/common/components/app-title.vue'
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
@@ -10,19 +9,19 @@ import CartFooter from '@/modules/cart/cart-footer.vue'
 import CartForm from '@/modules/cart/cart-form.vue'
 import CartMiscList from '@/modules/cart/cart-misc-list.vue'
 import CartPizzas from '@/modules/cart/cart-pizzas.vue'
-import { useCartStore, useProfileStore } from '@/store'
+import { useAddressStore, useCartStore, useProfileStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
 
-const { data: addresses } = useAddressesQuery()
 const createOrder = useCreateOrderMutation()
 
 const router = useRouter()
 const cartStore = useCartStore()
 const profileStore = useProfileStore()
+const addressStore = useAddressStore()
 
 const { orderTotalPrice } = storeToRefs(cartStore)
 const selectedAddress = ref<Address | null>(null)
@@ -134,7 +133,7 @@ const onSubmit = handleSubmit(async (values) => {
 
           <div class="cart__form">
             <CartForm
-              :addresses="addresses"
+              :addresses="addressStore.addressesWithoutAddMode"
               @select-address="handleAddressSelect"
             />
           </div>

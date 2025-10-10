@@ -1,17 +1,13 @@
-import { AddressMode } from '@/common/enums/address-mode.enum'
-import { Address, AddressProfile } from '@/common/types/address.types'
 import { User } from '@/common/types/user.types'
 import { defineStore } from 'pinia'
 
 interface ProfileState {
   user: User | null
-  addresses: AddressProfile[]
 }
 
 export const useProfileStore = defineStore('profile', {
   state: (): ProfileState => ({
-    user: null,
-    addresses: []
+    user: null
   }),
   getters: {
     userId: (state) => state.user?.id,
@@ -44,52 +40,6 @@ export const useProfileStore = defineStore('profile', {
   actions: {
     setUser(user: User | null) {
       this.user = user
-    },
-
-    clearProfile() {
-      this.user = null
-      this.addresses = []
-    },
-
-    buildAddresses(addresses: Address[]) {
-      const userAddresses = addresses.filter((a) => a.userId === this.user?.id)
-      this.addresses = userAddresses.map((a) => {
-        return {
-          ...a,
-          addressMode: AddressMode.VIEW
-        }
-      })
-    },
-
-    setAddressMode(addressId: number, mode: AddressMode) {
-      this.addresses = this.addresses.map((a) => ({
-        ...a,
-        addressMode: a.id === addressId ? mode : a.addressMode
-      }))
-    },
-
-    addNewAddress() {
-      if (!this.userId) return
-      const hasNewAddress = this.addresses.some(
-        (a) => a.addressMode === AddressMode.ADD
-      )
-
-      if (hasNewAddress) return
-
-      const address: AddressProfile = {
-        id: 'new-address',
-        name: '',
-        userId: this.userId,
-        flat: '',
-        addressMode: AddressMode.ADD,
-        building: '',
-        street: ''
-      }
-      this.addresses.push(address)
-    },
-
-    removeAddress(addressId: string) {
-      this.addresses = this.addresses.filter((i) => i.id !== addressId)
     }
   }
 })
