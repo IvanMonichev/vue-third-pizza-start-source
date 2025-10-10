@@ -1,19 +1,21 @@
 <script setup lang="ts">
+import colaImg from '@/assets/img/cola.svg'
+import potatoImg from '@/assets/img/potato.svg'
+import productImg from '@/assets/img/product.svg'
+import sauceImg from '@/assets/img/sauce.svg'
 import AppButton from '@/common/components/app-button.vue'
+import { Order } from '@/common/types/order.types'
 import OrderAdditional from '@/modules/order/order-additional.vue'
 import OrderListItem from '@/modules/order/order-list-item.vue'
 import OrderList from '@/modules/order/order-list.vue'
-import productImg from '@/assets/img/product.svg'
-import colaImg from '@/assets/img/cola.svg'
-import sauceImg from '@/assets/img/sauce.svg'
-import potatoImg from '@/assets/img/potato.svg'
-import { Order } from '@/common/types/order.types'
 
 interface Props {
   order: Order
 }
 
 const { order } = defineProps<Props>()
+
+console.log('order', order)
 
 const additionalItems = [
   {

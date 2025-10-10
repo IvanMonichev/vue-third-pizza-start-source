@@ -6,7 +6,12 @@ import { useOrdersQuery } from '@/api/orders.api'
 import { useSaucesQuery } from '@/api/sauces.api'
 import { useSizesQuery } from '@/api/sizes.api'
 import AppLayout from '@/layouts/app-layout.vue'
-import { useAddressStore, useDataStore, useProfileStore } from '@/store'
+import {
+  useAddressStore,
+  useDataStore,
+  useOrdersStore,
+  useProfileStore
+} from '@/store'
 import { useAuthStore } from '@/store/auth.store'
 import { computed, watch, watchEffect } from 'vue'
 import { useAuthUser } from './api/auth.api'
@@ -16,6 +21,7 @@ const authStore = useAuthStore()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 const addressStore = useAddressStore()
+const ordersStore = useOrdersStore()
 
 // --- Пользователь
 const { data: user, isLoading, isError } = useAuthUser()
@@ -49,6 +55,10 @@ watchEffect(() => {
   if (user.value) {
     if (addresses.value) {
       addressStore.buildAddresses(addresses.value, user.value.id)
+    }
+
+    if (orders.value) {
+      ordersStore.buildOrders(orders.value, user.value.id)
     }
   }
 })

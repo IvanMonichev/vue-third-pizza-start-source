@@ -16,14 +16,18 @@ export interface PizzaOrderResponse {
   sizeId: number
   quantity: number
   orderId: number
-  ingredients: IngredientOrderResponse[]
+  ingredients?: IngredientOrderResponse[]
 }
 
-export interface PizzaOrder extends Pick<PizzaOrderResponse, 'id' | 'name'> {
+export interface PizzaOrder {
+  id: number
+  name: string
   sauce: SauceResponse
   dough: DoughResponse
   size: Size
   ingredients: Ingredient[]
+  price: number
+  quantity: number
 }
 
 export interface Pizza extends Pick<PizzaOrderResponse, 'name' | 'quantity'> {

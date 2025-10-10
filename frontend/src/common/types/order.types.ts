@@ -17,8 +17,8 @@ export interface OrderResponse {
   id: number
   userId: string
   addressId: number
-  orderPizzas: PizzaOrderResponse[]
-  orderMisc: MiscOrderResponse[]
+  orderPizzas?: PizzaOrderResponse[]
+  orderMisc?: MiscOrderResponse[]
   orderAddress: AddressResponse
 }
 
@@ -26,8 +26,8 @@ export interface Order {
   id: number
   name: string
   price: number
-  pizza: PizzaOrder
-  misc: Misc
+  pizzas: PizzaOrder[]
+  miscList: Misc[]
   address: AddressResponse
 }
 

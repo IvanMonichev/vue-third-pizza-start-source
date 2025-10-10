@@ -22,8 +22,6 @@ const handleDropIngredient = (payload: unknown) => {
 const { pizzaPrice, pizzaName, dough, sauce, selectedIngredients } =
   storeToRefs(pizzaStore)
 
-console.log('selectedIngredients', selectedIngredients.value)
-
 const handleAddPizza = () => {
   try {
     const pizza = pizzaStore.toCartPizza()
