@@ -2,19 +2,19 @@ import {
   doughClassMap,
   saucesClassMap
 } from '@/common/constants/mappers.constants'
-import { Dough, DoughUi } from '@/common/types/dough.types'
-import { Ingredient, IngredientUi } from '@/common/types/ingredient.types'
-import { Misc } from '@/common/types/misc.types'
-import { Sauce, SauceUi } from '@/common/types/sauce.types'
+import { Dough, DoughResponse } from '@/common/types/dough.types'
+import { Ingredient, IngredientResponse } from '@/common/types/ingredient.types'
+import { MiscResponse } from '@/common/types/misc.types'
+import { Sauce, SauceResponse } from '@/common/types/sauce.types'
 import { Size } from '@/common/types/size.types'
 import { defineStore } from 'pinia'
 
 interface DataState {
-  doughList: DoughUi[]
-  sauces: SauceUi[]
+  doughList: Dough[]
+  sauces: Sauce[]
   sizes: Size[]
-  ingredients: IngredientUi[]
-  miscList: Misc[]
+  ingredients: Ingredient[]
+  miscList: MiscResponse[]
 }
 
 export const useDataStore = defineStore('data', {
@@ -37,14 +37,14 @@ export const useDataStore = defineStore('data', {
       }
   },
   actions: {
-    buildDough(doughDto: Dough[]) {
+    buildDough(doughDto: DoughResponse[]) {
       this.doughList = doughDto.map((d) => ({
         ...d,
         className: doughClassMap[d.id]
       }))
     },
 
-    buildSauces(saucesDto: Sauce[]) {
+    buildSauces(saucesDto: SauceResponse[]) {
       this.sauces = saucesDto.map((s) => ({
         ...s,
         className: saucesClassMap[s.id]
@@ -55,7 +55,7 @@ export const useDataStore = defineStore('data', {
       this.sizes = sizesDto
     },
 
-    buildIngredients(ingredientsDto: Ingredient[]) {
+    buildIngredients(ingredientsDto: IngredientResponse[]) {
       this.ingredients = ingredientsDto.map((i) => {
         // Получаем имя ингредиента без расширения
         const className =
@@ -72,7 +72,7 @@ export const useDataStore = defineStore('data', {
       })
     },
 
-    buildMisc(miscDto: Misc[]) {
+    buildMisc(miscDto: MiscResponse[]) {
       this.miscList = miscDto
     }
   }

@@ -1,13 +1,14 @@
+import { DoughResponse } from '@/common/types/dough.types'
 import {
   Ingredient,
+  IngredientOrderResponse,
   IngredientPizza,
   IngredientPizzaCreate
 } from '@/common/types/ingredient.types'
-import { Sauce } from '@/common/types/sauce.types'
-import { Dough } from '@/common/types/dough.types'
+import { SauceResponse } from '@/common/types/sauce.types'
 import { Size } from '@/common/types/size.types'
 
-export interface PizzaOrder {
+export interface PizzaOrderResponse {
   id: number
   name: string
   sauceId: number
@@ -15,16 +16,18 @@ export interface PizzaOrder {
   sizeId: number
   quantity: number
   orderId: number
-  ingredients: Ingredient[]
+  ingredients: IngredientOrderResponse[]
 }
 
-export interface PizzaOrderUi extends Pick<PizzaOrder, 'id' | 'name'> {
-  sauce: Sauce
-  dough: Dough
+export interface PizzaOrder extends Pick<PizzaOrderResponse, 'id' | 'name'> {
+  sauce: SauceResponse
+  dough: DoughResponse
   size: Size
+  ingredients: Ingredient
 }
 
-export interface PizzaCart extends Pick<PizzaOrder, 'name' | 'quantity'> {
+export interface PizzaCart
+  extends Pick<PizzaOrderResponse, 'name' | 'quantity'> {
   pizzaId: string
   sauceId: number
   doughId: number

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
-import { Misc } from '@/common/types/misc.types'
+import { MiscResponse } from '@/common/types/misc.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore } from '@/store'
 import { computed } from 'vue'
 
 interface Props {
-  misc: Misc
+  misc: MiscResponse
 }
 
 const cartStore = useCartStore()

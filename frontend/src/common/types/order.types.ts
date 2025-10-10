@@ -1,19 +1,34 @@
-import { Address, AddressOrderCreate } from '@/common/types/address.types'
-import { MiscOrder, MiscOrderCreate } from '@/common/types/misc.types'
-import { PizzaOrder, PizzaOrderCreate } from '@/common/types/pizza.types'
+import {
+  AddressOrderCreate,
+  AddressResponse
+} from '@/common/types/address.types'
+import {
+  MiscOrder,
+  MiscOrderCreate,
+  MiscOrderResponse
+} from '@/common/types/misc.types'
+import {
+  PizzaOrder,
+  PizzaOrderCreate,
+  PizzaOrderResponse
+} from '@/common/types/pizza.types'
 
-export interface Order {
+export interface OrderResponse {
   id: number
   userId: string
   addressId: number
-  orderPizzas: PizzaOrder[]
-  orderMisc: MiscOrder[]
-  orderAddress: Address
+  orderPizzas: PizzaOrderResponse[]
+  orderMisc: MiscOrderResponse[]
+  orderAddress: AddressResponse
 }
 
-export interface OrderUi extends Order {
+export interface Order {
+  id: number
   name: string
   price: number
+  pizza: PizzaOrder
+  misc: MiscOrder
+  address: AddressResponse
 }
 
 export interface OrderCreate {

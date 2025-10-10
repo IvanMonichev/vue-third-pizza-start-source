@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { AddressProfile } from '@/common/types/address.types'
-import ProfileAddressView from '@/modules/user-data/profile-address-view.vue'
 import { AddressMode } from '@/common/enums/address-mode.enum'
+import { Address } from '@/common/types/address.types'
 import ProfileAddressForm from '@/modules/user-data/profile-address-form.vue'
+import ProfileAddressView from '@/modules/user-data/profile-address-view.vue'
+import { computed } from 'vue'
 
 interface Props {
-  address: AddressProfile
+  address: Address
 }
 
 const { address } = defineProps<Props>()

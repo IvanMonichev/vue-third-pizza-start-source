@@ -1,6 +1,6 @@
 import { AddressMode } from '@/common/enums/address-mode.enum'
 
-export interface Address {
+export interface AddressResponse {
   id: number
   name: string
   userId: string
@@ -10,12 +10,12 @@ export interface Address {
   comment?: string
 }
 
-export type AddressCreate = Omit<Address, 'id'>
-export type AddressUpdate = Address
+export type AddressCreate = Omit<AddressResponse, 'id'>
+export type AddressUpdate = AddressResponse
 
-export type AddressOrderCreate = Omit<Address, 'id' | 'name' | 'userId'>
+export type AddressOrderCreate = Omit<AddressResponse, 'id' | 'name' | 'userId'>
 
-export interface AddressProfile extends Omit<Address, 'id'> {
+export interface Address extends Omit<AddressResponse, 'id'> {
   id: string | number
   addressMode: AddressMode
 }
