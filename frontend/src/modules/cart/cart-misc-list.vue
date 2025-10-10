@@ -2,17 +2,9 @@
 import { MiscCart } from '@/common/types/misc.types'
 import CartMiscListItem from '@/modules/cart/cart-misc-list-item.vue'
 import { useCartStore, useDataStore } from '@/store'
-import { watch } from 'vue'
-import { useMiscQuery } from '@/api/misc.api'
 
 const dataStore = useDataStore()
 const cartStore = useCartStore()
-const { data: misc } = useMiscQuery()
-
-watch(misc, (data) => {
-  if (!data) return
-  dataStore.buildMisc(data)
-})
 
 const handleIncrement = (misc: MiscCart) => {
   cartStore.setMisc({ ...misc, quantity: misc.quantity + 1 })

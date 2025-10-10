@@ -30,7 +30,7 @@ export const useOrdersStore = defineStore('orders', {
       this.orders = userOrders.map((order) => {
         const pizzas: PizzaOrder[] =
           order.orderPizzas
-            .map((p): PizzaOrder | null => {
+            ?.map((p): PizzaOrder | null => {
               const sauce = dataStore.dataById('sauces', p.sauceId)
               const dough = dataStore.dataById('doughList', p.doughId)
               const size = dataStore.dataById('sizes', p.sizeId)

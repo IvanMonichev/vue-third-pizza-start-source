@@ -1,6 +1,5 @@
 import { authService } from '@/services/resources/auth.service'
 import { tokenManager } from '@/services/token-manager'
-import { useProfileStore } from '@/store'
 import { useAuthStore } from '@/store/auth.store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 
@@ -16,7 +15,6 @@ export const useAuthUser = () => {
 
 export const useLogin = () => {
   const authStore = useAuthStore()
-  const profileStore = useProfileStore()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -29,11 +27,7 @@ export const useLogin = () => {
     onSuccess: async (response) => {
       tokenManager.set(response.token)
 
-      const user = await authService.whoAmI()
-
-      profileStore.setUser(user)
-      authStore.setAuth({ token: response.token })
-
+      await queryClient.invalidateQueries({ queryKey: ['auth'] })
       await queryClient.invalidateQueries({ queryKey: ['addresses'] })
       await queryClient.invalidateQueries({ queryKey: ['orders'] })
     },

@@ -2,6 +2,7 @@
 import { useAddressesQuery } from '@/api/addresses.api'
 import { useDoughQuery } from '@/api/dough.api'
 import { useIngredientsQuery } from '@/api/ingredients.api'
+import { useMiscQuery } from '@/api/misc.api'
 import { useOrdersQuery } from '@/api/orders.api'
 import { useSaucesQuery } from '@/api/sauces.api'
 import { useSizesQuery } from '@/api/sizes.api'
@@ -31,6 +32,7 @@ const { data: dough } = useDoughQuery()
 const { data: sizes } = useSizesQuery()
 const { data: ingredients } = useIngredientsQuery()
 const { data: sauces } = useSaucesQuery()
+const { data: misc } = useMiscQuery()
 
 const isUserReady = computed(() => !!user.value?.id)
 // --- Адреса и заказы только если юзер есть
@@ -51,6 +53,7 @@ watchEffect(() => {
   if (sauces.value) dataStore.buildSauces(sauces.value)
   if (sizes.value) dataStore.buildSizes(sizes.value)
   if (ingredients.value) dataStore.buildIngredients(ingredients.value)
+  if (misc.value) dataStore.buildMisc(misc.value)
 
   if (user.value) {
     if (addresses.value) {

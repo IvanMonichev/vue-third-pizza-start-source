@@ -16,7 +16,7 @@ import {
 export interface OrderResponse {
   id: number
   userId: string
-  addressId: number
+  addressId: number | null
   orderPizzas?: PizzaOrderResponse[]
   orderMisc?: MiscOrderResponse[]
   orderAddress: AddressResponse
