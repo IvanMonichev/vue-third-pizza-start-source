@@ -67,8 +67,7 @@ export const useDataStore = defineStore('data', {
 
         return {
           ...i,
-          className,
-          quantity: 0
+          className
         }
       })
     },

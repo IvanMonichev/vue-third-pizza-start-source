@@ -18,7 +18,7 @@ const quantityById = (id: number) =>
       :key="ingredient.id"
       class="ingredients__item"
     >
-      <AppDrag :transfer-data="ingredient">
+      <AppDrag :payload="ingredient">
         <div class="filling">
           <img
             :src="ingredient.image"

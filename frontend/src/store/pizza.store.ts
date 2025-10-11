@@ -1,18 +1,9 @@
-import { Ingredient, IngredientPizza } from '@/common/types/ingredient.types'
-import { Pizza } from '@/common/types/pizza.types'
+import { Ingredient } from '@/common/types/ingredient.types'
+import { Pizza, PizzaState } from '@/common/types/pizza.types'
 import { calculatePizzaPrice } from '@/common/utils/price.utils'
 import { useCartStore } from '@/store/cart.store'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
-
-interface PizzaState {
-  pizzaId: string | null
-  pizzaName: string
-  doughId: number
-  sizeId: number
-  sauceId: number
-  ingredients: IngredientPizza[]
-}
 
 export const usePizzaStore = defineStore('pizza', {
   state: (): PizzaState => ({
@@ -117,13 +108,13 @@ export const usePizzaStore = defineStore('pizza', {
       }
     },
 
-    loadFromCartPizza(cartPizza: Pizza) {
-      this.pizzaId = cartPizza.pizzaId
-      this.pizzaName = cartPizza.name
-      this.doughId = cartPizza.doughId
-      this.sauceId = cartPizza.sauceId
-      this.sizeId = cartPizza.sizeId
-      this.ingredients = [...cartPizza.ingredients]
+    setPizza(pizza: PizzaState) {
+      this.pizzaId = pizza.pizzaId
+      this.pizzaName = pizza.pizzaName
+      this.doughId = pizza.doughId
+      this.sauceId = pizza.sauceId
+      this.sizeId = pizza.sizeId
+      this.ingredients = [...pizza.ingredients]
     },
 
     buildPizzaToCart() {

@@ -45,3 +45,12 @@ export type PizzaOrderCreate = Omit<
 > & {
   ingredients: IngredientPizzaCreate[]
 }
+
+export interface PizzaState {
+  pizzaId: string | null
+  pizzaName: string
+  doughId: number
+  sizeId: number
+  sauceId: number
+  ingredients: IngredientPizza[]
+}

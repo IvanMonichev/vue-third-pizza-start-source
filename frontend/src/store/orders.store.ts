@@ -1,5 +1,5 @@
 import { AddressMode } from '@/common/enums/address-mode.enum'
-import { Ingredient } from '@/common/types/ingredient.types'
+import type { Ingredient } from '@/common/types/ingredient.types'
 import type { Misc } from '@/common/types/misc.types'
 import type { Order, OrderResponse } from '@/common/types/order.types'
 import type { PizzaOrder } from '@/common/types/pizza.types'
@@ -31,7 +31,7 @@ export const useOrdersStore = defineStore('orders', {
         .sort((a, b) => b.id - a.id)
       const dataStore = useDataStore()
 
-      this.orders = userOrders.map((order) => {
+      this.orders = userOrders.map<Order>((order) => {
         const pizzas: PizzaOrder[] =
           order.orderPizzas
             ?.map((p): PizzaOrder | null => {
@@ -43,9 +43,16 @@ export const useOrdersStore = defineStore('orders', {
 
               const ingredients =
                 p.ingredients
-                  ?.map((i) =>
-                    dataStore.dataById('ingredients', i.ingredientId)
-                  )
+                  ?.map((i) => {
+                    const dataIngredient = dataStore.dataById(
+                      'ingredients',
+                      i.ingredientId
+                    )
+
+                    return dataIngredient
+                      ? { ...dataIngredient, quantity: i.quantity }
+                      : null
+                  })
                   .filter((i): i is Ingredient => Boolean(i)) ?? []
 
               const price = calculatePizzaPrice(
@@ -87,7 +94,6 @@ export const useOrdersStore = defineStore('orders', {
 
         return {
           id: order.id,
-          addressId: order.addressId,
           name: `Заказ #${order.id}`,
           price: price,
           pizzas: pizzas,

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import AppButtonLink from '@/common/components/app-button-link.vue'
+import AppButton from '@/common/components/app-button.vue'
 import AppCounter from '@/common/components/app-counter.vue'
 import { doughCartMap } from '@/common/constants/mappers.constants'
 import { Pizza } from '@/common/types/pizza.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore, useDataStore } from '@/store'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 interface Props {
   pizza: Pizza
@@ -14,6 +15,7 @@ interface Props {
 const dataStore = useDataStore()
 const cartStore = useCartStore()
 const { pizza } = defineProps<Props>()
+const router = useRouter()
 
 const ingredientsList = computed(() =>
   pizza.ingredients
@@ -25,6 +27,11 @@ const ingredientsList = computed(() =>
 )
 const size = computed(() => dataStore.dataById('sizes', pizza.sizeId))
 const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
+
+const handlePizzaChange = () => {
+  cartStore.buildPizzaToConstructor(pizza.pizzaId)
+  router.push({ name: 'home-view' })
+}
 </script>
 
 <template>
@@ -69,11 +76,8 @@ const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
     </div>
 
     <div class="cart-list__button">
-      <AppButtonLink
-        :to="`/${pizza.pizzaId}`"
-        class-name="cart-list__edit"
-        :variants="['border']"
-        >Изменить</AppButtonLink
+      <AppButton :variant="'text'" @click="handlePizzaChange"
+        >Изменить</AppButton
       >
     </div>
   </li>
@@ -145,29 +149,6 @@ const sauce = computed(() => dataStore.dataById('sauces', pizza.sauceId))
 
   b {
     @include ds-typography.b-s16-h19;
-  }
-}
-
-.cart-list__edit {
-  @include ds-typography.l-s11-h13;
-
-  cursor: pointer;
-  transition: 0.3s;
-
-  border: none;
-  outline: none;
-  background-color: transparent;
-
-  &:hover {
-    color: ds-colors.$green-500;
-  }
-
-  &:active {
-    color: ds-colors.$green-600;
-  }
-
-  &:focus {
-    color: ds-colors.$green-400;
   }
 }
 

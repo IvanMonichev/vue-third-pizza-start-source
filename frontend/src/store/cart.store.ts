@@ -1,8 +1,9 @@
 import { Address } from '@/common/types/address.types'
 import { Misc, MiscCart } from '@/common/types/misc.types'
-import { Pizza } from '@/common/types/pizza.types'
+import { Pizza, PizzaState } from '@/common/types/pizza.types'
 import { calculateOrderTotal } from '@/common/utils/price.utils'
 import { useDataStore } from '@/store/data.store'
+import { usePizzaStore } from '@/store/pizza.store'
 import { defineStore } from 'pinia'
 
 interface CartState {
@@ -153,6 +154,25 @@ export const useCartStore = defineStore('cart', {
 
     setIsOrderSuccess(isOrderSuccess: boolean) {
       this.isOrderSuccess = isOrderSuccess
+    },
+
+    buildPizzaToConstructor(pizzaId: string) {
+      const pizza = this.pizzas.find((p) => p.pizzaId === pizzaId)
+
+      console.log('pizza', pizza)
+      if (!pizza) throw new Error(`Pizza with id ${pizzaId} not found`)
+
+      const pizzaStore = usePizzaStore()
+      const pizzaConstructor: PizzaState = {
+        pizzaId: pizza.pizzaId,
+        doughId: pizza.doughId,
+        sauceId: pizza.sauceId,
+        sizeId: pizza.sizeId,
+        pizzaName: pizza.name,
+        ingredients: pizza.ingredients
+      }
+
+      pizzaStore.setPizza(pizzaConstructor)
     },
 
     resetStore() {
