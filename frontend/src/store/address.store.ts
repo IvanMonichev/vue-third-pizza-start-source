@@ -16,7 +16,11 @@ export const useAddressStore = defineStore('address', {
       return state.addresses.filter((a) => a.addressMode !== AddressMode.ADD)
     },
 
-    addressesFull: (state) => state.addresses
+    addressesFull: (state) => state.addresses,
+
+    addressById: (state) => (id: number) => {
+      return state.addresses.find((a) => a.id === id)
+    }
   },
 
   actions: {

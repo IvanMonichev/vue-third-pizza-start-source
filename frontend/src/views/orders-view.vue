@@ -13,7 +13,6 @@ const { ordersList } = storeToRefs(useOrdersStore())
   </div>
 
   <OrderSheet v-for="order in ordersList" :key="order.id" :order="order" />
-  <!--  <OrderSheet />-->
 </template>
 
 <style scoped lang="scss">

@@ -24,7 +24,9 @@ export const useOrdersStore = defineStore('orders', {
 
   actions: {
     buildOrders(orderResponses: OrderResponse[], userId: string) {
-      const userOrders = orderResponses.filter((o) => o.userId === userId)
+      const userOrders = orderResponses
+        .filter((o) => o.userId === userId)
+        .sort((a, b) => b.id - a.id)
       const dataStore = useDataStore()
 
       this.orders = userOrders.map((order) => {
@@ -88,7 +90,7 @@ export const useOrdersStore = defineStore('orders', {
           price: price,
           pizzas: pizzas,
           miscList: misc,
-          address: order.orderAddress
+          address: order.orderAddress ?? null
         }
       })
     },

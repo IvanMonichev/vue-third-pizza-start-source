@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import AppButton from '@/common/components/app-button.vue'
 import { Order } from '@/common/types/order.types'
+import { buildFullAddress } from '@/common/utils/address.utils'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import OrderAdditional from '@/modules/order/order-additional.vue'
 import OrderListItem from '@/modules/order/order-list-item.vue'
 import OrderList from '@/modules/order/order-list.vue'
+import { computed } from 'vue'
 
 interface Props {
   order: Order
@@ -12,6 +14,11 @@ interface Props {
 
 const { order } = defineProps<Props>()
 
+const adressContent = computed(() => {
+  if (!order.address) return null
+
+  return buildFullAddress(order.address)
+})
 console.log('order', order)
 </script>
 
@@ -47,8 +54,8 @@ console.log('order', order)
 
     <OrderAdditional :misc-list="order.miscList" />
 
-    <p class="order__address">
-      Адрес доставки: Тест (или если адрес новый - писать целиком)
+    <p v-if="adressContent" class="order__address">
+      Адрес доставки: {{ adressContent }}
     </p>
   </section>
 </template>

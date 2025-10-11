@@ -2,6 +2,7 @@
 import AppButtonIcon from '@/common/components/app-button-icon.vue'
 import { AddressMode } from '@/common/enums/address-mode.enum'
 import { Address } from '@/common/types/address.types'
+import { buildFullAddress } from '@/common/utils/address.utils'
 import { useAddressStore } from '@/store'
 import { computed } from 'vue'
 
@@ -14,9 +15,7 @@ const { address } = defineProps<Props>()
 const addressStore = useAddressStore()
 
 const fullAddress = computed(() => {
-  const parts = [address.street, address.building]
-  if (address?.flat) parts.push(address.flat)
-  return parts.join(', ')
+  return buildFullAddress(address)
 })
 
 const handleEdit = () => {

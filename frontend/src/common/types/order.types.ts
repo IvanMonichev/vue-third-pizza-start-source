@@ -28,7 +28,7 @@ export interface Order {
   price: number
   pizzas: PizzaOrder[]
   miscList: Misc[]
-  address: AddressResponse
+  address: AddressResponse | null
 }
 
 export interface OrderCreate {
