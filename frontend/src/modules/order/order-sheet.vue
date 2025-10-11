@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDeleteOrderMutation } from '@/api/orders.api'
 import AppButton from '@/common/components/app-button.vue'
 import { Order } from '@/common/types/order.types'
 import { buildFullAddress } from '@/common/utils/address.utils'
@@ -6,20 +7,38 @@ import { AppConfig } from '@/modules/cart/config/app.config'
 import OrderAdditional from '@/modules/order/order-additional.vue'
 import OrderListItem from '@/modules/order/order-list-item.vue'
 import OrderList from '@/modules/order/order-list.vue'
+import { useOrdersStore } from '@/store'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 interface Props {
   order: Order
 }
 
 const { order } = defineProps<Props>()
+const { buildOrderToCart } = useOrdersStore()
+const router = useRouter()
 
-const adressContent = computed(() => {
+const deleteOrder = useDeleteOrderMutation()
+
+const addressContent = computed(() => {
   if (!order.address) return null
 
   return buildFullAddress(order.address)
 })
-console.log('order', order)
+
+const handleOrderRepeat = () => {
+  buildOrderToCart(order.id)
+  router.push({ name: 'cart-view' })
+}
+
+const handleDeleteOrder = async () => {
+  try {
+    await deleteOrder.mutateAsync(order.id)
+  } catch (e) {
+    console.error('Ошибка при удалении заказа:', e)
+  }
+}
 </script>
 
 <template>
@@ -37,10 +56,12 @@ console.log('order', order)
       </div>
 
       <div class="order__button">
-        <AppButton type="button">Удалить</AppButton>
+        <AppButton type="button" @click="handleDeleteOrder">Удалить</AppButton>
       </div>
       <div class="order__button">
-        <AppButton type="button">Повторить</AppButton>
+        <AppButton type="button" @click="handleOrderRepeat"
+          >Повторить</AppButton
+        >
       </div>
     </div>
 
@@ -54,8 +75,8 @@ console.log('order', order)
 
     <OrderAdditional :misc-list="order.miscList" />
 
-    <p v-if="adressContent" class="order__address">
-      Адрес доставки: {{ adressContent }}
+    <p v-if="addressContent" class="order__address">
+      Адрес доставки: {{ addressContent }}
     </p>
   </section>
 </template>

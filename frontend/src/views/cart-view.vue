@@ -12,7 +12,7 @@ import CartPizzas from '@/modules/cart/cart-pizzas.vue'
 import { useAddressStore, useCartStore, useProfileStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
 
@@ -22,11 +22,11 @@ const router = useRouter()
 const cartStore = useCartStore()
 const profileStore = useProfileStore()
 const addressStore = useAddressStore()
+const { setAddress } = cartStore
+const { orderTotalPrice, miscCartList, pizzas, selectedAddress } =
+  storeToRefs(cartStore)
 
-const { orderTotalPrice } = storeToRefs(cartStore)
-const selectedAddress = ref<Address | null>(null)
-
-const isEmptyPizzas = computed(() => cartStore.pizzas.length === 0)
+const isEmptyPizzas = computed(() => pizzas.value.length === 0)
 const userPhone = computed(() => profileStore.user?.phone ?? null)
 
 const validationSchema = object({
@@ -49,11 +49,14 @@ const validationSchema = object({
 })
 
 const { handleSubmit, setFieldValue } = useForm<CartAddressForm>({
-  validationSchema,
   initialValues: {
-    deliveryType: DeliveryType.PICK_UP,
+    deliveryType: selectedAddress.value?.id.toString() ?? DeliveryType.PICK_UP,
+    house: selectedAddress.value?.building ?? '',
+    apartment: selectedAddress.value?.flat ?? '',
+    street: selectedAddress.value?.street ?? '',
     phone: userPhone.value ?? ''
-  }
+  },
+  validationSchema
 })
 
 const handleAddressSelect = (address: Address | null) => {
@@ -61,14 +64,14 @@ const handleAddressSelect = (address: Address | null) => {
     setFieldValue('street', '')
     setFieldValue('house', '')
     setFieldValue('apartment', '')
-    selectedAddress.value = null
+    setAddress(null)
     return
   }
 
   setFieldValue('street', address.street)
   setFieldValue('house', address.building)
   setFieldValue('apartment', address.flat ?? '')
-  selectedAddress.value = address
+  setAddress(address)
 }
 
 const onSubmit = handleSubmit(async (values) => {
@@ -86,7 +89,7 @@ const onSubmit = handleSubmit(async (values) => {
     userId: profileStore.user?.id ?? null,
     phone: values.phone,
     address: address,
-    pizzas: cartStore.pizzas.map((p) => ({
+    pizzas: pizzas.value.map((p) => ({
       name: p.name,
       sauceId: p.sauceId,
       doughId: p.doughId,
@@ -97,7 +100,7 @@ const onSubmit = handleSubmit(async (values) => {
         quantity: i.quantity
       }))
     })),
-    misc: cartStore.miscCartList.map((m) => ({
+    misc: miscCartList.value.map((m) => ({
       miscId: m.id,
       quantity: m.quantity
     }))

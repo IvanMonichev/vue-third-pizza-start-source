@@ -1,6 +1,7 @@
 import { Ingredient, IngredientPizza } from '@/common/types/ingredient.types'
 import { Pizza } from '@/common/types/pizza.types'
 import { calculatePizzaPrice } from '@/common/utils/price.utils'
+import { useCartStore } from '@/store/cart.store'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
 
@@ -116,8 +117,18 @@ export const usePizzaStore = defineStore('pizza', {
       }
     },
 
-    toCartPizza(): Pizza {
-      return {
+    loadFromCartPizza(cartPizza: Pizza) {
+      this.pizzaId = cartPizza.pizzaId
+      this.pizzaName = cartPizza.name
+      this.doughId = cartPizza.doughId
+      this.sauceId = cartPizza.sauceId
+      this.sizeId = cartPizza.sizeId
+      this.ingredients = [...cartPizza.ingredients]
+    },
+
+    buildPizzaToCart() {
+      const cartStore = useCartStore()
+      const pizza: Pizza = {
         pizzaId: this.pizzaId ?? crypto.randomUUID(),
         name: this.pizzaName,
         doughId: this.doughId,
@@ -127,15 +138,8 @@ export const usePizzaStore = defineStore('pizza', {
         ingredients: this.ingredients,
         price: this.pizzaPrice
       }
-    },
 
-    loadFromCartPizza(cartPizza: Pizza) {
-      this.pizzaId = cartPizza.pizzaId
-      this.pizzaName = cartPizza.name
-      this.doughId = cartPizza.doughId
-      this.sauceId = cartPizza.sauceId
-      this.sizeId = cartPizza.sizeId
-      this.ingredients = [...cartPizza.ingredients]
+      cartStore.savePizza(pizza)
     },
 
     resetPizza() {

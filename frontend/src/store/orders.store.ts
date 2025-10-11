@@ -1,3 +1,4 @@
+import { AddressMode } from '@/common/enums/address-mode.enum'
 import { Ingredient } from '@/common/types/ingredient.types'
 import type { Misc } from '@/common/types/misc.types'
 import type { Order, OrderResponse } from '@/common/types/order.types'
@@ -6,6 +7,7 @@ import {
   calculateOrderTotal,
   calculatePizzaPrice
 } from '@/common/utils/price.utils'
+import { useCartStore } from '@/store/cart.store'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
 
@@ -93,6 +95,46 @@ export const useOrdersStore = defineStore('orders', {
           address: order.orderAddress ?? null
         }
       })
+    },
+
+    buildOrderToCart(orderId: number) {
+      const order = this.orders.find((o) => o.id === orderId)
+
+      if (!order) throw new Error(`Order with id ${orderId} is not found`)
+
+      const cartStore = useCartStore()
+
+      cartStore.resetStore()
+
+      for (const pizza of order.pizzas) {
+        cartStore.savePizza({
+          pizzaId: String(pizza.id),
+          name: pizza.name,
+          price: pizza.price,
+          quantity: pizza.quantity,
+          doughId: pizza.dough.id,
+          sauceId: pizza.sauce.id,
+          sizeId: pizza.size.id,
+          ingredients: pizza.ingredients.map((i) => ({
+            id: i.id,
+            quantity: i.quantity
+          }))
+        })
+      }
+
+      for (const misc of order.miscList) {
+        cartStore.setMisc({
+          id: misc.id,
+          quantity: misc.quantity
+        })
+      }
+
+      if (order.address) {
+        cartStore.setAddress({
+          ...order.address,
+          addressMode: AddressMode.VIEW
+        })
+      }
     },
 
     clearOrders() {

@@ -1,3 +1,4 @@
+import { Address } from '@/common/types/address.types'
 import { Misc, MiscCart } from '@/common/types/misc.types'
 import { Pizza } from '@/common/types/pizza.types'
 import { calculateOrderTotal } from '@/common/utils/price.utils'
@@ -8,13 +9,15 @@ interface CartState {
   pizzas: Pizza[]
   miscCartList: MiscCart[]
   isOrderSuccess: boolean
+  selectedAddress: null | Address
 }
 
 export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
     pizzas: [],
     miscCartList: [],
-    isOrderSuccess: true
+    isOrderSuccess: true,
+    selectedAddress: null
   }),
   getters: {
     pizzaTotalPrice: (state) => {
@@ -74,6 +77,10 @@ export const useCartStore = defineStore('cart', {
       }
 
       this.miscCartList[index] = misc
+    },
+
+    setAddress(address: Address | null) {
+      this.selectedAddress = address
     },
 
     incrementCartPizza(pizzaId: string) {

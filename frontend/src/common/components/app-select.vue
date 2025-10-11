@@ -52,6 +52,7 @@ const modelValue = defineModel<string | number>()
     padding-right: 30px;
     cursor: pointer;
     transition: 0.3s;
+    max-width: 200px;
 
     color: ds-colors.$black;
     border: 1px solid ds-colors.$purple-400;
