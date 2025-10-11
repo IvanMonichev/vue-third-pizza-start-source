@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import AppCounter from '@/common/components/app-counter.vue'
-import { miscImagesMap } from '@/common/constants/mappers.constants'
-import { Misc } from '@/common/types/misc.types'
+import { MiscResponse } from '@/common/types/misc.types'
 import { AppConfig } from '@/modules/cart/config/app.config'
 import { useCartStore } from '@/store'
 import { computed } from 'vue'
 
 interface Props {
-  misc: Misc
+  misc: MiscResponse
 }
 
 const cartStore = useCartStore()
@@ -21,12 +20,7 @@ const miscQuantity = computed(
 <template>
   <li class="additional-list__item sheet">
     <p class="additional-list__description">
-      <img
-        :src="miscImagesMap[misc.image]"
-        width="39"
-        height="60"
-        :alt="misc.name"
-      />
+      <img :src="misc.image" width="39" height="60" :alt="misc.name" />
       <span>{{ misc.name }}</span>
     </p>
 

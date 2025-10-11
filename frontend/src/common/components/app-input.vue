@@ -1,20 +1,18 @@
 <script setup lang="ts">
-import { useField } from 'vee-validate'
-
 interface Props {
   name: string
-  type: 'text' | 'password' | 'email'
+  type?: string
   placeholder?: string
   label?: string
   labelHidden?: boolean
   required?: boolean
   size?: 'big'
+  error?: string
+  disabled?: boolean
 }
 
-const props = defineProps<Props>()
-const { value, errorMessage } = useField(() => props.name, undefined, {
-  validateOnValueUpdate: false
-})
+const { size, error, labelHidden, disabled } = defineProps<Props>()
+const modelValue = defineModel<string>()
 </script>
 
 <template>
@@ -22,22 +20,23 @@ const { value, errorMessage } = useField(() => props.name, undefined, {
     :class="[
       'input',
       {
-        'input--big-label': props.size === 'big',
-        'input--error': errorMessage
+        'input--big-label': size === 'big',
+        'input--error': error
       }
     ]"
   >
-    <span v-if="label" :class="{ 'visually-hidden': props.labelHidden }">{{
+    <span v-if="label" :class="{ 'visually-hidden': labelHidden }">{{
       label
     }}</span>
     <input
-      v-model="value"
+      v-model="modelValue"
       :type="type"
-      :name="name"
       :placeholder="placeholder"
       :required="required"
+      :name="name"
+      :disabled="disabled"
     />
-    <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
+    <span v-if="error" class="error">{{ error }}</span>
   </label>
 </template>
 
@@ -99,7 +98,7 @@ const { value, errorMessage } = useField(() => props.name, undefined, {
       font-weight: 600;
       font-size: 12px;
       line-height: 1;
-      left: 0;
+      right: 0;
       bottom: -18px;
     }
   }
@@ -108,7 +107,7 @@ const { value, errorMessage } = useField(() => props.name, undefined, {
     display: flex;
     align-items: center;
 
-    span {
+    span:not(.error) {
       @include ds-typography.b-s16-h19;
 
       margin-right: 16px;

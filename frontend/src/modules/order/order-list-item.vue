@@ -1,36 +1,48 @@
 <script setup lang="ts">
-import { toRefs } from 'vue'
+import productImg from '@/assets/img/product.svg'
+import { doughCartMap } from '@/common/constants/mappers.constants'
+import { PizzaOrder } from '@/common/types/pizza.types'
+import { computed } from 'vue'
 
 interface Props {
-  title: string
-  image: string
-  price: string
-  options: string[]
+  pizza: PizzaOrder
 }
 
-const props = defineProps<Props>()
-const { title, image, price, options } = toRefs(props)
+const { pizza } = defineProps<Props>()
+
+const ingredientsList = computed(() =>
+  pizza.ingredients
+    .map((i) => {
+      return i.name.toLowerCase()
+    })
+    .join(', ')
+)
 </script>
 
 <template>
   <li class="order__item">
     <div class="product">
       <img
-        :src="image"
+        :src="productImg"
         class="product__img"
         width="56"
         height="56"
-        :alt="title"
+        :alt="pizza.name"
       />
       <div class="product__text">
-        <h2>{{ title }}</h2>
+        <h2>{{ pizza.name }}</h2>
         <ul>
-          <li v-for="(option, i) in options" :key="i">{{ option }}</li>
+          <li>{{ pizza.size.name }}, {{ doughCartMap[pizza.dough.id] }}</li>
+          <li>Соус: {{ pizza.sauce.name.toLowerCase() }}</li>
+          <li v-if="ingredientsList.length">Начинка: {{ ingredientsList }}</li>
         </ul>
       </div>
     </div>
 
-    <p class="order__price">{{ price }} ₽</p>
+    <p class="order__price">
+      <span v-if="pizza.quantity > 1">{{ pizza.quantity }}x</span
+      >{{ pizza.price }} ₽
+    </p>
   </li>
 </template>
 

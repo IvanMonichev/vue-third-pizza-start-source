@@ -1,36 +1,26 @@
-import { DeliveryType } from '@/common/enums/delivery-type.enum'
-import { AddressForm, OrderAddress } from '@/common/types/address.types'
-import { MiscCart } from '@/common/types/misc.types'
-import { CartPizza } from '@/common/types/pizza.types'
+import { Address } from '@/common/types/address.types'
+import { Misc, MiscCart } from '@/common/types/misc.types'
+import { Pizza, PizzaState } from '@/common/types/pizza.types'
+import { calculateOrderTotal } from '@/common/utils/price.utils'
 import { useDataStore } from '@/store/data.store'
+import { usePizzaStore } from '@/store/pizza.store'
 import { defineStore } from 'pinia'
 
 interface CartState {
-  pizzas: CartPizza[]
+  pizzas: Pizza[]
   miscCartList: MiscCart[]
-  address: OrderAddress | null
-  addressForm: AddressForm
   isOrderSuccess: boolean
+  selectedAddress: null | Address
 }
 
 export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
     pizzas: [],
     miscCartList: [],
-    address: null,
-    addressForm: {
-      deliveryType: DeliveryType.PICK_UP,
-      phone: ''
-    },
-    isOrderSuccess: true
+    isOrderSuccess: true,
+    selectedAddress: null
   }),
   getters: {
-    pizzasPrice: (state): number =>
-      state.pizzas.reduce(
-        (acc, pizza) => acc + pizza.price * pizza.quantity,
-        0
-      ),
-
     pizzaTotalPrice: (state) => {
       return (pizzaId: string) => {
         const pizza = state.pizzas.find((p) => p.pizzaId === pizzaId)
@@ -51,19 +41,14 @@ export const useCartStore = defineStore('cart', {
     orderTotalPrice: (state): number => {
       const dataStore = useDataStore()
 
-      // Общая цена всех пицц
-      const pizzasTotalPrice = state.pizzas.reduce(
-        (acc, pizza) => acc + pizza.price * pizza.quantity,
-        0
-      )
+      const miscList: Misc[] = state.miscCartList
+        .map((m) => {
+          const miscData = dataStore.miscList.find((md) => md.id === m.id)
+          return miscData ? { ...miscData, quantity: m.quantity } : null
+        })
+        .filter((m): m is Misc => Boolean(m))
 
-      // Общая цена всех доп. продуктов
-      const miscListTotalPrice = state.miscCartList.reduce((acc, miscCart) => {
-        const miscData = dataStore.miscList.find((m) => m.id === miscCart.id)
-        return acc + (miscData ? miscCart.quantity * miscData.price : 0)
-      }, 0)
-
-      return pizzasTotalPrice + miscListTotalPrice
+      return calculateOrderTotal(state.pizzas, miscList)
     },
 
     pizzaById: (state) => {
@@ -74,7 +59,7 @@ export const useCartStore = defineStore('cart', {
     }
   },
   actions: {
-    savePizza(pizza: CartPizza) {
+    savePizza(pizza: Pizza) {
       const index = this.pizzas.findIndex((p) => p.pizzaId === pizza.pizzaId)
 
       if (index === -1) {
@@ -93,6 +78,10 @@ export const useCartStore = defineStore('cart', {
       }
 
       this.miscCartList[index] = misc
+    },
+
+    setAddress(address: Address | null) {
+      this.selectedAddress = address
     },
 
     incrementCartPizza(pizzaId: string) {
@@ -163,41 +152,27 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    setDeliveryType(type: DeliveryType) {
-      this.addressForm.deliveryType = type
-
-      // при переключении можно сбрасывать адрес
-      if (type === DeliveryType.PICK_UP) {
-        this.addressForm = {
-          deliveryType: DeliveryType.PICK_UP,
-          phone: this.addressForm.phone
-        }
-      }
-
-      if (type === DeliveryType.NEW_ADDRESS) {
-        this.addressForm = {
-          deliveryType: DeliveryType.NEW_ADDRESS,
-          phone: this.addressForm.phone,
-          street: '',
-          house: '',
-          apartment: ''
-        }
-      }
-
-      if (type === DeliveryType.SAVED_ADDRESS) {
-        this.addressForm = {
-          deliveryType: DeliveryType.SAVED_ADDRESS,
-          phone: this.addressForm.phone
-        }
-      }
-    },
-
-    updateAddressForm(payload: Partial<AddressForm>) {
-      this.addressForm = { ...this.addressForm, ...payload }
-    },
-
     setIsOrderSuccess(isOrderSuccess: boolean) {
       this.isOrderSuccess = isOrderSuccess
+    },
+
+    buildPizzaToConstructor(pizzaId: string) {
+      const pizza = this.pizzas.find((p) => p.pizzaId === pizzaId)
+
+      console.log('pizza', pizza)
+      if (!pizza) throw new Error(`Pizza with id ${pizzaId} not found`)
+
+      const pizzaStore = usePizzaStore()
+      const pizzaConstructor: PizzaState = {
+        pizzaId: pizza.pizzaId,
+        doughId: pizza.doughId,
+        sauceId: pizza.sauceId,
+        sizeId: pizza.sizeId,
+        pizzaName: pizza.name,
+        ingredients: pizza.ingredients
+      }
+
+      pizzaStore.setPizza(pizzaConstructor)
     },
 
     resetStore() {

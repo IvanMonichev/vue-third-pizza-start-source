@@ -1,61 +1,104 @@
 <script setup lang="ts">
-import AppInput from '@/common/components/app-input.vue'
+import AppFormInput from '@/common/components/app-form-input.vue'
 import AppSelect from '@/common/components/app-select.vue'
-import { deliveryTypeOptions } from '@/common/constants/address-form.constants'
 import { DeliveryType } from '@/common/enums/delivery-type.enum'
-import { useCartStore } from '@/store'
-import { storeToRefs } from 'pinia'
+import { Address } from '@/common/types/address.types'
+import { DeliverySelectValue } from '@/common/types/cart.types'
+import { useField } from 'vee-validate'
+import { computed, watch } from 'vue'
 
-const cartStore = useCartStore()
-const { addressForm } = storeToRefs(cartStore)
+interface Props {
+  addresses?: Address[]
+}
+
+const { addresses } = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'select-address', address: Address | null): void
+}>()
+
+const { value: deliveryTypeValue, errorMessage: deliveryTypeError } =
+  useField<DeliverySelectValue>('deliveryType')
+
+const deliveryOptions = computed(() => {
+  const base = [
+    { label: 'Заберу сам', value: DeliveryType.PICK_UP },
+    { label: 'Новый адрес', value: DeliveryType.NEW_ADDRESS }
+  ]
+
+  if (!addresses) return base
+
+  const existing = addresses.map((a) => ({
+    label: a.name,
+    value: String(a.id)
+  }))
+
+  return [...base, ...existing]
+})
+const isAddressReadonly = computed(() => {
+  if (!deliveryTypeValue.value) return false
+  return (
+    deliveryTypeValue.value !== DeliveryType.PICK_UP &&
+    deliveryTypeValue.value !== DeliveryType.NEW_ADDRESS
+  )
+})
+
+watch(deliveryTypeValue, (value) => {
+  if (
+    !value ||
+    value === DeliveryType.PICK_UP ||
+    value === DeliveryType.NEW_ADDRESS
+  ) {
+    emit('select-address', null)
+    return
+  }
+
+  if (!addresses) return
+
+  const selected = addresses.find((a) => a.id === Number(value))
+  emit('select-address', selected ?? null)
+})
 </script>
 
 <template>
   <div class="cart-form">
     <AppSelect
-      v-model="addressForm.deliveryType"
-      name="delivery-type"
-      :options="deliveryTypeOptions"
+      v-model="deliveryTypeValue"
+      :options="deliveryOptions"
       label="Получение заказа:"
       extra-class="cart-form__select"
+      :error="deliveryTypeError"
+      name="deliveryType"
     />
-    <AppInput
-      v-model="addressForm.phone"
-      label="Контактный телефон:"
-      name="tel"
+    <AppFormInput
+      label="Контактный телефон*:"
+      name="phone"
       placeholder="+7 999-999-99-99"
       size="big"
     />
 
     <div
-      v-if="addressForm.deliveryType === DeliveryType.NEW_ADDRESS"
+      v-if="deliveryTypeValue !== DeliveryType.PICK_UP"
       class="cart-form__address"
     >
       <span class="cart-form__label">Новый адрес:</span>
 
       <div class="cart-form__input">
-        <AppInput
-          v-model="addressForm.street"
+        <AppFormInput
           label="Улица*"
           name="street"
-          :required="true"
+          :disabled="isAddressReadonly"
         />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppInput
-          v-model="addressForm.house"
-          label="Дом*"
-          name="house"
-          :required="true"
-        />
+        <AppFormInput label="Дом*" name="house" :disabled="isAddressReadonly" />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppInput
-          v-model="addressForm.apartment"
+        <AppFormInput
           label="Квартира"
           name="apartment"
+          :disabled="isAddressReadonly"
         />
       </div>
     </div>

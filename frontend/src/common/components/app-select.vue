@@ -6,6 +6,7 @@ interface Props {
   name: string
   options: Option[]
   extraClass?: string
+  error?: string
 }
 
 defineProps<Props>()
@@ -13,7 +14,7 @@ const modelValue = defineModel<string | number>()
 </script>
 
 <template>
-  <label :class="['app-select', extraClass]">
+  <label :class="['app-select', extraClass, { 'app-select--error': error }]">
     <span class="app-select__label">Получение заказа:</span>
 
     <select v-model="modelValue" name="test" class="app-select__field">
@@ -25,6 +26,7 @@ const modelValue = defineModel<string | number>()
         {{ option.label }}
       </option>
     </select>
+    <span v-if="error" class="error">{{ error }}</span>
   </label>
 </template>
 
@@ -50,6 +52,7 @@ const modelValue = defineModel<string | number>()
     padding-right: 30px;
     cursor: pointer;
     transition: 0.3s;
+    max-width: 200px;
 
     color: ds-colors.$black;
     border: 1px solid ds-colors.$purple-400;
@@ -68,6 +71,22 @@ const modelValue = defineModel<string | number>()
 
     &:focus {
       border-color: ds-colors.$green-500;
+    }
+  }
+
+  &--error {
+    .app-select__field {
+      border-color: ds-colors.$red-800;
+    }
+
+    .error {
+      position: absolute;
+      right: 0;
+      bottom: -18px;
+      color: ds-colors.$red-900;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 1;
     }
   }
 }

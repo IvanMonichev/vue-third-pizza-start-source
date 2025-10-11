@@ -2,7 +2,7 @@
 import { DATA_TRANSFER_PAYLOAD, MOVE } from '@/common/constants/core.constants'
 
 interface Props {
-  transferData: T
+  payload: T
 }
 
 const props = defineProps<Props>()
@@ -12,10 +12,7 @@ const onDrag = (e: DragEvent) => {
   if (!dataTransfer) return
   dataTransfer.effectAllowed = MOVE
   dataTransfer.dropEffect = MOVE
-  dataTransfer.setData(
-    DATA_TRANSFER_PAYLOAD,
-    JSON.stringify(props.transferData)
-  )
+  dataTransfer.setData(DATA_TRANSFER_PAYLOAD, JSON.stringify(props.payload))
 }
 </script>
 

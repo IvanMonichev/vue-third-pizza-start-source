@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import sizesMock from '@/mocks/sizes.json'
 import RadioDiameter from '@/modules/constructor/radio-diameter.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
-onMounted(async () => {
-  dataStore.buildSizes(sizesMock)
-})
-
-const { sizes } = storeToRefs(dataStore)
 const { sizeId } = storeToRefs(pizzaStore)
 </script>
 
@@ -20,12 +13,10 @@ const { sizeId } = storeToRefs(pizzaStore)
   <div class="content__diameter">
     <SheetLayout title="Выберите размер" content-class="diameter">
       <RadioDiameter
-        v-for="s in sizes"
+        v-for="s in dataStore.sizes"
         :key="s.id"
         v-model="sizeId"
-        name="diameter"
-        :label="s.name"
-        :value="s.id"
+        :size="s"
       />
     </SheetLayout>
   </div>
@@ -36,5 +27,9 @@ const { sizeId } = storeToRefs(pizzaStore)
   width: 373px;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+:deep(.diameter) {
+  padding-bottom: 15px;
 }
 </style>

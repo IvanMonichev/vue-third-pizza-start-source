@@ -1,8 +1,8 @@
-import { Address, AddressUpdate } from '@/common/types/address.types'
+import { AddressResponse, AddressUpdate } from '@/common/types/address.types'
 import { createCrudService } from '@/services/http/base-http.service'
 import { httpClient } from '@/services/http/http-client'
 
-const crud = createCrudService<Address>(httpClient, 'addresses')
+const crud = createCrudService<AddressResponse>(httpClient, 'addresses')
 
 export const addressesService = {
   getAll: crud.getAll,

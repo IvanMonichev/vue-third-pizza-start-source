@@ -1,4 +1,4 @@
-export interface Dough {
+export interface DoughResponse {
   id: number
   name: string
   image: string
@@ -6,6 +6,6 @@ export interface Dough {
   price: number
 }
 
-export interface DoughUi extends Dough {
+export interface Dough extends DoughResponse {
   className: string
 }

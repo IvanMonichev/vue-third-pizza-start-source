@@ -6,7 +6,7 @@ import TheProfileSidebar from '@/modules/profile/the-profile-sidebar.vue'
   <main class="layout">
     <TheProfileSidebar />
     <div class="layout__content">
-      <router-view></router-view>
+      <RouterView />
     </div>
   </main>
 </template>

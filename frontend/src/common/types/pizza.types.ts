@@ -1,6 +1,14 @@
-import { Ingredient, IngredientPizza } from '@/common/types/ingredient.types'
+import { DoughResponse } from '@/common/types/dough.types'
+import {
+  Ingredient,
+  IngredientOrderResponse,
+  IngredientPizza,
+  IngredientPizzaCreate
+} from '@/common/types/ingredient.types'
+import { SauceResponse } from '@/common/types/sauce.types'
+import { Size } from '@/common/types/size.types'
 
-export interface OrderPizza {
+export interface PizzaOrderResponse {
   id: number
   name: string
   sauceId: number
@@ -8,14 +16,41 @@ export interface OrderPizza {
   sizeId: number
   quantity: number
   orderId: number
-  ingredients: Ingredient[]
+  ingredients?: IngredientOrderResponse[]
 }
 
-export interface CartPizza extends Pick<OrderPizza, 'name' | 'quantity'> {
+export interface PizzaOrder {
+  id: number
+  name: string
+  sauce: SauceResponse
+  dough: DoughResponse
+  size: Size
+  ingredients: Ingredient[]
+  price: number
+  quantity: number
+}
+
+export interface Pizza extends Pick<PizzaOrderResponse, 'name' | 'quantity'> {
   pizzaId: string
   sauceId: number
   doughId: number
   sizeId: number
   price: number
-  ingredientsPizza: IngredientPizza[]
+  ingredients: IngredientPizza[]
+}
+
+export type PizzaOrderCreate = Omit<
+  Pizza,
+  'pizzaId' | 'price' | 'ingredients'
+> & {
+  ingredients: IngredientPizzaCreate[]
+}
+
+export interface PizzaState {
+  pizzaId: string | null
+  pizzaName: string
+  doughId: number
+  sizeId: number
+  sauceId: number
+  ingredients: IngredientPizza[]
 }

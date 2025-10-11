@@ -1,15 +1,18 @@
 import { AddressCreate, AddressUpdate } from '@/common/types/address.types'
 import { addressesService } from '@/services/resources/addresses.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { Ref } from 'vue'
 
-export const useAddresses = () => {
+export const useAddressesQuery = (options?: { enabled?: Ref<boolean> }) => {
   return useQuery({
     queryKey: ['addresses'],
-    queryFn: () => addressesService.getAll()
+    queryFn: () => addressesService.getAll(),
+    retry: false,
+    enabled: options?.enabled ?? true
   })
 }
 
-export const useCreateAddress = () => {
+export const useCreateAddressMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -21,7 +24,7 @@ export const useCreateAddress = () => {
   })
 }
 
-export const useUpdateAddress = () => {
+export const useUpdateAddressMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -33,7 +36,7 @@ export const useUpdateAddress = () => {
     }
   })
 }
-export const useDeleteAddress = () => {
+export const useDeleteAddressMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({

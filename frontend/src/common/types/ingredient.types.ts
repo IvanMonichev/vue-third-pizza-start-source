@@ -1,14 +1,27 @@
-export interface Ingredient {
+export interface IngredientResponse {
   id: number
   name: string
   image: string
   price: number
 }
 
-export interface IngredientUi extends Ingredient {
-  className: string
+export interface IngredientOrderResponse {
+  id: number
+  pizzaId: number
+  ingredientId: number
+  quantity: number
 }
 
-export interface IngredientPizza extends Pick<Ingredient, 'id'> {
+export interface Ingredient extends IngredientResponse {
+  className: string
+  quantity: number
+}
+
+export interface IngredientPizza extends Pick<IngredientResponse, 'id'> {
+  quantity: number
+}
+
+export interface IngredientPizzaCreate {
+  ingredientId: number
   quantity: number
 }

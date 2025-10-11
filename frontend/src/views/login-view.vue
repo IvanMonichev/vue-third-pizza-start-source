@@ -2,7 +2,7 @@
 import { useLogin } from '@/api/auth.api'
 import AppButtonClose from '@/common/components/app-button-close.vue'
 import AppButton from '@/common/components/app-button.vue'
-import AppInput from '@/common/components/app-input.vue'
+import AppFormInput from '@/common/components/app-form-input.vue'
 import AppTitle from '@/common/components/app-title.vue'
 import { AxiosError } from 'axios'
 import { useForm } from 'vee-validate'
@@ -14,6 +14,8 @@ interface LoginForm {
   email: string
   password: string
 }
+const router = useRouter()
+const login = useLogin()
 
 const loginSchema = object({
   email: string()
@@ -29,9 +31,6 @@ const { handleSubmit, isSubmitting } = useForm<LoginForm>({
     password: 'user@example.com'
   }
 })
-
-const router = useRouter()
-const login = useLogin()
 
 const onSubmit = handleSubmit(async (values) => {
   try {
@@ -56,11 +55,11 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
     <form novalidate @submit.prevent="onSubmit">
       <div class="sign-form__input">
-        <AppInput type="email" name="email" placeholder="example@mail.ru" />
+        <AppFormInput name="email" type="email" placeholder="example@mail.ru" />
       </div>
 
       <div class="sign-form__input">
-        <AppInput type="password" name="password" placeholder="*********" />
+        <AppFormInput name="password" type="password" placeholder="********" />
       </div>
       <AppButton
         type="submit"

@@ -3,12 +3,11 @@ import AppButton from '@/common/components/app-button.vue'
 import AppDrop from '@/common/components/app-drop.vue'
 import AppInput from '@/common/components/app-input.vue'
 import { AppConfig } from '@/modules/cart/config/app.config'
-import { useCartStore, usePizzaStore } from '@/store'
+import { usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
 const pizzaStore = usePizzaStore()
-const cartStore = useCartStore()
 const router = useRouter()
 
 const handleDropIngredient = (payload: unknown) => {
@@ -24,8 +23,7 @@ const { pizzaPrice, pizzaName, dough, sauce, selectedIngredients } =
 
 const handleAddPizza = () => {
   try {
-    const pizza = pizzaStore.toCartPizza()
-    cartStore.savePizza(pizza)
+    pizzaStore.buildPizzaToCart()
     router.push({ name: 'cart-view' })
   } catch (e) {
     console.error(e)
@@ -41,6 +39,7 @@ const handleAddPizza = () => {
       name="pizza_name"
       label="Название пиццы"
       :label-hidden="true"
+      type="text"
     />
 
     <AppDrop @drop="handleDropIngredient">

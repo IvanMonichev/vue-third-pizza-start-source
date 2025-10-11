@@ -8,13 +8,14 @@ export const authGuard = async (
 ) => {
   const authStore = useAuthStore()
   const isUnauthenticated = authStore.isUnauthenticated
+  const isAuthenticated = authStore.isAuthenticated
 
   if (to.meta.requiresAuth && isUnauthenticated) {
     next({ name: 'login-view' })
     return
   }
 
-  if (to.name === 'login-view' && !isUnauthenticated) {
+  if (to.name === 'login-view' && isAuthenticated) {
     next('/')
     return
   }

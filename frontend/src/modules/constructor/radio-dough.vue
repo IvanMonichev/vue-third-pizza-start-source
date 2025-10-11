@@ -1,25 +1,29 @@
 <script setup lang="ts">
-import { DoughUi } from '@/common/types/dough.types'
+import { DoughResponse } from '@/common/types/dough.types'
 
 const { dough } = defineProps<{
-  dough: DoughUi
+  dough: DoughResponse
 }>()
 
-const { name, className, description, id } = dough
+const { name, description, id } = dough
 const modelValue = defineModel<number | null>()
 </script>
 
 <template>
-  <label :class="['dough__input', `dough__input--${className}`]">
-    <input
-      v-model="modelValue"
-      type="radio"
-      name="dough"
-      class="visually-hidden"
-      :value="id"
-    />
-    <b>{{ name }}</b>
-    <span>{{ description }}</span>
+  <label :class="['dough__input']">
+    <div class="dough__content">
+      <input
+        v-model="modelValue"
+        type="radio"
+        name="dough"
+        class="visually-hidden"
+        :value="id"
+      />
+      <img :src="dough.image" :alt="dough.name" class="dough__img" />
+      <span class="dough__name">{{ name }}</span>
+    </div>
+
+    <span class="dough__description">{{ description }}</span>
   </label>
 </template>
 
@@ -37,55 +41,42 @@ const modelValue = defineModel<number | null>()
 
   cursor: pointer;
 
-  b {
-    @include ds-typography.r-s16-h19;
-
-    &::before {
-      @include m_center.p_center-v;
-
-      width: 36px;
-      height: 36px;
-
-      content: '';
-      transition: 0.3s;
-
-      border-radius: 50%;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-    }
-  }
-
-  span {
+  .dough__description {
     @include ds-typography.l-s11-h13;
 
     display: block;
   }
 
-  &--light {
-    b {
-      &::before {
-        background-image: url('@/assets/img/dough-light.svg');
-      }
-    }
-  }
+  .dough__content {
+    display: flex;
+    align-content: center;
 
-  &--large {
-    b {
-      &::before {
-        background-image: url('@/assets/img/dough-large.svg');
-      }
+    .dough__name {
+      @include ds-typography.r-s16-h19;
+    }
+
+    .dough__img {
+      @include m_center.p_center-v;
+
+      width: 36px;
+      height: 36px;
+
+      transition: 0.3s;
+
+      border-radius: 50%;
+      object-fit: contain;
+      flex-shrink: 0;
     }
   }
 
   &:hover {
-    b::before {
+    .dough__img {
       box-shadow: ds-shadows.$shadow-regular;
     }
   }
 
   input {
-    &:checked + b::before {
+    &:checked + .dough__img {
       box-shadow: ds-shadows.$shadow-large;
     }
   }

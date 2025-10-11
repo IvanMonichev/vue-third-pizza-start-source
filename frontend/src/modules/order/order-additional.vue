@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { MiscView } from '@/common/types/order.types'
+import { Misc } from '@/common/types/misc.types'
+import { AppConfig } from '@/modules/cart/config/app.config'
 
 interface Props {
-  items: MiscView[]
+  miscList: Misc[]
 }
 
-const props = defineProps<Props>()
+const { miscList } = defineProps<Props>()
 </script>
 
 <template>
   <ul class="order__additional">
-    <li v-for="(item, index) in props.items" :key="index">
-      <img :src="item.image" width="20" height="30" :alt="item.alt" />
+    <li v-for="item in miscList" :key="item.id">
+      <img :src="item.image" width="20" height="30" :alt="item.name" />
       <p>
         <span>{{ item.name }}</span>
-        <b>{{ item.price }} ₽</b>
+        <b
+          ><span v-if="item.quantity > 1">{{ item.quantity }}x</span
+          >{{ item.price.toLocaleString(AppConfig.Locale) }} ₽</b
+        >
       </p>
     </li>
   </ul>
