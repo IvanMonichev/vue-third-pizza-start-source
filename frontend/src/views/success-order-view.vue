@@ -22,18 +22,20 @@ const handlePopupClose = () => {
 </script>
 
 <template>
-  <div class="popup">
-    <AppButtonClose :to="{ name: 'orders-view' }" @click="handlePopupClose" />
-    <div class="popup__title">
-      <h2 class="title">Спасибо за заказ</h2>
+  <Transition name="fade">
+    <div v-if="cartStore.isOrderSuccess" class="popup">
+      <AppButtonClose :to="{ name: 'orders-view' }" @click="handlePopupClose" />
+      <div class="popup__title">
+        <h2 class="title">Спасибо за заказ</h2>
+      </div>
+      <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
+      <div class="popup__button">
+        <AppButtonLink :to="{ name: 'orders-view' }" @click="handlePopupClose">
+          Отлично, я жду!</AppButtonLink
+        >
+      </div>
     </div>
-    <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
-    <div class="popup__button">
-      <AppButtonLink :to="{ name: 'orders-view' }" @click="handlePopupClose">
-        Отлично, я жду!</AppButtonLink
-      >
-    </div>
-  </div>
+  </Transition>
 </template>
 
 <style scoped lang="scss">
@@ -101,5 +103,15 @@ const handlePopupClose = () => {
   a {
     padding: 16px 32px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

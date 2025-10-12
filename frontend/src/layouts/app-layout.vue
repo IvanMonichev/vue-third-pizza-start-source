@@ -34,7 +34,7 @@ watch(
 </script>
 
 <template>
-  <component :is="layout"><slot /></component>
+  <Component :is="layout"><slot /></Component>
 </template>
 
 <style scoped lang="scss"></style>

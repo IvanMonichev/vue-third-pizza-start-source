@@ -51,16 +51,18 @@ const handleAddPizza = () => {
           ]"
         >
           <div class="pizza__wrapper">
-            <div
-              v-for="i in selectedIngredients"
-              :key="i.id"
-              :class="[
-                'pizza__filling',
-                `pizza__filling--${i.className}`,
-                i.quantity === 2 ? 'pizza__filling--second' : '',
-                i.quantity === 3 ? 'pizza__filling--third' : ''
-              ]"
-            />
+            <TransitionGroup name="scale" tag="div">
+              <div
+                v-for="i in selectedIngredients"
+                :key="`${i.id}-${i.quantity}`"
+                :class="[
+                  'pizza__filling',
+                  `pizza__filling--${i.className}`,
+                  i.quantity === 2 ? 'pizza__filling--second' : '',
+                  i.quantity === 3 ? 'pizza__filling--third' : ''
+                ]"
+              />
+            </TransitionGroup>
           </div>
         </div>
       </div>
@@ -284,6 +286,40 @@ const handleAddPizza = () => {
   button {
     margin-left: 12px;
     padding: 16px 45px;
+  }
+}
+
+/* Появление ингредиента */
+.scale-enter-active {
+  animation: ingredient-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scale-leave-active {
+  animation: ingredient-fade 0.25s ease forwards;
+}
+
+@keyframes ingredient-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes ingredient-fade {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
   }
 }
 </style>

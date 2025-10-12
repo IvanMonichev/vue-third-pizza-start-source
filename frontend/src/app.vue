@@ -14,7 +14,7 @@ import {
   useProfileStore
 } from '@/store'
 import { useAuthStore } from '@/store/auth.store'
-import { computed, watch, watchEffect } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useAuthUser } from './api/auth.api'
 import { tokenManager } from './services/token-manager'
 
@@ -25,7 +25,7 @@ const addressStore = useAddressStore()
 const ordersStore = useOrdersStore()
 
 // --- Пользователь
-const { data: user, isLoading, isError } = useAuthUser()
+const { data: user, isError } = useAuthUser()
 
 // --- Основные данные (грузим всегда)
 const { data: dough } = useDoughQuery()
@@ -39,11 +39,12 @@ const isUserReady = computed(() => !!user.value?.id)
 const { data: addresses } = useAddressesQuery({ enabled: isUserReady })
 const { data: orders } = useOrdersQuery({ enabled: isUserReady })
 
-watch(user, (newUser) => {
-  if (newUser) {
+watchEffect(() => {
+  console.log('user', user.value)
+  if (user.value) {
     authStore.setAuth({ token: tokenManager.get()! })
-    profileStore.setUser(newUser)
-  } else if (!isLoading.value && isError.value) {
+    profileStore.setUser(user.value)
+  } else if (isError.value) {
     authStore.clearAuth()
   }
 })
@@ -69,6 +70,27 @@ watchEffect(() => {
 
 <template>
   <AppLayout>
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <transition name="slide" mode="out-in">
+        <Component :is="Component" />
+      </transition>
+    </RouterView>
   </AppLayout>
 </template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(30px);
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateX(-30px);
+  opacity: 0;
+}
+</style>
