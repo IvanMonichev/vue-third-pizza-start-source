@@ -13,8 +13,8 @@ defineProps<Props>()
 <template>
   <section class="footer">
     <div class="footer__more">
-      <AppButtonLink to="/" :variants="['border', 'arrow']"
-        >Хочу еще одну</AppButtonLink
+      <app-button-link to="/" :variants="['border', 'arrow']"
+        >Хочу еще одну</app-button-link
       >
     </div>
     <p class="footer__text">
@@ -25,8 +25,8 @@ defineProps<Props>()
     </div>
 
     <div class="footer__submit">
-      <AppButton type="submit" :disabled="totalPrice === 0"
-        >Оформить заказ</AppButton
+      <app-button type="submit" :disabled="totalPrice === 0"
+        >Оформить заказ</app-button
       >
     </div>
   </section>

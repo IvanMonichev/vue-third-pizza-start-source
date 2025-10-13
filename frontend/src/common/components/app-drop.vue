@@ -19,7 +19,9 @@ const onDrop = (e: DragEvent) => {
 </script>
 
 <template>
-  <div @drop.stop="onDrop" @dragover.prevent @dragenter.prevent><slot /></div>
+  <div @drop.stop="onDrop" @dragover.prevent @dragenter.prevent>
+    <slot></slot>
+  </div>
 </template>
 
 <style scoped lang="scss"></style>

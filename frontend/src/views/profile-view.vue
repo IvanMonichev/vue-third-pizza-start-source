@@ -4,9 +4,9 @@ import TheProfileSidebar from '@/modules/profile/the-profile-sidebar.vue'
 
 <template>
   <main class="layout">
-    <TheProfileSidebar />
+    <the-profile-sidebar />
     <div class="layout__content">
-      <RouterView />
+      <router-view />
     </div>
   </main>
 </template>

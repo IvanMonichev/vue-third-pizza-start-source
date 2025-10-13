@@ -50,24 +50,32 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <div class="sign-form">
-    <AppButtonClose to="/" />
+    <app-button-close to="/" />
     <div class="sign-form__title">
-      <AppTitle type="small">Авторизуйтесь на сайте</AppTitle>
+      <app-title type="small">Авторизуйтесь на сайте</app-title>
     </div>
     <form novalidate @submit.prevent="onSubmit">
       <div class="sign-form__input">
-        <AppFormInput name="email" type="email" placeholder="example@mail.ru" />
+        <app-form-input
+          name="email"
+          type="email"
+          placeholder="example@mail.ru"
+        />
       </div>
 
       <div class="sign-form__input">
-        <AppFormInput name="password" type="password" placeholder="********" />
+        <app-form-input
+          name="password"
+          type="password"
+          placeholder="********"
+        />
       </div>
-      <AppButton
+      <app-button
         type="submit"
         :disabled="isSubmitting || login.isPending.value"
       >
         Авторизоваться
-      </AppButton>
+      </app-button>
     </form>
   </div>
 </template>

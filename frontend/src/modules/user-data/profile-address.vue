@@ -18,8 +18,8 @@ const isAddMode = computed(() => address.addressMode === AddressMode.EDIT)
 
 <template>
   <div class="layout__address">
-    <ProfileAddressView v-if="isViewMode" :address="address" />
-    <ProfileAddressForm v-if="isFormAdd || isAddMode" :address="address" />
+    <profile-address-view v-if="isViewMode" :address="address" />
+    <profile-address-form v-if="isFormAdd || isAddMode" :address="address" />
   </div>
 </template>
 

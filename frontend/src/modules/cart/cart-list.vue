@@ -2,7 +2,7 @@
 
 <template>
   <ul class="cart-list sheet">
-    <slot />
+    <slot></slot>
   </ul>
 </template>
 

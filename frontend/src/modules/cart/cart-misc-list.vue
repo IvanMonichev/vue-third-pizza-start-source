@@ -22,7 +22,7 @@ const handleSetValue = ({ misc, value }: { misc: MiscCart; value: number }) => {
 <template>
   <div class="cart__additional">
     <ul class="additional-list">
-      <CartMiscListItem
+      <cart-misc-list-item
         v-for="m in dataStore.miscList"
         :key="m.id"
         :misc="m"

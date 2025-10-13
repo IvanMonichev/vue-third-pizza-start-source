@@ -18,7 +18,7 @@ const quantityById = (id: number) =>
       :key="ingredient.id"
       class="ingredients__item"
     >
-      <AppDrag :payload="ingredient">
+      <app-drag :payload="ingredient">
         <div class="filling">
           <img
             :src="ingredient.image"
@@ -27,8 +27,8 @@ const quantityById = (id: number) =>
           />
           <span class="filling__name">{{ ingredient.name }}</span>
         </div>
-      </AppDrag>
-      <AppCounter
+      </app-drag>
+      <app-counter
         :value="quantityById(ingredient.id).value"
         extra-class="ingredients__counter"
         :min="0"

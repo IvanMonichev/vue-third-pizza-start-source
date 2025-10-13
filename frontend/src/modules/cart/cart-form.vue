@@ -61,7 +61,7 @@ watch(deliveryTypeValue, (value) => {
 
 <template>
   <div class="cart-form">
-    <AppSelect
+    <app-select
       v-model="deliveryTypeValue"
       :options="deliveryOptions"
       label="Получение заказа:"
@@ -69,7 +69,7 @@ watch(deliveryTypeValue, (value) => {
       :error="deliveryTypeError"
       name="deliveryType"
     />
-    <AppFormInput
+    <app-form-input
       label="Контактный телефон*:"
       name="phone"
       placeholder="+7 999-999-99-99"
@@ -83,7 +83,7 @@ watch(deliveryTypeValue, (value) => {
       <span class="cart-form__label">Новый адрес:</span>
 
       <div class="cart-form__input">
-        <AppFormInput
+        <app-form-input
           label="Улица*"
           name="street"
           :disabled="isAddressReadonly"
@@ -91,11 +91,15 @@ watch(deliveryTypeValue, (value) => {
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppFormInput label="Дом*" name="house" :disabled="isAddressReadonly" />
+        <app-form-input
+          label="Дом*"
+          name="house"
+          :disabled="isAddressReadonly"
+        />
       </div>
 
       <div class="cart-form__input cart-form__input--small">
-        <AppFormInput
+        <app-form-input
           label="Квартира"
           name="apartment"
           :disabled="isAddressReadonly"

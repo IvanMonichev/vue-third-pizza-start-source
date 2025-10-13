@@ -16,7 +16,7 @@ defineEmits<{
     :disabled="props.disabled"
     @click="$emit('click', $event)"
   >
-    <span class="visually-hidden"> <slot /></span>
+    <span class="visually-hidden"> <slot></slot></span>
   </button>
 </template>
 

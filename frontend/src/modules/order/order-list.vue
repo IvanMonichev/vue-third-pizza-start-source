@@ -2,7 +2,7 @@
 
 <template>
   <ul class="order__list">
-    <slot />
+    <slot></slot>
   </ul>
 </template>
 

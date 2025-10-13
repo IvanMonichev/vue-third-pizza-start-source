@@ -29,7 +29,7 @@ const handleEdit = () => {
     <div class="address-form__header">
       <b>{{ address.name }}</b>
       <div class="address-form__edit">
-        <AppButtonIcon @click="handleEdit">Изменить адрес</AppButtonIcon>
+        <app-button-icon @click="handleEdit">Изменить адрес</app-button-icon>
       </div>
     </div>
     <p>{{ fullAddress }}</p>

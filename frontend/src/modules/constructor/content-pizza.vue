@@ -33,7 +33,7 @@ const handleAddPizza = () => {
 
 <template>
   <div class="content__pizza">
-    <AppInput
+    <app-input
       v-model="pizzaName"
       placeholder="Введите название пиццы"
       name="pizza_name"
@@ -42,7 +42,7 @@ const handleAddPizza = () => {
       type="text"
     />
 
-    <AppDrop @drop="handleDropIngredient">
+    <app-drop @drop="handleDropIngredient">
       <div class="content__constructor">
         <div
           :class="[
@@ -51,7 +51,7 @@ const handleAddPizza = () => {
           ]"
         >
           <div class="pizza__wrapper">
-            <TransitionGroup name="scale" tag="div">
+            <transition-group name="scale" tag="div">
               <div
                 v-for="i in selectedIngredients"
                 :key="`${i.id}-${i.quantity}`"
@@ -61,17 +61,17 @@ const handleAddPizza = () => {
                   i.quantity === 2 ? 'pizza__filling--second' : '',
                   i.quantity === 3 ? 'pizza__filling--third' : ''
                 ]"
-              />
-            </TransitionGroup>
+              ></div>
+            </transition-group>
           </div>
         </div>
       </div>
-    </AppDrop>
+    </app-drop>
 
     <div class="content__result">
       <p>Итого: {{ pizzaPrice.toLocaleString(AppConfig.Locale) }} ₽</p>
-      <AppButton type="button" :disabled="!pizzaName" @click="handleAddPizza"
-        >Готовьте!</AppButton
+      <app-button type="button" :disabled="!pizzaName" @click="handleAddPizza"
+        >Готовьте!</app-button
       >
     </div>
   </div>

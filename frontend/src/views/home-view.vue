@@ -10,11 +10,11 @@ import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
   <main class="content">
     <form action="#" method="post">
       <div class="content__wrapper">
-        <AppTitle>Конструктор пиццы</AppTitle>
-        <SelectorDough />
-        <SelectorDiameter />
-        <SelectorIngredients />
-        <ContentPizza />
+        <app-title>Конструктор пиццы</app-title>
+        <selector-dough />
+        <selector-diameter />
+        <selector-ingredients />
+        <content-pizza />
       </div>
     </form>
   </main>

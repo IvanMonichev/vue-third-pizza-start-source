@@ -123,25 +123,25 @@ const onSubmit = handleSubmit(async (values) => {
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
-          <AppTitle>Корзина</AppTitle>
+          <app-title>Корзина</app-title>
         </div>
         <div v-if="isEmptyPizzas" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
         </div>
 
-        <CartPizzas v-else />
+        <cart-pizzas v-else />
 
-        <CartMiscList />
+        <cart-misc-list />
 
         <div class="cart__form">
-          <CartForm
+          <cart-form
             :addresses="addressStore.addressesWithoutAddMode"
             @select-address="handleAddressSelect"
           />
         </div>
       </div>
     </main>
-    <CartFooter :total-price="orderTotalPrice" />
+    <cart-footer :total-price="orderTotalPrice" />
   </form>
 </template>
 

@@ -24,7 +24,7 @@ defineEmits<{
     :disabled="props.disabled"
     @click="$emit('click', $event)"
   >
-    <slot />
+    <slot></slot>
   </button>
 </template>
 

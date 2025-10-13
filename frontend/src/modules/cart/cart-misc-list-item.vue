@@ -25,7 +25,7 @@ const miscQuantity = computed(
     </p>
 
     <div class="additional-list__wrapper">
-      <AppCounter
+      <app-counter
         color="orange"
         extra-class="additional-list__counter"
         :value="miscQuantity"

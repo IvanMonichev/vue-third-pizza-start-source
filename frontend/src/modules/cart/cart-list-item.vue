@@ -54,7 +54,7 @@ const handlePizzaChange = () => {
       </div>
     </div>
 
-    <AppCounter
+    <app-counter
       :min="0"
       color="orange"
       extra-class="cart-list__counter"
@@ -76,8 +76,8 @@ const handlePizzaChange = () => {
     </div>
 
     <div class="cart-list__button">
-      <AppButton :variant="'text'" @click="handlePizzaChange"
-        >Изменить</AppButton
+      <app-button :variant="'text'" @click="handlePizzaChange"
+        >Изменить</app-button
       >
     </div>
   </li>
