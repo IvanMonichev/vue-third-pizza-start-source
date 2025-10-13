@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import AppTitle from '@/common/components/app-title.vue'
 import OrderSheet from '@/modules/order/order-sheet.vue'
+import { useOrdersStore } from '@/store'
+import { storeToRefs } from 'pinia'
+
+const { ordersList } = storeToRefs(useOrdersStore())
 </script>
 
 <template>
@@ -8,8 +12,7 @@ import OrderSheet from '@/modules/order/order-sheet.vue'
     <AppTitle type="big">История заказов</AppTitle>
   </div>
 
-  <OrderSheet />
-  <OrderSheet />
+  <OrderSheet v-for="order in ordersList" :key="order.id" :order="order" />
 </template>
 
 <style scoped lang="scss">

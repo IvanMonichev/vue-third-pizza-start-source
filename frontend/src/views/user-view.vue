@@ -1,8 +1,19 @@
 <script setup lang="ts">
 import AppButton from '@/common/components/app-button.vue'
 import AppTitle from '@/common/components/app-title.vue'
-import AddressForm from '@/modules/user-data/address-form.vue'
+import ProfileAddress from '@/modules/user-data/profile-address.vue'
 import UserData from '@/modules/user-data/user-data.vue'
+import { useAddressStore, useProfileStore } from '@/store'
+import { storeToRefs } from 'pinia'
+
+const addressStore = useAddressStore()
+const profileStore = useProfileStore()
+const { userId } = storeToRefs(profileStore)
+
+const handleAddAddress = () => {
+  if (!userId.value) return
+  addressStore.addNewAddress(userId.value)
+}
 </script>
 
 <template>
@@ -12,11 +23,16 @@ import UserData from '@/modules/user-data/user-data.vue'
 
   <UserData />
 
-  <AddressForm mode="view" />
-  <AddressForm mode="edit" />
+  <ProfileAddress
+    v-for="address in addressStore.addressesFull"
+    :key="address.id"
+    :address="address"
+  />
 
   <div class="layout__button">
-    <AppButton type="button" variant="border">Добавить новый адрес</AppButton>
+    <AppButton type="button" variant="border" @click="handleAddAddress"
+      >Добавить новый адрес</AppButton
+    >
   </div>
 </template>
 

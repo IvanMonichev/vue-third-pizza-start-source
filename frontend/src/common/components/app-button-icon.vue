@@ -43,6 +43,7 @@ defineEmits<{
 
   &:hover {
     box-shadow: ds-shadows.$shadow-light;
+    cursor: pointer;
   }
 
   &:active {

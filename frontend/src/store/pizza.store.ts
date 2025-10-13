@@ -1,16 +1,9 @@
-import { IngredientPizza } from '@/common/types/ingredient.types'
-import { CartPizza } from '@/common/types/pizza.types'
+import { Ingredient } from '@/common/types/ingredient.types'
+import { Pizza, PizzaState } from '@/common/types/pizza.types'
+import { calculatePizzaPrice } from '@/common/utils/price.utils'
+import { useCartStore } from '@/store/cart.store'
 import { useDataStore } from '@/store/data.store'
 import { defineStore } from 'pinia'
-
-interface PizzaState {
-  pizzaId: string | null
-  pizzaName: string
-  doughId: number
-  sizeId: number
-  sauceId: number
-  ingredients: IngredientPizza[]
-}
 
 export const usePizzaStore = defineStore('pizza', {
   state: (): PizzaState => ({
@@ -55,13 +48,22 @@ export const usePizzaStore = defineStore('pizza', {
 
       if (!dough || !sauce || !size) return 0
 
-      const basePrice = dough.price + sauce.price
-      const ingredientsPrice = state.ingredients.reduce((acc, ing) => {
-        const ingredient = dataStore.dataById('ingredients', ing.id)
-        return acc + (ingredient ? ingredient.price * ing.quantity : 0)
-      }, 0)
+      const ingredients = state.ingredients
+        .map((i) => {
+          const dataIngredient = dataStore.dataById('ingredients', i.id)
 
-      return size.multiplier * (basePrice + ingredientsPrice)
+          return dataIngredient
+            ? { ...dataIngredient, quantity: i.quantity }
+            : null
+        })
+        .filter((i): i is Ingredient => Boolean(i))
+
+      return calculatePizzaPrice(
+        dough.price,
+        sauce.price,
+        size.multiplier,
+        ingredients
+      )
     }
   },
   actions: {
@@ -106,43 +108,29 @@ export const usePizzaStore = defineStore('pizza', {
       }
     },
 
-    // Добавить или обновить ингредиент (если quantity > 0)
-    addIngredient(ingredient: IngredientPizza) {
-      const index = this.ingredients.findIndex((i) => i.id === ingredient.id)
-      if (ingredient.quantity <= 0) {
-        if (index !== -1) {
-          this.ingredients.splice(index, 1)
-        }
-        return
-      }
-
-      if (index === -1) {
-        this.ingredients.push(ingredient)
-      } else {
-        this.ingredients[index] = ingredient
-      }
+    setPizza(pizza: PizzaState) {
+      this.pizzaId = pizza.pizzaId
+      this.pizzaName = pizza.pizzaName
+      this.doughId = pizza.doughId
+      this.sauceId = pizza.sauceId
+      this.sizeId = pizza.sizeId
+      this.ingredients = [...pizza.ingredients]
     },
 
-    toCartPizza(): CartPizza {
-      return {
+    buildPizzaToCart() {
+      const cartStore = useCartStore()
+      const pizza: Pizza = {
         pizzaId: this.pizzaId ?? crypto.randomUUID(),
         name: this.pizzaName,
         doughId: this.doughId,
         sauceId: this.sauceId,
         sizeId: this.sizeId,
         quantity: 1,
-        ingredientsPizza: this.ingredients,
+        ingredients: this.ingredients,
         price: this.pizzaPrice
       }
-    },
 
-    loadFromCartPizza(cartPizza: CartPizza) {
-      this.pizzaId = cartPizza.pizzaId
-      this.pizzaName = cartPizza.name
-      this.doughId = cartPizza.doughId
-      this.sauceId = cartPizza.sauceId
-      this.sizeId = cartPizza.sizeId
-      this.ingredients = [...cartPizza.ingredientsPizza]
+      cartStore.savePizza(pizza)
     },
 
     resetPizza() {

@@ -1,11 +1,16 @@
 <script setup lang="ts">
 interface Props {
-  variant?: 'default' | 'transparent' | 'border'
+  variant?: 'default' | 'transparent' | 'border' | 'text'
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  variant: 'default',
+  type: 'button',
+  disabled: false
+})
+
 defineEmits<{
   (e: 'click', event: MouseEvent): void
 }>()
@@ -14,11 +19,8 @@ defineEmits<{
 <template>
   <button
     :type="props.type || 'button'"
-    :class="{
-      button: true,
-      'button--transparent': variant === 'transparent',
-      'button--border': variant === 'border'
-    }"
+    class="button"
+    :class="`button--${props.variant}`"
     :disabled="props.disabled"
     @click="$emit('click', $event)"
   >
@@ -32,44 +34,47 @@ defineEmits<{
 @use '@/assets/sass/ds-system/ds-typography';
 
 .button {
-  $bl: &;
-
   @include ds-typography.b-s18-h21;
   font-family: inherit;
   display: block;
-
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-
   cursor: pointer;
   transition: 0.3s;
   text-align: center;
-
-  color: ds-colors.$white;
-  border: none;
   border-radius: 8px;
   outline: none;
-  box-shadow: ds-shadows.$shadow-medium;
 
-  background-color: ds-colors.$green-500;
-
-  &:hover:not(:active):not(:disabled) {
-    background-color: ds-colors.$green-400;
-  }
-
-  &:active:not(:disabled) {
-    background-color: ds-colors.$green-600;
-  }
-
-  &:focus:not(:disabled) {
+  // Общие стили для всех
+  &:disabled {
+    cursor: default;
     opacity: 0.5;
   }
 
-  &:disabled {
-    background-color: ds-colors.$green-300;
-    color: rgba(ds-colors.$white, 0.2);
-    cursor: default;
+  // 🔹 Вариант по умолчанию
+  &--default {
+    color: ds-colors.$white;
+    border: none;
+    box-shadow: ds-shadows.$shadow-medium;
+    background-color: ds-colors.$green-500;
+
+    &:hover:not(:active):not(:disabled) {
+      background-color: ds-colors.$green-400;
+    }
+
+    &:active:not(:disabled) {
+      background-color: ds-colors.$green-600;
+    }
+
+    &:focus:not(:disabled) {
+      opacity: 0.5;
+    }
+
+    &:disabled {
+      background-color: ds-colors.$green-300;
+      color: rgba(ds-colors.$white, 0.2);
+    }
   }
 
   &--border {
@@ -81,17 +86,11 @@ defineEmits<{
     &:hover:not(:active):not(:disabled) {
       color: ds-colors.$green-500;
       border-color: ds-colors.$green-500;
-      background-color: transparent;
     }
 
     &:active:not(:disabled) {
       color: ds-colors.$green-600;
       border-color: ds-colors.$green-600;
-      background-color: transparent;
-    }
-
-    &:disabled {
-      opacity: 0.5;
     }
   }
 
@@ -103,16 +102,33 @@ defineEmits<{
 
     &:hover:not(:active):not(:disabled) {
       color: ds-colors.$red-800;
-      background-color: transparent;
     }
 
     &:active:not(:disabled) {
       color: ds-colors.$red-900;
-      background-color: transparent;
     }
 
     &:disabled {
       opacity: 0.25;
+    }
+  }
+
+  &--text {
+    @include ds-typography.l-s11-h13;
+    background-color: transparent;
+    color: ds-colors.$black;
+    border: none;
+
+    &:hover {
+      color: ds-colors.$green-500;
+    }
+
+    &:active {
+      color: ds-colors.$green-600;
+    }
+
+    &:focus {
+      color: ds-colors.$green-400;
     }
   }
 

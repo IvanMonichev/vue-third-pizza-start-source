@@ -1,29 +1,21 @@
-import { DeliveryType } from '@/common/enums/delivery-type.enum'
+import { AddressMode } from '@/common/enums/address-mode.enum'
 
-export interface Address {
+export interface AddressResponse {
   id: number
   name: string
   userId: string
   street: string
   building: string
-  flat: string
-  comment: string
+  flat?: string
+  comment?: string
 }
 
-export type AddressCreate = Omit<Address, 'id'>
-export type AddressUpdate = Address
+export type AddressCreate = Omit<AddressResponse, 'id'>
+export type AddressUpdate = AddressResponse
 
-export type OrderAddress = Address
+export type AddressOrderCreate = Omit<AddressResponse, 'id' | 'name' | 'userId'>
 
-export interface AddressUi extends Pick<Address, 'id'> {
-  label: string
-  fullAddress: string
-}
-
-export interface AddressForm {
-  deliveryType: DeliveryType
-  phone: string
-  street?: string
-  house?: string
-  apartment?: string
+export interface Address extends Omit<AddressResponse, 'id'> {
+  id: string | number
+  addressMode: AddressMode
 }

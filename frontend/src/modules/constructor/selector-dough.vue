@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import dough from '@/mocks/dough.json'
 import RadioDough from '@/modules/constructor/radio-dough.vue'
 import SheetLayout from '@/modules/constructor/sheet-layout.vue'
 import { useDataStore, usePizzaStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
 
 const dataStore = useDataStore()
 const pizzaStore = usePizzaStore()
-onMounted(async () => {
-  dataStore.buildDough(dough)
-})
 
 const { doughId } = storeToRefs(pizzaStore)
 </script>

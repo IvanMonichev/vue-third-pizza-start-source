@@ -1,82 +1,82 @@
 <script setup lang="ts">
+import { useDeleteOrderMutation } from '@/api/orders.api'
 import AppButton from '@/common/components/app-button.vue'
-import { MiscView } from '@/common/types/order.types'
+import { Order } from '@/common/types/order.types'
+import { buildFullAddress } from '@/common/utils/address.utils'
+import { AppConfig } from '@/modules/cart/config/app.config'
 import OrderAdditional from '@/modules/order/order-additional.vue'
 import OrderListItem from '@/modules/order/order-list-item.vue'
 import OrderList from '@/modules/order/order-list.vue'
-import productImg from '@/assets/img/product.svg'
-import colaImg from '@/assets/img/cola.svg'
-import sauceImg from '@/assets/img/sauce.svg'
-import potatoImg from '@/assets/img/potato.svg'
+import { useOrdersStore } from '@/store'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-const additionalItems: MiscView[] = [
-  {
-    name: 'Coca-Cola 0,5 литра',
-    price: 56,
-    image: colaImg,
-    alt: 'Coca-Cola 0,5 литра'
-  },
-  {
-    name: 'Острый соус',
-    price: 30,
-    image: sauceImg,
-    alt: 'Острый соус'
-  },
-  {
-    name: 'Картошка из печи',
-    price: 170,
-    image: potatoImg,
-    alt: 'Картошка из печи'
+interface Props {
+  order: Order
+}
+
+const { order } = defineProps<Props>()
+const { buildOrderToCart } = useOrdersStore()
+const router = useRouter()
+
+const deleteOrder = useDeleteOrderMutation()
+
+const addressContent = computed(() => {
+  if (!order.address) return null
+
+  return buildFullAddress(order.address)
+})
+
+const handleOrderRepeat = () => {
+  buildOrderToCart(order.id)
+  router.push({ name: 'cart-view' })
+}
+
+const handleDeleteOrder = async () => {
+  try {
+    await deleteOrder.mutateAsync(order.id)
+  } catch (e) {
+    console.error('Ошибка при удалении заказа:', e)
   }
-]
+}
 </script>
 
 <template>
   <section class="sheet order">
     <div class="order__wrapper">
       <div class="order__number">
-        <b>Заказ #11199929</b>
+        <b>{{ order.name }}</b>
       </div>
 
       <div class="order__sum">
-        <span>Сумма заказа: 1&nbsp;564 ₽</span>
+        <span
+          >Сумма заказа:
+          {{ order.price.toLocaleString(AppConfig.Locale) }} ₽</span
+        >
       </div>
 
       <div class="order__button">
-        <AppButton type="button">Удалить</AppButton>
+        <AppButton type="button" @click="handleDeleteOrder">Удалить</AppButton>
       </div>
       <div class="order__button">
-        <AppButton type="button">Повторить</AppButton>
+        <AppButton type="button" @click="handleOrderRepeat"
+          >Повторить</AppButton
+        >
       </div>
     </div>
 
     <OrderList>
       <OrderListItem
-        title="Капричоза"
-        :image="productImg"
-        price="782"
-        :options="[
-          '30 см, на тонком тест',
-          'Соус: томатный',
-          'Начинка: грибы, лук, ветчина, пармезан, ананас, бекон, блю чиз'
-        ]"
-      />
-      <OrderListItem
-        title="Капричоза"
-        :image="productImg"
-        price="2x782"
-        :options="[
-          '30 см, на тонком тест',
-          'Соус: томатный',
-          'Начинка: грибы, лук, ветчина, пармезан, ананас'
-        ]"
+        v-for="pizza in order.pizzas"
+        :key="pizza.id"
+        :pizza="pizza"
       />
     </OrderList>
 
-    <OrderAdditional :items="additionalItems" />
+    <OrderAdditional :misc-list="order.miscList" />
 
-    <p class="order__address">
-      Адрес доставки: Тест (или если адрес новый - писать целиком)
+    <p v-if="addressContent" class="order__address">
+      Адрес доставки: {{ addressContent }}
     </p>
   </section>
 </template>
