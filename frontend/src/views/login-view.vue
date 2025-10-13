@@ -9,6 +9,8 @@ import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { object, string } from 'yup'
+import AppLayoutBlank from '@/layouts/app-layout-blank.vue'
+import SlideTransition from '@/common/components/slide-transition.vue'
 
 interface LoginForm {
   email: string
@@ -49,35 +51,39 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <div class="sign-form">
-    <app-button-close to="/" />
-    <div class="sign-form__title">
-      <app-title type="small">Авторизуйтесь на сайте</app-title>
-    </div>
-    <form novalidate @submit.prevent="onSubmit">
-      <div class="sign-form__input">
-        <app-form-input
-          name="email"
-          type="email"
-          placeholder="example@mail.ru"
-        />
-      </div>
+  <app-layout-blank>
+    <slide-transition>
+      <div class="sign-form">
+        <app-button-close to="/" />
+        <div class="sign-form__title">
+          <app-title type="small">Авторизуйтесь на сайте</app-title>
+        </div>
+        <form novalidate @submit.prevent="onSubmit">
+          <div class="sign-form__input">
+            <app-form-input
+              name="email"
+              type="email"
+              placeholder="example@mail.ru"
+            />
+          </div>
 
-      <div class="sign-form__input">
-        <app-form-input
-          name="password"
-          type="password"
-          placeholder="********"
-        />
+          <div class="sign-form__input">
+            <app-form-input
+              name="password"
+              type="password"
+              placeholder="********"
+            />
+          </div>
+          <app-button
+            type="submit"
+            :disabled="isSubmitting || login.isPending.value"
+          >
+            Авторизоваться
+          </app-button>
+        </form>
       </div>
-      <app-button
-        type="submit"
-        :disabled="isSubmitting || login.isPending.value"
-      >
-        Авторизоваться
-      </app-button>
-    </form>
-  </div>
+    </slide-transition>
+  </app-layout-blank>
 </template>
 
 <style scoped lang="scss">

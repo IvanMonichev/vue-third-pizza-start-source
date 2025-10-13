@@ -6,7 +6,6 @@ import { useMiscQuery } from '@/api/misc.api'
 import { useOrdersQuery } from '@/api/orders.api'
 import { useSaucesQuery } from '@/api/sauces.api'
 import { useSizesQuery } from '@/api/sizes.api'
-import AppLayout from '@/layouts/app-layout.vue'
 import {
   useAddressStore,
   useDataStore,
@@ -72,11 +71,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <app-layout>
-    <router-view v-slot="{ Component }">
-      <component :is="Component" />
-    </router-view>
-  </app-layout>
+  <router-view />
 </template>
 
 <style scoped></style>
