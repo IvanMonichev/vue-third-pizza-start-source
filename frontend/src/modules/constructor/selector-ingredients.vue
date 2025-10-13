@@ -21,10 +21,10 @@ const saucesOptions = computed<Option[]>(() =>
 
 <template>
   <div class="content__ingredients">
-    <SheetLayout title="Выберите ингредиенты" content-class="ingredients">
+    <sheet-layout title="Выберите ингредиенты" content-class="ingredients">
       <div class="ingredients__sauce">
         <p>Основной соус:</p>
-        <AppRadioGroup
+        <app-radio-group
           v-model="sauceId"
           :options="saucesOptions"
           name="sauce"
@@ -34,9 +34,9 @@ const saucesOptions = computed<Option[]>(() =>
 
       <div class="ingredients__filling">
         <p>Начинка:</p>
-        <IngredientsList />
+        <ingredients-list />
       </div>
-    </SheetLayout>
+    </sheet-layout>
   </div>
 </template>
 

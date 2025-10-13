@@ -23,6 +23,6 @@ const onDrag = (e: DragEvent) => {
     @dragover.prevent
     @dragend.prevent
   >
-    <slot />
+    <slot></slot>
   </div>
 </template>

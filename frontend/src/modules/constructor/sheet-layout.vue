@@ -6,7 +6,7 @@ defineProps<{ title?: string; contentClass?: string }>()
   <div class="sheet">
     <h2 v-if="title" class="title title--small sheet__title">{{ title }}</h2>
     <div :class="['sheet__content', contentClass]">
-      <slot />
+      <slot></slot>
     </div>
   </div>
 </template>

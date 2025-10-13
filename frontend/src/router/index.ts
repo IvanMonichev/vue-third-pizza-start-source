@@ -5,8 +5,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home-view',
-    component: () => import('@/views/home-view.vue'),
-    meta: { layout: 'app-layout-main' }
+    component: () => import('@/views/home-view.vue')
   },
   {
     path: '/sign-in',
@@ -16,8 +15,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/cart',
     name: 'cart-view',
-    component: () => import('@/views/cart-view.vue'),
-    meta: { layout: 'app-layout-main' }
+    component: () => import('@/views/cart-view.vue')
   },
   {
     path: '/success-order',
@@ -29,7 +27,7 @@ const routes: RouteRecordRaw[] = [
     name: 'profile-view',
     component: () => import('@/views/profile-view.vue'),
     redirect: '/profile/user-data',
-    meta: { layout: 'app-layout-main', requiresAuth: true },
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'user-data',

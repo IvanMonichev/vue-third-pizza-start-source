@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import TheProfileSidebar from '@/modules/profile/the-profile-sidebar.vue'
+import AppLayoutMain from '@/layouts/app-layout-main.vue'
+import SlideTransition from '@/common/components/slide-transition.vue'
 </script>
 
 <template>
-  <main class="layout">
-    <TheProfileSidebar />
-    <div class="layout__content">
-      <RouterView />
-    </div>
-  </main>
+  <app-layout-main>
+    <main class="layout">
+      <the-profile-sidebar />
+      <slide-transition>
+        <div class="layout__content">
+          <router-view />
+        </div>
+      </slide-transition>
+    </main>
+  </app-layout-main>
 </template>
 
 <style scoped lang="scss">

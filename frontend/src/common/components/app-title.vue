@@ -9,7 +9,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <h1 class="title" :class="`title--${type}`"><slot /></h1>
+  <h1 class="title" :class="`title--${type}`"><slot></slot></h1>
 </template>
 
 <style scoped lang="scss">

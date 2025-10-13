@@ -109,42 +109,44 @@ const handleDelete = async () => {
       <b v-if="isAddMode">Новый адрес</b>
       <b v-if="isEditMode">{{ address.name }}</b>
       <div v-if="isEditMode" class="address-form__edit">
-        <AppButtonIcon @click="handleViewMode">Изменить адрес</AppButtonIcon>
+        <app-button-icon @click="handleViewMode"
+          >Изменить адрес</app-button-icon
+        >
       </div>
     </div>
 
     <div class="address-form__wrapper">
       <!-- inputs -->
       <div class="address-form__input">
-        <AppFormInput
+        <app-form-input
           label="Название адреса*"
           name="name"
           placeholder="Введите название адреса"
         />
       </div>
       <div class="address-form__input address-form__input--size--normal">
-        <AppFormInput
+        <app-form-input
           label="Улица*"
           name="street"
           placeholder="Введите название улицы"
         />
       </div>
       <div class="address-form__input address-form__input--size--small">
-        <AppFormInput
+        <app-form-input
           label="Дом*"
           name="building"
           placeholder="Введите номер дома"
         />
       </div>
       <div class="address-form__input address-form__input--size--small">
-        <AppFormInput
+        <app-form-input
           label="Квартира"
           name="flat"
           placeholder="Введите № квартиры"
         />
       </div>
       <div class="address-form__input">
-        <AppFormInput
+        <app-form-input
           label="Комментарий"
           name="comment"
           placeholder="Введите комментарий"
@@ -153,14 +155,14 @@ const handleDelete = async () => {
     </div>
 
     <div class="address-form__buttons">
-      <AppButton
+      <app-button
         type="button"
         variant="transparent"
         :disabled="createAddress.isPending.value"
         @click="handleDelete"
         >Удалить
-      </AppButton>
-      <AppButton type="submit" :disabled="isSubmitting">Сохранить</AppButton>
+      </app-button>
+      <app-button type="submit" :disabled="isSubmitting">Сохранить</app-button>
     </div>
   </form>
 </template>

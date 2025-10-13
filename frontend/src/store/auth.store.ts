@@ -26,8 +26,9 @@ export const useAuthStore = defineStore('auth', {
       this.authStatus = AuthStatus.AUTHENTICATED
     },
 
-    clearAuth() {
+    async clearAuth() {
       const profileStore = useProfileStore()
+
       tokenManager.remove()
       this.authStatus = AuthStatus.UNAUTHENTICATED
       profileStore.setUser(null)

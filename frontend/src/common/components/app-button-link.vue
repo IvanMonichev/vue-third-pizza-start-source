@@ -23,14 +23,14 @@ defineEmits<{
 </script>
 
 <template>
-  <RouterLink
+  <router-link
     :to="to"
     class="button"
     :class="[...variantsClasses, className]"
     @click="$emit('click', $event)"
   >
-    <slot />
-  </RouterLink>
+    <slot></slot>
+  </router-link>
 </template>
 
 <style scoped lang="scss">

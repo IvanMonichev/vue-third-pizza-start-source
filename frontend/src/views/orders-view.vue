@@ -9,10 +9,10 @@ const { ordersList } = storeToRefs(useOrdersStore())
 
 <template>
   <div class="layout__title">
-    <AppTitle type="big">История заказов</AppTitle>
+    <app-title type="big">История заказов</app-title>
   </div>
 
-  <OrderSheet v-for="order in ordersList" :key="order.id" :order="order" />
+  <order-sheet v-for="order in ordersList" :key="order.id" :order="order" />
 </template>
 
 <style scoped lang="scss">

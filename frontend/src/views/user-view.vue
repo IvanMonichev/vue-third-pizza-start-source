@@ -18,20 +18,20 @@ const handleAddAddress = () => {
 
 <template>
   <div class="layout__title">
-    <AppTitle type="big">Мои данные</AppTitle>
+    <app-title type="big">Мои данные</app-title>
   </div>
 
-  <UserData />
+  <user-data />
 
-  <ProfileAddress
+  <profile-address
     v-for="address in addressStore.addressesFull"
     :key="address.id"
     :address="address"
   />
 
   <div class="layout__button">
-    <AppButton type="button" variant="border" @click="handleAddAddress"
-      >Добавить новый адрес</AppButton
+    <app-button type="button" variant="border" @click="handleAddAddress"
+      >Добавить новый адрес</app-button
     >
   </div>
 </template>

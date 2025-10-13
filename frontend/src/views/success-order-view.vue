@@ -4,6 +4,8 @@ import AppButtonLink from '@/common/components/app-button-link.vue'
 import { useCartStore, usePizzaStore } from '@/store'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import AppLayoutBlank from '@/layouts/app-layout-blank.vue'
+import SlideTransition from '@/common/components/slide-transition.vue'
 
 const cartStore = useCartStore()
 const pizzaStore = usePizzaStore()
@@ -22,18 +24,30 @@ const handlePopupClose = () => {
 </script>
 
 <template>
-  <div class="popup">
-    <AppButtonClose :to="{ name: 'orders-view' }" @click="handlePopupClose" />
-    <div class="popup__title">
-      <h2 class="title">Спасибо за заказ</h2>
-    </div>
-    <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
-    <div class="popup__button">
-      <AppButtonLink :to="{ name: 'orders-view' }" @click="handlePopupClose">
-        Отлично, я жду!</AppButtonLink
-      >
-    </div>
-  </div>
+  <app-layout-blank>
+    <slide-transition>
+      <transition name="fade">
+        <div v-if="cartStore.isOrderSuccess" class="popup">
+          <app-button-close
+            :to="{ name: 'orders-view' }"
+            @click="handlePopupClose"
+          />
+          <div class="popup__title">
+            <h2 class="title">Спасибо за заказ</h2>
+          </div>
+          <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
+          <div class="popup__button">
+            <app-button-link
+              :to="{ name: 'orders-view' }"
+              @click="handlePopupClose"
+            >
+              Отлично, я жду!</app-button-link
+            >
+          </div>
+        </div>
+      </transition>
+    </slide-transition>
+  </app-layout-blank>
 </template>
 
 <style scoped lang="scss">
@@ -101,5 +115,15 @@ const handlePopupClose = () => {
   a {
     padding: 16px 32px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

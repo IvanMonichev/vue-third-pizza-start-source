@@ -15,6 +15,8 @@ import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
+import AppLayoutMain from '@/layouts/app-layout-main.vue'
+import SlideTransition from '@/common/components/slide-transition.vue'
 
 const createOrder = useCreateOrderMutation()
 
@@ -119,30 +121,34 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form class="layout-form" @submit.prevent="onSubmit">
-    <main class="content cart">
-      <div class="container">
-        <div class="cart__title">
-          <AppTitle>Корзина</AppTitle>
-        </div>
-        <div v-if="isEmptyPizzas" class="sheet cart__empty">
-          <p>В корзине нет ни одного товара</p>
-        </div>
+  <app-layout-main>
+    <slide-transition>
+      <form class="layout-form" @submit.prevent="onSubmit">
+        <main class="content cart">
+          <div class="container">
+            <div class="cart__title">
+              <app-title>Корзина</app-title>
+            </div>
+            <div v-if="isEmptyPizzas" class="sheet cart__empty">
+              <p>В корзине нет ни одного товара</p>
+            </div>
 
-        <CartPizzas v-else />
+            <cart-pizzas v-else />
 
-        <CartMiscList />
+            <cart-misc-list />
 
-        <div class="cart__form">
-          <CartForm
-            :addresses="addressStore.addressesWithoutAddMode"
-            @select-address="handleAddressSelect"
-          />
-        </div>
-      </div>
-    </main>
-    <CartFooter :total-price="orderTotalPrice" />
-  </form>
+            <div class="cart__form">
+              <cart-form
+                :addresses="addressStore.addressesWithoutAddMode"
+                @select-address="handleAddressSelect"
+              />
+            </div>
+          </div>
+        </main>
+        <cart-footer :total-price="orderTotalPrice" />
+      </form>
+    </slide-transition>
+  </app-layout-main>
 </template>
 
 <style scoped lang="scss">
@@ -160,15 +166,8 @@ const onSubmit = handleSubmit(async (values) => {
 }
 
 .layout-form {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
   flex-grow: 1;
 }
 

@@ -56,24 +56,26 @@ const handleDeleteOrder = async () => {
       </div>
 
       <div class="order__button">
-        <AppButton type="button" @click="handleDeleteOrder">Удалить</AppButton>
+        <app-button type="button" @click="handleDeleteOrder"
+          >Удалить</app-button
+        >
       </div>
       <div class="order__button">
-        <AppButton type="button" @click="handleOrderRepeat"
-          >Повторить</AppButton
+        <app-button type="button" @click="handleOrderRepeat"
+          >Повторить</app-button
         >
       </div>
     </div>
 
-    <OrderList>
-      <OrderListItem
+    <order-list>
+      <order-list-item
         v-for="pizza in order.pizzas"
         :key="pizza.id"
         :pizza="pizza"
       />
-    </OrderList>
+    </order-list>
 
-    <OrderAdditional :misc-list="order.miscList" />
+    <order-additional :misc-list="order.miscList" />
 
     <p v-if="addressContent" class="order__address">
       Адрес доставки: {{ addressContent }}

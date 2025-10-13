@@ -12,14 +12,14 @@ const { doughId } = storeToRefs(pizzaStore)
 
 <template>
   <div class="content__dough">
-    <SheetLayout title="Выберите тесто" content-class="dough">
-      <RadioDough
+    <sheet-layout title="Выберите тесто" content-class="dough">
+      <radio-dough
         v-for="d in dataStore.doughList"
         :key="d.id"
         v-model="doughId"
         :dough="d"
       />
-    </SheetLayout>
+    </sheet-layout>
   </div>
 </template>
 <style scoped lang="scss">

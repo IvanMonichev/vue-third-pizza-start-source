@@ -7,9 +7,7 @@ export const useAuthUser = () => {
   return useQuery({
     queryKey: ['auth'],
     retry: false,
-    queryFn: () => {
-      return authService.whoAmI()
-    }
+    queryFn: authService.whoAmI
   })
 }
 
@@ -19,9 +17,7 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: async (payload: { email: string; password: string }) => {
-      const response = await authService.login(payload.email, payload.password)
-      tokenManager.set(response.token)
-      return response
+      return await authService.login(payload.email, payload.password)
     },
 
     onSuccess: async (response) => {

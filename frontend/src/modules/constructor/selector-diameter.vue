@@ -11,14 +11,14 @@ const { sizeId } = storeToRefs(pizzaStore)
 
 <template>
   <div class="content__diameter">
-    <SheetLayout title="Выберите размер" content-class="diameter">
-      <RadioDiameter
+    <sheet-layout title="Выберите размер" content-class="diameter">
+      <radio-diameter
         v-for="s in dataStore.sizes"
         :key="s.id"
         v-model="sizeId"
         :size="s"
       />
-    </SheetLayout>
+    </sheet-layout>
   </div>
 </template>
 

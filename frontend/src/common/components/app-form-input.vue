@@ -13,7 +13,7 @@ defineProps<{
 </script>
 
 <template>
-  <Field
+  <field
     v-slot="{ field, errorMessage }"
     :name="name"
     :type="type"
@@ -22,7 +22,7 @@ defineProps<{
     :validate-on-input="false"
     :validate-on-model-update="false"
   >
-    <AppInput
+    <app-input
       v-model="field.value"
       :name="name"
       :type="type"
@@ -34,7 +34,7 @@ defineProps<{
       @input="field.onInput"
       @blur="field.onBlur"
     />
-  </Field>
+  </field>
 </template>
 
 <style scoped lang="scss"></style>

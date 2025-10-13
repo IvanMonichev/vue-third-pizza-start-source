@@ -33,7 +33,7 @@ const handleAddPizza = () => {
 
 <template>
   <div class="content__pizza">
-    <AppInput
+    <app-input
       v-model="pizzaName"
       placeholder="Введите название пиццы"
       name="pizza_name"
@@ -42,7 +42,7 @@ const handleAddPizza = () => {
       type="text"
     />
 
-    <AppDrop @drop="handleDropIngredient">
+    <app-drop @drop="handleDropIngredient">
       <div class="content__constructor">
         <div
           :class="[
@@ -51,25 +51,27 @@ const handleAddPizza = () => {
           ]"
         >
           <div class="pizza__wrapper">
-            <div
-              v-for="i in selectedIngredients"
-              :key="i.id"
-              :class="[
-                'pizza__filling',
-                `pizza__filling--${i.className}`,
-                i.quantity === 2 ? 'pizza__filling--second' : '',
-                i.quantity === 3 ? 'pizza__filling--third' : ''
-              ]"
-            />
+            <transition-group name="scale" tag="div">
+              <div
+                v-for="i in selectedIngredients"
+                :key="`${i.id}-${i.quantity}`"
+                :class="[
+                  'pizza__filling',
+                  `pizza__filling--${i.className}`,
+                  i.quantity === 2 ? 'pizza__filling--second' : '',
+                  i.quantity === 3 ? 'pizza__filling--third' : ''
+                ]"
+              ></div>
+            </transition-group>
           </div>
         </div>
       </div>
-    </AppDrop>
+    </app-drop>
 
     <div class="content__result">
       <p>Итого: {{ pizzaPrice.toLocaleString(AppConfig.Locale) }} ₽</p>
-      <AppButton type="button" :disabled="!pizzaName" @click="handleAddPizza"
-        >Готовьте!</AppButton
+      <app-button type="button" :disabled="!pizzaName" @click="handleAddPizza"
+        >Готовьте!</app-button
       >
     </div>
   </div>
@@ -284,6 +286,40 @@ const handleAddPizza = () => {
   button {
     margin-left: 12px;
     padding: 16px 45px;
+  }
+}
+
+/* Появление ингредиента */
+.scale-enter-active {
+  animation: ingredient-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scale-leave-active {
+  animation: ingredient-fade 0.25s ease forwards;
+}
+
+@keyframes ingredient-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes ingredient-fade {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
   }
 }
 </style>

@@ -18,20 +18,20 @@ const handleClick = () => {
 <template>
   <header class="header">
     <div class="header__logo">
-      <RouterLink to="/" class="logo">
+      <router-link to="/" class="logo">
         <img :src="logo" alt="V!U!E! Pizza logo" width="90" height="40" />
-      </RouterLink>
+      </router-link>
     </div>
     <div class="header__cart">
-      <RouterLink to="/cart"
+      <router-link to="/cart"
         >{{
           cartStore.orderTotalPrice.toLocaleString(AppConfig.Locale)
         }}
-        ₽</RouterLink
+        ₽</router-link
       >
     </div>
     <div class="header__user">
-      <RouterLink v-if="authStore.isAuthenticated" :to="{ name: 'user-view' }">
+      <router-link v-if="authStore.isAuthenticated" :to="{ name: 'user-view' }">
         <picture v-if="images">
           <source
             type="image/webp"
@@ -46,19 +46,19 @@ const handleClick = () => {
           />
         </picture>
         <span>{{ profileStore.user?.name }}</span>
-      </RouterLink>
-      <RouterLink
+      </router-link>
+      <router-link
         v-if="authStore.isUnauthenticated"
         to="/sign-in"
         class="header__login"
-        ><span>Войти</span></RouterLink
+        ><span>Войти</span></router-link
       >
-      <RouterLink
+      <router-link
         v-if="authStore.isAuthenticated"
         to="/"
         class="header__logout"
         @click="handleClick"
-        ><span>Выйти</span></RouterLink
+        ><span>Выйти</span></router-link
       >
     </div>
   </header>

@@ -16,13 +16,13 @@ defineEmits<{
 </script>
 
 <template>
-  <RouterLink
+  <router-link
     :to="props.to"
     :class="['close', `close--${props.theme}`]"
     @click="$emit('click', $event)"
   >
     <span class="visually-hidden">Закрыть форму авторизации</span>
-  </RouterLink>
+  </router-link>
 </template>
 <style lang="scss" scoped>
 @use '@/assets/sass/ds-system/ds-colors';

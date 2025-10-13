@@ -4,20 +4,26 @@ import ContentPizza from '@/modules/constructor/content-pizza.vue'
 import SelectorDiameter from '@/modules/constructor/selector-diameter.vue'
 import SelectorDough from '@/modules/constructor/selector-dough.vue'
 import SelectorIngredients from '@/modules/constructor/selector-ingredients.vue'
+import AppLayoutMain from '@/layouts/app-layout-main.vue'
+import SlideTransition from '@/common/components/slide-transition.vue'
 </script>
 
 <template>
-  <main class="content">
-    <form action="#" method="post">
-      <div class="content__wrapper">
-        <AppTitle>Конструктор пиццы</AppTitle>
-        <SelectorDough />
-        <SelectorDiameter />
-        <SelectorIngredients />
-        <ContentPizza />
-      </div>
-    </form>
-  </main>
+  <app-layout-main>
+    <slide-transition>
+      <main class="content">
+        <form action="#" method="post">
+          <div class="content__wrapper">
+            <app-title>Конструктор пиццы</app-title>
+            <selector-dough />
+            <selector-diameter />
+            <selector-ingredients />
+            <content-pizza />
+          </div>
+        </form>
+      </main>
+    </slide-transition>
+  </app-layout-main>
 </template>
 <style lang="scss" scoped>
 .content {
