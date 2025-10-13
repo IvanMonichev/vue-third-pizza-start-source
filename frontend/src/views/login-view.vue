@@ -35,7 +35,8 @@ const { handleSubmit, isSubmitting } = useForm<LoginForm>({
 const onSubmit = handleSubmit(async (values) => {
   try {
     await login.mutateAsync(values)
-    router.push({ name: 'home-view' })
+
+    await router.push({ name: 'home-view' })
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
       const errorMessage = e?.response?.data.error.message
