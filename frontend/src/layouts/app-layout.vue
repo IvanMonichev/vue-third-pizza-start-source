@@ -34,7 +34,46 @@ watch(
 </script>
 
 <template>
-  <Component :is="layout"><slot /></Component>
+  <transition name="slide" mode="out-in">
+    <component :is="layout">
+      <slot></slot>
+    </component>
+  </transition>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@use '@/assets/sass/ds-system/ds-colors';
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 960px;
+  min-height: 100vh;
+
+  color: ds-colors.$black;
+  background-color: ds-colors.$white;
+
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(30px);
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateX(-30px);
+  opacity: 0;
+}
+</style>

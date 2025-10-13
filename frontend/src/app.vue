@@ -72,28 +72,11 @@ watchEffect(() => {
 </script>
 
 <template>
-  <AppLayout>
-    <RouterView v-slot="{ Component }">
-      <transition name="slide" mode="out-in">
-        <Component :is="Component" />
-      </transition>
-    </RouterView>
-  </AppLayout>
+  <app-layout>
+    <router-view v-slot="{ Component }">
+      <component :is="Component" />
+    </router-view>
+  </app-layout>
 </template>
 
-<style scoped>
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.2s ease;
-}
-
-.slide-enter-from {
-  transform: translateX(30px);
-  opacity: 0;
-}
-
-.slide-leave-to {
-  transform: translateX(-30px);
-  opacity: 0;
-}
-</style>
+<style scoped></style>
