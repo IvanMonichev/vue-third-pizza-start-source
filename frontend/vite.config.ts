@@ -8,7 +8,9 @@ const projectRootDir = resolve(__dirname)
 export default defineConfig({
   plugins: [vue()],
   test: {
-    environment: 'jsdom'
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts']
   },
   resolve: {
     alias: {
