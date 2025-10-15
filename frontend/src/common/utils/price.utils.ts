@@ -1,12 +1,8 @@
-import { Ingredient } from '@/common/types/ingredient.types'
-import { Misc } from '@/common/types/misc.types'
-import { Pizza, PizzaOrder } from '@/common/types/pizza.types'
-
 export const calculatePizzaPrice = (
   doughPrice: number,
   saucePrice: number,
   sizeMultiplier: number,
-  ingredients: Ingredient[]
+  ingredients: { price: number; quantity: number }[]
 ): number => {
   const base = doughPrice + saucePrice
   const ingredientsPrice = ingredients.reduce(
@@ -17,8 +13,8 @@ export const calculatePizzaPrice = (
 }
 
 export const calculateOrderTotal = (
-  pizzas: Pizza[] | PizzaOrder[],
-  misc: Misc[]
+  pizzas: { price: number; quantity: number }[],
+  misc: { price: number; quantity: number }[]
 ): number => {
   const pizzasTotal = pizzas.reduce((sum, p) => sum + p.price * p.quantity, 0)
 
