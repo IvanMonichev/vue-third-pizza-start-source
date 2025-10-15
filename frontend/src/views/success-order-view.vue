@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import AppButtonClose from '@/common/components/app-button-close.vue'
 import AppButtonLink from '@/common/components/app-button-link.vue'
-import { useCartStore, usePizzaStore } from '@/store'
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import AppLayoutBlank from '@/layouts/app-layout-blank.vue'
 import SlideTransition from '@/common/components/slide-transition.vue'
+import AppLayoutBlank from '@/layouts/app-layout-blank.vue'
+import { useCartStore, usePizzaStore } from '@/store'
+import { useAuthStore } from '@/store/auth.store'
+import { computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const cartStore = useCartStore()
 const pizzaStore = usePizzaStore()
+const authStore = useAuthStore()
 const router = useRouter()
+
+const nextLink = computed(() =>
+  authStore.isAuthenticated ? { name: 'orders-view' } : { name: 'home-view' }
+)
 
 onMounted(() => {
   if (!cartStore.isOrderSuccess) {
@@ -28,19 +34,13 @@ const handlePopupClose = () => {
     <slide-transition>
       <transition name="fade">
         <div v-if="cartStore.isOrderSuccess" class="popup">
-          <app-button-close
-            :to="{ name: 'orders-view' }"
-            @click="handlePopupClose"
-          />
+          <app-button-close :to="nextLink" @click="handlePopupClose" />
           <div class="popup__title">
             <h2 class="title">Спасибо за заказ</h2>
           </div>
           <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
           <div class="popup__button">
-            <app-button-link
-              :to="{ name: 'orders-view' }"
-              @click="handlePopupClose"
-            >
+            <app-button-link :to="nextLink" @click="handlePopupClose">
               Отлично, я жду!</app-button-link
             >
           </div>
