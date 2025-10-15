@@ -2,10 +2,10 @@ import { useAuthStore } from '@/store/auth.store'
 import axios from 'axios'
 import { tokenManager } from '../token-manager'
 
-const BASE_URL = 'http://localhost:3000'
+const API_TAG = '/api'
 
 export const httpClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || BASE_URL,
+  baseURL: API_TAG,
   timeout: 10_000,
   headers: {
     'Content-Type': 'application/json'
