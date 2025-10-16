@@ -35,7 +35,6 @@ const quantityById = (id: number) =>
         :max="3"
         @increment="pizzaStore.incrementIngredient(ingredient.id)"
         @decrement="pizzaStore.decrementIngredient(ingredient.id)"
-        @set-value="pizzaStore.setIngredient(ingredient.id, $event)"
       />
     </li>
   </ul>

@@ -13,7 +13,6 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'increment'): void
   (e: 'decrement'): void
-  (e: 'set-value', value: number): void
 }>()
 
 const isDecrementDisabled = computed(
@@ -22,34 +21,6 @@ const isDecrementDisabled = computed(
 const isIncrementDisabled = computed(
   () => props.max !== undefined && props.value >= props.max
 )
-
-const onInput = (event: Event) => {
-  const validNumberRegex = /^-?\d*$/
-  const target = event.target as HTMLInputElement
-  const raw = target.value
-  if (!validNumberRegex.test(raw)) {
-    target.value = String(props.value)
-    return
-  }
-
-  if (target.value === '-' || target.value === '') {
-    return
-  }
-
-  let newValue = Number(target.value)
-
-  if (Number.isNaN(newValue)) {
-    target.value = String(props.min) ?? String(0)
-  }
-  if (props.min !== undefined && newValue < props.min) {
-    target.value = String(props.min)
-  }
-  if (props.max !== undefined && newValue > props.max) {
-    target.value = String(props.max)
-  }
-
-  emit('set-value', newValue)
-}
 </script>
 
 <template>
@@ -67,7 +38,7 @@ const onInput = (event: Event) => {
       name="counter"
       class="counter__input"
       :value="value"
-      @input="onInput"
+      disabled
     />
     <button
       type="button"

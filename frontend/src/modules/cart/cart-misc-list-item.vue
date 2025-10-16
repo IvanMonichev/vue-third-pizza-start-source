@@ -32,7 +32,6 @@ const miscQuantity = computed(
         :min="0"
         @increment="cartStore.incrementMisc(misc.id)"
         @decrement="cartStore.decrementMisc(misc.id)"
-        @set-value="cartStore.setMiscQuantity(misc.id, $event)"
       />
       <div class="additional-list__price">
         <b

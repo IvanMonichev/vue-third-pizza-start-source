@@ -61,7 +61,6 @@ const handlePizzaChange = () => {
       :value="pizza.quantity"
       @increment="cartStore.incrementCartPizza(pizza.pizzaId)"
       @decrement="cartStore.decrementCartPizza(pizza.pizzaId)"
-      @set-value="cartStore.setCartPizzaQuantity(pizza.pizzaId, $event)"
     />
 
     <div class="cart-list__price">
